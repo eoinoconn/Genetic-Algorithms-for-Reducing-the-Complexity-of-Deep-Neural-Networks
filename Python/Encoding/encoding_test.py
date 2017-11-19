@@ -5,9 +5,11 @@ In this file we will test the encoding and train a basic network using the built
 from __future__ import print_function
 from gene import *
 from chromosome import *
+from fitness import *
 import numpy as np
 from six.moves import cPickle as pickle
 import keras as keras
+
 
 
 
@@ -44,18 +46,17 @@ valid_labels = keras.utils.to_categorical(valid_labels, num_labels)
 test_labels = keras.utils.to_categorical(test_labels, num_labels)
 
 chromosome = Chromosome()
-gene_config = GeneConfig("Convolutional", 32, True, (28, 28, 1), (2, 2), 'relu', 'same')
-chromosome.add_gene(Gene(gene_config))
-chromosome.add_gene(Gene(GeneConfig("Flatten", 0, False, 0, 0, 0, 0)))
-gene_config = GeneConfig("Dense", 10, False, 0, 0, "softmax", 0)
-chromosome.add_gene(Gene(gene_config))
-model = chromosome.create_model()
 
-model.compile(loss='categorical_crossentropy',
-                optimizer='sgd',
-                metrics=['accuracy'])
 
-model.fit(train_dataset, train_labels, epochs=5, batch_size=100, validation_data=(valid_dataset, valid_labels))
-loss_and_metrics = model.evaluate(test_dataset, test_labels, batch_size=100)
-print('\nTest loss:', loss_and_metrics[0])
-print('Test accuracy:', loss_and_metrics[1])
+chromosome.add_gene(ConvolutionalGene(64, input_layer=True))
+chromosome.add_gene(Gene(GeneConfig("Flatten", 0)))
+chromosome.add_gene(DenseGene(10, activation="softmax"))
+
+
+kwag = {"train_dataset":train_dataset, "train_labels":train_labels,
+        "valid_dataset":valid_dataset, "valid_labels":valid_labels,
+        "test_dataset":test_dataset, "test_labels":test_labels}
+
+fitness = Fitness(chromosome, **kwag)
+print(fitness.__str__())
+

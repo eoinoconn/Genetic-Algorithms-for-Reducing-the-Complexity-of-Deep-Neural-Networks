@@ -48,6 +48,9 @@ model.add(Conv2D(32, (2, 2), input_shape=(28, 28, 1), padding='same', activation
 model.add(Flatten())
 model.add(Dense(10, activation='softmax'))
 
+
+print(model.get_input_shape_at(1))
+
 print('Training set', train_dataset.shape, train_labels.shape)
 print('Validation set', valid_dataset.shape, valid_labels.shape)
 print('Test set', test_dataset.shape, test_labels.shape)
