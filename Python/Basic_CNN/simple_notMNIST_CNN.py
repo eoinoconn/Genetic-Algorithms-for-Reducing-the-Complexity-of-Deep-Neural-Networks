@@ -44,12 +44,13 @@ test_labels = keras.utils.to_categorical(test_labels, num_labels)
 
 model = Sequential()
 
-model.add(Conv2D(32, (2, 2), input_shape=(28, 28, 1), padding='same', activation='relu'))
-model.add(Flatten())
+# model.add(Conv2D(32, (2, 2), input_shape=(28, 28, 1), padding='same', activation='relu'))
+model.add(Flatten(input_shape=(28, 28, 1)))
 model.add(Dense(10, activation='softmax'))
 
+model.summary()
 
-print(model.get_input_shape_at(1))
+print(model.get_input_shape_at(0))
 
 print('Training set', train_dataset.shape, train_labels.shape)
 print('Validation set', valid_dataset.shape, valid_labels.shape)

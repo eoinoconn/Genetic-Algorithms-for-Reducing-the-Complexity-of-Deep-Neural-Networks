@@ -6,8 +6,6 @@ class BaseGene(object):
     def compile(self, model):
         raise NotImplementedError("Please Implement this method")
 
-    def build_details(self):
-        raise NotImplementedError("Please Implement this method")
 
     def set_activation(self, activation):
         self.activation = activation
@@ -47,9 +45,22 @@ class Gene(object):
         return details, kwag
 
 
+class FlattenGene(BaseGene):
+    def __init__(self, input_shape=(28, 28, 1), input_layer=True):
+        self.input_shape=input_shape
+        self.input_layer = input_layer
+
+    def compile(self, model):
+        if self.input_layer:
+            model.add(Flatten(input_shape=self.input_shape))
+        else:
+            model.add(Flatten())
+        return model
+
+
 class DenseGene(BaseGene):
 
-    def __init__(self, layer_units, input_layer=False, input_shape=(1, 1, 1),
+    def __init__(self, layer_units, input_layer=False, input_shape=(28, 28, 1),
                  activation="relu"):
 
         self.layer_type = "Dense"
@@ -60,19 +71,32 @@ class DenseGene(BaseGene):
         if input_layer:
             self.input_shape = input_shape
 
-    def compile(self, model):
-        details, kwag = self.build_details()
+    def compile(self, model, output=False):
+        details, kwag = self.build_details(output)
         model.add(Dense(*details, **kwag))
         return model
 
-    def build_details(self):
+    def build_details(self, output):
         kwag = {}
-        details = [self.layer_units]
+        if output:
+            details = [10]
+            kwag['activation'] = "softmax"
+        else:
+            details = {self.layer_units}
+            kwag['activation'] = self.activation
+
         if self.input_layer:
             kwag['input_shape'] = self.input_shape
-        kwag['activation'] = self.activation
 
         return details, kwag
+
+    def set_input(self, input_shape=(28, 28, 1)):
+        self.input_layer = True
+        self.input_shape = input_shape
+
+    def set_output(self, num_labels=10):
+        self.layer_units = num_labels
+        self.activation = 'softmax'
 
 
 class ConvolutionalGene(BaseGene):

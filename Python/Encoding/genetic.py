@@ -1,5 +1,5 @@
 # File: genetic.py
-#    from chapter 6 of _Genetic Algorithms with Python_
+#    from chapter 7 of _Genetic Algorithms with Python_
 #
 # Author: Clinton Sheppard <fluentcoder@gmail.com>
 # Copyright (c) 2016 Clinton Sheppard
@@ -40,14 +40,14 @@ def _mutate(parent, geneSet, get_fitness):
 
 
 def _mutate_custom(parent, custom_mutate, get_fitness):
-    childGenes = parent.Genes[:]
+    childGenes = parent.Genes
     custom_mutate(childGenes)
     fitness = get_fitness(childGenes)
     return Chromosome(childGenes, fitness)
 
 
 def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,
-             custom_mutate=None):
+             custom_mutate=None, custom_create=None):
     if custom_mutate is None:
         def fnMutate(parent):
             return _mutate(parent, geneSet, get_fitness)
@@ -55,11 +55,16 @@ def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,
         def fnMutate(parent):
             return _mutate_custom(parent, custom_mutate, get_fitness)
 
-    def fnGenerateParent():
-        return _generate_parent(targetLen, geneSet, get_fitness)
+    if custom_create is None:
+        def fnGenerateParent():
+            return _generate_parent(targetLen, geneSet, get_fitness)
+    else:
+        def fnGenerateParent():
+            genes = custom_create()
+            return Chromosome(genes, get_fitness(genes))
 
     for improvement in _get_improvement(fnMutate, fnGenerateParent):
-        display(improvement)
+        display(improvement.Fitness)
         if not optimalFitness > improvement.Fitness:
             return improvement
 
