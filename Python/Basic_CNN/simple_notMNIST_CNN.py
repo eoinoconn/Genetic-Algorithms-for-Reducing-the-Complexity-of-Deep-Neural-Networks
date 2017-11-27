@@ -45,7 +45,10 @@ test_labels = keras.utils.to_categorical(test_labels, num_labels)
 model = Sequential()
 
 # model.add(Conv2D(32, (2, 2), input_shape=(28, 28, 1), padding='same', activation='relu'))
-model.add(Flatten(input_shape=(28, 28, 1)))
+
+model.add(Conv2D(32, (2, 2), input_shape=(28, 28, 1)))
+model.add(Flatten())
+# model.add(Conv1D(64, 2))
 model.add(Dense(10, activation='softmax'))
 
 model.summary()
