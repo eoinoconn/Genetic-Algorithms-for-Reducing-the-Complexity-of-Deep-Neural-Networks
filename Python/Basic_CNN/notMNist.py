@@ -8,7 +8,7 @@ from keras import backend as K
 from keras.models import Sequential
 from keras.losses import sparse_categorical_crossentropy
 from keras.layers import Dense, Activation, Conv2D, Conv1D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
-from keras.optimizers import Adadelta
+from keras.optimizers import SGD
 
 pickle_file = 'notMNIST.pickle'
 
@@ -41,9 +41,9 @@ test_dataset = reformat(test_dataset)
 
 num_classes = 10
 
-train_labels = keras.utils.to_categorical(train_labels, num_labels)
-valid_labels = keras.utils.to_categorical(valid_labels, num_labels)
-test_labels = keras.utils.to_categorical(test_labels, num_labels)
+train_labels = keras.utils.to_categorical(train_labels, num_classes)
+valid_labels = keras.utils.to_categorical(valid_labels, num_classes)
+test_labels = keras.utils.to_categorical(test_labels, num_classes)
 
 model = Sequential()
 model.add(Conv2D(32, (2, 2), input_shape=(28, 28, 1), padding='same', activation='relu'))
@@ -57,16 +57,16 @@ model.add(Dropout(0.5))
 model.add(Dense(10, activation='softmax'))
 model.summary()
 
-if True:
-    print('Training set', train_dataset.shape, train_labels.shape)
-    print('Validation set', valid_dataset.shape, valid_labels.shape)
-    print('Test set', test_dataset.shape, test_labels.shape)
 
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='sgd',
-                  metrics=['accuracy'])
+print('Training set', train_dataset.shape, train_labels.shape)
+print('Validation set', valid_dataset.shape, valid_labels.shape)
+print('Test set', test_dataset.shape, test_labels.shape)
 
-    model.fit(train_dataset, train_labels, epochs=12, batch_size=256, validation_data=(valid_dataset, valid_labels))
-    loss_and_metrics = model.evaluate(test_dataset, test_labels, batch_size=256)
-    print('Test loss:', loss_and_metrics[0])
-    print('Test accuracy:', loss_and_metrics[1])
+model.compile(loss='categorical_crossentropy',
+              optimizer=SGD(lr=0.1, momentum=0.01, decay=0.001),
+              metrics=['accuracy'])
+
+model.fit(train_dataset, train_labels, epochs=12, batch_size=1000, validation_data=(valid_dataset, valid_labels))
+loss_and_metrics = model.evaluate(test_dataset, test_labels, batch_size=1000)
+print('Test loss:', loss_and_metrics[0])
+print('Test accuracy:', loss_and_metrics[1])
