@@ -1,5 +1,4 @@
-from gene import DenseGene, FlattenGene
-from chromosome import Chromosome
+from Python.Encoding.chromosome import Chromosome
 import random
 
 
@@ -8,7 +7,7 @@ def mutate(chromosome, input_layer=False):
     if len(chromosome) > 2 and rand % 2 == 0:
 
         # Remove Gene
-        chromosome.remove_gene()
+        chromosome.remove_layer()
     else:
 
         # Add Gene
