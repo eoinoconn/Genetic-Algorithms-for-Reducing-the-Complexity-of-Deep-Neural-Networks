@@ -3,15 +3,14 @@ In this file we will test the encoding and train a basic network using the built
 
 """
 from __future__ import print_function
-from gene import *
-from chromosome import Chromosome as chrome
-from genetic import *
-from fitness import *
+from Python.Encoding.fitness import *
+from Python.Encoding.mutate import *
+from Python.Encoding.genetic import *
+
 import numpy as np
 from six.moves import cPickle as pickle
 import keras as keras
 import unittest
-from mutate import mutate, create_parent
 
 image_size = 28
 num_labels = 10
@@ -80,6 +79,7 @@ class EncodingTest(unittest.TestCase):
         best = get_best(fnGetFitness, None, optimalFitness, None, fnDisplay,
                         custom_mutate=fnCustomMutate, custom_create=fnCustomCreate)
         self.assertTrue(not optimalFitness > best.Fitness)
+
 
 if __name__ == '__main__':
     unittest.main()

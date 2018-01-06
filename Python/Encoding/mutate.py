@@ -1,4 +1,4 @@
-from Python.Encoding.chromosome import Chromosome
+from Python.Encoding.chromosome import Chromosome, LAYER_DEPTH
 import random
 
 
@@ -36,6 +36,10 @@ def mutate(chromosome, input_layer=False):
 
 def create_parent():
     chromosome = Chromosome()
-    chromosome.add_gene(FlattenGene(input_layer=True))
-    chromosome = mutate(chromosome, input_layer=False)
+    chromosome.add_layer(convolutional_layer())
     return chromosome
+
+def convolutional_layer():
+    layer = [0 for x in range(LAYER_DEPTH)]
+    layer[0] = 1
+    

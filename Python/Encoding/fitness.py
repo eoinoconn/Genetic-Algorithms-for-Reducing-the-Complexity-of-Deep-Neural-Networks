@@ -1,6 +1,3 @@
-import chromosome
-import keras
-
 
 class Fitness:
     def __init__(self, optimal_fitness=False, chromosome=None, train_dataset=None, train_labels=None, valid_dataset=None,
@@ -9,7 +6,7 @@ class Fitness:
             self.accuracy = 0.90
         else:
 
-            model = chromosome.create_model()
+            model = chromosome.build_model()
             model.compile(loss='categorical_crossentropy',
                           optimizer='sgd',
                           metrics=['accuracy'])
