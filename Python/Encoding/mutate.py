@@ -5,7 +5,9 @@ import random
 def mutate(chromosome, input_layer=False):
     rand = random.randrange(0, 2)
     # remove layer
-    if len(chromosome) > 2 and rand == 0:
+    # there should always be at least 3 layers in the chromosome.
+    # the input convolutional, the flatten layer and the dense layer.
+    if len(chromosome) > 3 and rand == 0:
         # Remove Gene
         chromosome.remove_layer()
 
@@ -16,8 +18,11 @@ def mutate(chromosome, input_layer=False):
             chromosome.add_layer(dense_layer())
         elif rand == 1:
             chromosome.add_layer(convolutional_layer())
-    # change hyperparameter
+    # change layer
     elif rand == 2:
+        raise NotImplementedError
+    # change hyperparameter
+    elif rand == 3:
         raise NotImplementedError
 
 def create_parent():
