@@ -18,7 +18,21 @@ class TestChromosome(unittest.TestCase):
 
         self.assertEqual(expected_chromo.__str__(), self.chromo.__str__())
 
-    def testBuildModel(self):
+    def testRemoveLayer(self):
+        # Create expected Layer
+        expected_chromo = [[0 for x in range(LAYER_DEPTH)] for y in range(MAX_LAYERS)]
+
+        # Add the layer values
+        for x in range(1, 5):
+            layer = [i*x for i in range(1, LAYER_DEPTH+1)]
+            self.chromo.add_layer(layer)
+            # add layers to expected chromosome except last layer
+            if x < 5:
+                expected_chromo[x-1] = layer
+
+        self.assertEqual(expected_chromo.__str__(), self.chromo.__str__())
+
+    def testBuildModelDense(self):
         layer = [0 for i in range(0, LAYER_DEPTH)]
         layer[0] = 1    # Dense layer
         layer[1] = 64   # 64 units
@@ -35,6 +49,31 @@ class TestChromosome(unittest.TestCase):
         layer[1] = 10
         self.chromo.add_layer(layer)
         self.chromo.build_model()
+
+    def testBuildModel2DConv(self):
+        layer = [0 for i in range(0, LAYER_DEPTH)]
+        layer[0] = 2  # Conv layer
+        layer[1] = 64  # 64 units
+        layer[2] = 1  # input layer
+        layer[3] = 2    # slide size
+        layer[4] = 'relu'
+        self.chromo.add_layer(layer)
+
+        layer = [0 for i in range(0, LAYER_DEPTH)]
+        layer[0] = 2
+        layer[1] = 32
+        layer[3] = 2
+        layer[4] = 'relu'
+        self.chromo.add_layer(layer)
+
+        layer = [0 for i in range(0, LAYER_DEPTH)]
+        layer[0] = 2
+        layer[1] = 16
+        layer[3] = 2
+        layer[4] = 'relu'
+        self.chromo.add_layer(layer)
+        self.chromo.build_model()
+        self.chromo.model_summary()
 
 
 if __name__ == '__main__':

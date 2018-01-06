@@ -18,7 +18,7 @@ class Chromosome(object):
 
     def remove_layer(self, index=None):
         if index is None:
-            self.chromosome[self.__len__()].remove()
+            self.chromosome[self.__len__()].remove
         else:
             raise NotImplementedError("remove layer at index not implemented")
 
@@ -27,25 +27,32 @@ class Chromosome(object):
         output_layer = False
         input_layer = True
         for x in range(self.chromosome.__len__()):
-            # check if output layer, regular layer or no layer at all
+            # check if output layer, hidden layer or no layer at all
             if (self.chromosome[x][0] != 0) and (self.chromosome[x+1][0] == 0):
                 output_layer = True
-                self.build_layer(self.chromosome[x], output=output_layer, input=input_layer)
+                self.build_layer(self.chromosome[x], output_layer=output_layer, input_layer=input_layer)
                 input_layer = False
             elif self.chromosome[x][0] != 0:
-                self.build_layer(self.chromosome[x], output=output_layer, input=input_layer)
+                self.build_layer(self.chromosome[x], output_layer=output_layer, input_layer=input_layer)
                 input_layer = False
             else:
-                return self.model()
+                return self.model
 
-    def build_layer(self, layer, input=False, output=False):
+    def build_layer(self, layer, input_layer=False, output_layer=False):
         if layer[0] == 1:   # Dense Layer
-            if input:           # input layer
+            if input_layer:           # input layer
                 self.model.add(Dense(layer[1], input_shape=INPUT_SHAPE, activation='relu'))
-            elif output:        # output layer
+            elif output_layer:        # output layer
                 self.model.add(Dense(CLASSES, activation='softmax'))
             else:               # hidden layer
                 self.model.add(Dense(layer[1], activation='relu'))
+        elif layer[0] == 2:
+            if input_layer:           # input layer
+                self.model.add(Conv2D(layer[1], (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation='relu'))
+            elif output_layer:        # output layer
+                self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), activation=layer[4]))
+            else:               # hidden layer
+                self.model.add(Conv2D(layer[1], (layer[3], layer[3]), activation=layer[4]))
         else:
             raise NotImplementedError('Layers other than dense have not been implemented')
 
@@ -56,3 +63,6 @@ class Chromosome(object):
         for x in range(0, MAX_LAYERS):
             if self.chromosome[x][0] == 0:
                 return x
+
+    def model_summary(self):
+        self.model.summary()
