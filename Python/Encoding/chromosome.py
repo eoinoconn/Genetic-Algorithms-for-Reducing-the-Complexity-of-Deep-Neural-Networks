@@ -23,7 +23,7 @@ class Chromosome(object):
             raise NotImplementedError("remove layer at index not implemented")
 
     def build_model(self):
-        self.model.layers.clear()
+        self.model = Sequential()
         output_layer = False
         input_layer = True
         for x in range(self.chromosome.__len__()):

@@ -56,6 +56,7 @@ def dense_layer(input_layer=False):
     else:
         layer[2] = 0    # Sets hidden layer
     layer[4] = set_activation()
+    return layer
 
 
 def set_activation():
