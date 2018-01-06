@@ -73,7 +73,6 @@ class TestChromosome(unittest.TestCase):
         layer[4] = 'relu'
         self.chromo.add_layer(layer)
         self.chromo.build_model()
-        self.chromo.model_summary()
 
 
 if __name__ == '__main__':

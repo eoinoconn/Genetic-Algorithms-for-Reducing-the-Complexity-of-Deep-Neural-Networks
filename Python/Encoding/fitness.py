@@ -7,6 +7,7 @@ class Fitness:
         else:
 
             model = chromosome.build_model()
+            model.summary()
             model.compile(loss='categorical_crossentropy',
                           optimizer='sgd',
                           metrics=['accuracy'])
