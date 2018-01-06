@@ -10,7 +10,7 @@ CLASSES = 10
 class Chromosome(object):
 
     def __init__(self):
-        self.chromosome = [[0 for x in range(LAYER_DEPTH)] for y in range(MAX_LAYERS)]
+        self.chromosome = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
 
     def add_layer(self, layer):
@@ -46,15 +46,19 @@ class Chromosome(object):
                 self.model.add(Dense(CLASSES, activation='softmax'))
             else:               # hidden layer
                 self.model.add(Dense(layer[1], activation='relu'))
-        elif layer[0] == 2:
-            if input_layer:           # input layer
+        elif layer[0] == 2:     # conv layer
+            if input_layer and output_layer:    # input and output
+                self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation=layer[4]))
+            elif input_layer:           # input layer
                 self.model.add(Conv2D(layer[1], (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation='relu'))
             elif output_layer:        # output layer
                 self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), activation=layer[4]))
             else:               # hidden layer
                 self.model.add(Conv2D(layer[1], (layer[3], layer[3]), activation=layer[4]))
+        elif layer[0] == 3:
+            self.model.add(Flatten())
         else:
-            raise NotImplementedError('Layers other than dense have not been implemented')
+            raise NotImplementedError('Layers not yet implemented')
 
     def __str__(self):
         return self.chromosome.__str__()
