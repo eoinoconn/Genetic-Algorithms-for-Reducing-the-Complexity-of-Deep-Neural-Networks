@@ -89,7 +89,7 @@ def dense_layer(input_layer=False):
 
 def set_activation():
     ran_active = random.randrange(0, 3)
-    if ran_active == 0:
+    if True:
         return 'relu'
     elif ran_active == 1:
         return 'sigmoid'
@@ -101,8 +101,9 @@ def set_activation():
 
 def add_layer(chromosome):
     change_layer = False
+    chromosome_length = chromosome.__len__()
     while not change_layer:
-        rand = random.randrange(0, chromosome.__len__())
+        rand = random.randrange(0, chromosome_length)
         logging.info("adding layer, rand = %d", rand)
         layer = chromosome.get_layer(rand)
         if layer[0] == 1:
@@ -114,16 +115,17 @@ def add_layer(chromosome):
         else:
             continue
 
-    for i in range(rand+1, chromosome.__len__()+1):
+    for i in range(rand+1, chromosome_length+1):
         temp_layer = chromosome.get_layer(i)
         chromosome.add_layer(new_layer, i)
         new_layer = temp_layer
 
 
 def remove_layer(chromosome):
+    chromosome_length = chromosome.__len__()
     while True:
         # randomly pick layer to remove
-        rand = random.randrange(0, chromosome.__len__())
+        rand = random.randrange(0, chromosome_length)
         layer = chromosome.get_layer(rand)
         # must not pick flatten layer which acts as border between convolutional and dense layers
         # must not pick dense or conv layer if only 1 is present
@@ -133,7 +135,7 @@ def remove_layer(chromosome):
             continue
         logging.info("removed layer type %d", layer[0])
         chromosome.remove_layer(rand)
-        for i in range(rand+1, chromosome.__len__()):
+        for i in range(rand, chromosome_length):
             temp_layer = chromosome.get_layer(i+1)
             chromosome.add_layer(temp_layer, i)
         break
