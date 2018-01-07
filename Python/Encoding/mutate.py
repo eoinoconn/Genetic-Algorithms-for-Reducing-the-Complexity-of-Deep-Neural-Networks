@@ -68,7 +68,7 @@ def flatten_layer():
     return layer
 
 
-# The first value of the layer array is 1 for a convolutional layer
+# The first value of the layer array is 1 for a dense layer
 # Other variables:
 #   1   layer units
 #   2   input layer
@@ -128,8 +128,8 @@ def remove_layer(chromosome):
         # must not pick flatten layer which acts as border between convolutional and dense layers
         # must not pick dense or conv layer if only 1 is present
         if layer[0] == 3 or \
-                (layer[0] == 2 and chromosome.num_dense() < 2) or \
-                (layer[0] == 1 and chromosome.num_conv() < 2):
+                (layer[0] == 2 and chromosome.num_conv() < 2) or \
+                (layer[0] == 1 and chromosome.num_dense() < 2):
             continue
         logging.info("removed layer type %d", layer[0])
         chromosome.remove_layer(rand)
