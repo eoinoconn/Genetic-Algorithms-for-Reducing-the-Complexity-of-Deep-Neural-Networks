@@ -33,9 +33,9 @@ def data_preprocess(pickle_file='notMNIST.pickle'):
         test_dataset = save['test_dataset']
         test_labels = save['test_labels']
         del save
-        print('Training set', train_dataset.shape, train_labels.shape)
-        print('Validation set', valid_dataset.shape, valid_labels.shape)
-        print('Test set', test_dataset.shape, test_labels.shape)
+        # print('Training set', train_dataset.shape, train_labels.shape)
+        # print('Validation set', valid_dataset.shape, valid_labels.shape)
+        # print('Test set', test_dataset.shape, test_labels.shape)
 
     train_dataset = reformat(train_dataset)
     valid_dataset = reformat(valid_dataset)
@@ -60,10 +60,12 @@ def get_fitness(chromo=None, optimal_fitness=False):
 
 class EncodingTest(unittest.TestCase):
 
-
-
     def test_encoding(self):
-        logging.basicConfig(filename='encoding.log', level=logging.DEBUG, filemode='w')
+        logging.basicConfig(filename='encoding.log',
+                            format='%(asctime)s - %(levelname)s - %(message)s',
+                            datefmt='%m/%d/%Y %I:%M:%S',
+                            level=logging.DEBUG,
+                            filemode='w')
 
         def fnDisplay(candidate):
             print(candidate)

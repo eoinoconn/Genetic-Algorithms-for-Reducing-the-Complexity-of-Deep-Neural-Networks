@@ -1,5 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Conv2D, Conv1D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
+import logging
 
 MAX_LAYERS = 50
 LAYER_DEPTH = 50
@@ -10,6 +11,7 @@ CLASSES = 10
 class Chromosome(object):
 
     def __init__(self):
+        logging.info("initialising chromosome")
         self.chromosome = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
 
