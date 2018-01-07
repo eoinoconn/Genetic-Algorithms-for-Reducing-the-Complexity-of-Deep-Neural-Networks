@@ -4,28 +4,32 @@ import logging
 
 
 def mutate(chromosome):
-    logging.info("mutating chromosome")
-    rand = random.randrange(0, 2)
-    # remove layer
-    # there should always be at least 3 layers in the chromosome.
-    # the input convolutional, the flatten layer and the dense layer.
+    mutation_done = False
 
-    # remove layer
-    if chromosome.__len__() > 3 and rand == 0:
-        logging.info("removing layer")
-        remove_layer(chromosome)
-    # add layer
-    elif rand == 1:
-        logging.info("adding layer")
-        add_layer(chromosome)
-    # change layer
-    elif rand == 2:
-        logging.warning("attempting unimplemented mutation")
-        raise NotImplementedError
-    # change hyperparameter
-    elif rand == 3:
-        logging.warning("attempting unimplemented mutation")
-        raise NotImplementedError
+    while not mutation_done:
+        rand = random.randrange(0, 2)
+        logging.info("mutating chromosome, rand = %f", rand)
+
+        # remove layer
+        # there should always be at least 3 layers in the chromosome.
+        # the input convolutional, the flatten layer and the dense layer.
+        if chromosome.__len__() > 3 and rand == 0:
+            logging.info("removing layer")
+            remove_layer(chromosome)
+            mutation_done = True
+        # add layer
+        elif rand == 1:
+            logging.info("adding layer")
+            add_layer(chromosome)
+            mutation_done = True
+        # change layer
+        elif rand == 2:
+            logging.warning("attempting unimplemented mutation")
+            raise NotImplementedError
+        # change hyperparameter
+        elif rand == 3:
+            logging.warning("attempting unimplemented mutation")
+            raise NotImplementedError
 
 
 def create_parent():
@@ -38,6 +42,12 @@ def create_parent():
     return chromosome
 
 
+# The first value of the layer array is 2 for a convolutional layer
+# Other variables:
+#   1   layer units
+#   2   input layer
+#   3   window size
+#   4   activation
 def convolutional_layer(input_layer=False):
     layer = [0 for x in range(0, LAYER_DEPTH)]
     layer[0] = 2    # Sets convolutional layer
@@ -48,6 +58,7 @@ def convolutional_layer(input_layer=False):
         layer[2] = 0    # Sets hidden layer
     layer[3] = random.randrange(1, 5)   # Sets slide size
     layer[4] = set_activation()
+    logging.info("added conv layer")
     return layer
 
 
@@ -57,6 +68,12 @@ def flatten_layer():
     return layer
 
 
+# The first value of the layer array is 1 for a convolutional layer
+# Other variables:
+#   1   layer units
+#   2   input layer
+#   3   <unused>
+#   4   activation
 def dense_layer(input_layer=False):
     layer = [0 for x in range(LAYER_DEPTH)]
     layer[0] = 1
@@ -66,6 +83,7 @@ def dense_layer(input_layer=False):
     else:
         layer[2] = 0    # Sets hidden layer
     layer[4] = set_activation()
+    logging.info("added dense layer")
     return layer
 
 
@@ -85,6 +103,7 @@ def add_layer(chromosome):
     change_layer = False
     while not change_layer:
         rand = random.randrange(0, chromosome.__len__())
+        logging.info("adding layer, rand = %d", rand)
         layer = chromosome.get_layer(rand)
         if layer[0] == 1:
             new_layer = dense_layer()
@@ -103,10 +122,16 @@ def add_layer(chromosome):
 
 def remove_layer(chromosome):
     while True:
+        # randomly pick layer to remove
         rand = random.randrange(0, chromosome.__len__())
         layer = chromosome.get_layer(rand)
-        if layer[0] == 3:
+        # must not pick flatten layer which acts as border between convolutional and dense layers
+        # must not pick dense or conv layer if only 1 is present
+        if layer[0] == 3 or \
+                (layer[0] == 2 and chromosome.num_dense() < 2) or \
+                (layer[0] == 1 and chromosome.num_conv() < 2):
             continue
+        logging.info("removed layer type %d", layer[0])
         chromosome.remove_layer(rand)
         for i in range(rand+1, chromosome.__len__()):
             temp_layer = chromosome.get_layer(i+1)

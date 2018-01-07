@@ -30,11 +30,30 @@ class Chromosome(object):
     def get_layer(self, index):
         return self.chromosome[index]
 
+    def num_dense(self):
+        count = 0
+        for layer in self.iterate_layers():
+            if layer[0] == 1:
+                count += 1
+        return count
+
+    def num_conv(self):
+        count = 0
+        for layer in self.iterate_layers():
+            if layer[0] == 2:
+                count += 1
+        return count
+
+    def iterate_layers(self):
+        for x in range(0, self.__len__()):
+            layer = self.get_layer(x)
+            yield layer
+
     def build_model(self):
         self.model = Sequential()
         output_layer = False
         input_layer = True
-        for x in range(self.chromosome.__len__()):
+        for x in range(self.__len__()+1):
             # check if output layer, hidden layer or no layer at all
             if (self.chromosome[x][0] != 0) and (self.chromosome[x+1][0] == 0):
                 output_layer = True
