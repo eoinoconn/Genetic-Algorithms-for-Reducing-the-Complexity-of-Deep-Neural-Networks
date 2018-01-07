@@ -13,14 +13,20 @@ class Chromosome(object):
         self.chromosome = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
 
-    def add_layer(self, layer):
-        self.chromosome[self.__len__()] = layer
+    def add_layer(self, layer, index=None):
+        if index is None:
+            self.chromosome[self.__len__()] = layer
+        else:
+            self.chromosome[index] = layer
 
     def remove_layer(self, index=None):
         if index is None:
-            self.chromosome[self.__len__()].remove
+            self.chromosome[self.__len__()] = [0 for x in range(0, LAYER_DEPTH)]
         else:
-            raise NotImplementedError("remove layer at index not implemented")
+            self.chromosome[index] = [0 for x in range(0, LAYER_DEPTH)]
+
+    def get_layer(self, index):
+        return self.chromosome[index]
 
     def build_model(self):
         self.model = Sequential()

@@ -11,6 +11,7 @@ import numpy as np
 from six.moves import cPickle as pickle
 import keras as keras
 import unittest
+import logging
 
 image_size = 28
 num_labels = 10
@@ -62,6 +63,7 @@ class EncodingTest(unittest.TestCase):
 
 
     def test_encoding(self):
+        logging.basicConfig(filename='encoding.log', level=logging.DEBUG, filemode='w')
 
         def fnDisplay(candidate):
             print(candidate)
