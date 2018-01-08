@@ -1,12 +1,12 @@
 import unittest
-from Python.Encoding.mutate import *
-from Python.Encoding.chromosome import *
+from Python.GeneticAlgorithm.mutate import *
+from Python.GeneticAlgorithm.genes import *
 
 
 class TestMutate(unittest.TestCase):
 
     def setUp(self):
-        self.chromosome = Chromosome()
+        self.chromosome = Genes()
 
     def test_create_parent(self):
         chromosome = create_parent()

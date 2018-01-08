@@ -1,11 +1,11 @@
 import unittest
-from Python.Encoding.chromosome import Chromosome, LAYER_DEPTH, MAX_LAYERS
+from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH, MAX_LAYERS
 
 
-class TestChromosome(unittest.TestCase):
+class TestGenes(unittest.TestCase):
 
     def setUp(self):
-        self.chromo = Chromosome()
+        self.chromo = Genes()
 
     def test_len(self):
         self.setup_fake_chromosome()
