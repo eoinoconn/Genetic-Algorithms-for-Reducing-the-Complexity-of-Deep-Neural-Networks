@@ -8,37 +8,39 @@ def mutate(chromosome):
 
     while not mutation_done:
         rand = random.randrange(0, 2)
-        logging.info("mutating chromosome, rand = %f", rand)
+        logger = logging.getLogger('mutate')
+        logger.info("mutating chromosome, rand = %f", rand)
 
         # remove layer
         # there should always be at least 3 layers in the chromosome.
         # the input convolutional, the flatten layer and the dense layer.
         if chromosome.__len__() > 3 and rand == 0:
-            logging.info("removing layer")
+            logger.info("removing layer")
             remove_layer(chromosome)
             mutation_done = True
         # add layer
         elif rand == 1:
-            logging.info("adding layer")
+            logger.info("adding layer")
             add_layer(chromosome)
             mutation_done = True
         # change layer
         elif rand == 2:
-            logging.warning("attempting unimplemented mutation")
+            logger.warning("attempting unimplemented mutation")
             raise NotImplementedError
         # change hyperparameter
         elif rand == 3:
-            logging.warning("attempting unimplemented mutation")
+            logger.warning("attempting unimplemented mutation")
             raise NotImplementedError
 
 
 def create_parent():
-    logging.info("creating parent chromosome")
+    logger = logging.getLogger('mutate')
+    logger.info("creating parent chromosome")
     chromosome = Genes()
     chromosome.add_layer(convolutional_layer(input_layer=True))
     chromosome.add_layer(flatten_layer())
     chromosome.add_layer(dense_layer())
-    logging.info("parent chromosome created")
+    logger.info("parent chromosome created")
     return chromosome
 
 
@@ -49,6 +51,7 @@ def create_parent():
 #   3   window size
 #   4   activation
 def convolutional_layer(input_layer=False):
+    logger = logging.getLogger('mutate')
     layer = [0 for x in range(0, LAYER_DEPTH)]
     layer[0] = 2    # Sets convolutional layer
     layer[1] = random.randrange(1, 16) * 16     # sets layer units
@@ -58,7 +61,7 @@ def convolutional_layer(input_layer=False):
         layer[2] = 0    # Sets hidden layer
     layer[3] = random.randrange(1, 5)   # Sets slide size
     layer[4] = set_activation()
-    logging.info("added conv layer")
+    logger.info("added conv layer")
     return layer
 
 
@@ -75,15 +78,16 @@ def flatten_layer():
 #   3   <unused>
 #   4   activation
 def dense_layer(input_layer=False):
+    logger = logging.getLogger('mutate')
     layer = [0 for x in range(LAYER_DEPTH)]
     layer[0] = 1
-    layer[1] = random.randrange(1, 16) * 16  # sets layer units
+    layer[1] = 2 ** random.randrange(4, 9)     # sets layer units
     if input_layer:
         layer[2] = 1    # Sets input layer
     else:
         layer[2] = 0    # Sets hidden layer
     layer[4] = set_activation()
-    logging.info("added dense layer")
+    logger.info("added dense layer")
     return layer
 
 
@@ -100,11 +104,12 @@ def set_activation():
 
 
 def add_layer(chromosome):
+    logger = logging.getLogger('mutate')
     change_layer = False
     chromosome_length = chromosome.__len__()
     while not change_layer:
         rand = random.randrange(0, chromosome_length)
-        logging.info("adding layer, rand = %d", rand)
+        logger.info("adding layer, rand = %d", rand)
         layer = chromosome.get_layer(rand)
         if layer[0] == 1:
             new_layer = dense_layer()
@@ -122,6 +127,7 @@ def add_layer(chromosome):
 
 
 def remove_layer(chromosome):
+    logger = logging.getLogger('mutate')
     chromosome_length = chromosome.__len__()
     while True:
         # randomly pick layer to remove
@@ -133,7 +139,7 @@ def remove_layer(chromosome):
                 (layer[0] == 2 and chromosome.num_conv() < 2) or \
                 (layer[0] == 1 and chromosome.num_dense() < 2):
             continue
-        logging.info("removed layer type %d", layer[0])
+        logger.info("removed layer type %d", layer[0])
         chromosome.remove_layer(rand)
         for i in range(rand, chromosome_length):
             temp_layer = chromosome.get_layer(i+1)

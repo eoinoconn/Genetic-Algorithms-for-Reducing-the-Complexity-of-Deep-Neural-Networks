@@ -11,7 +11,8 @@ CLASSES = 10
 class Genes(object):
 
     def __init__(self):
-        logging.info("initialising chromosome")
+        logger = logging.getLogger('fitness')
+        logger.info("initialising chromosome")
         self.chromosome = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
 

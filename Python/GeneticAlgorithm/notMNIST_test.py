@@ -12,6 +12,7 @@ from six.moves import cPickle as pickle
 import keras as keras
 import unittest
 import logging
+from logging import config
 
 image_size = 28
 num_labels = 10
@@ -61,14 +62,11 @@ def get_fitness(chromo=None, optimal_fitness=False):
 class EncodingTest(unittest.TestCase):
 
     def test_encoding(self):
-        logging.basicConfig(filename='encoding.log',
-                            format='%(asctime)s - %(levelname)s - %(message)s',
-                            datefmt='%m/%d/%Y %I:%M:%S',
-                            level=logging.DEBUG,
-                            filemode='w')
+        logging.config.fileConfig('logging.conf')
 
         def fnDisplay(candidate):
-            print(candidate)
+            logger = logging.getLogger('testFile')
+            logger.debug(candidate)
 
         def fnGetFitness(chromo):
             return get_fitness(chromo=chromo)

@@ -8,25 +8,25 @@ class Fitness:
         if optimal_fitness:
             self.accuracy = 0.90
         else:
-            logging.info("building model")
+            logger = logging.getLogger('fitness')
+            logger.info("building model")
             model = chromosome.build_model()
-            model.summary()
-            print_summary(model, print_fn=logging.debug)
-            logging.info("Model built succesfully, compiling...")
+            print_summary(model, print_fn=logger.debug)
+            logger.info("Model built succesfully, compiling...")
             model.compile(loss='categorical_crossentropy',
                           optimizer='sgd',
-                          metrics=['accuracy'])
-            logging.info("Model compiled succesfully, beginning training")
+                          metrics=['accuracy'],)
+            logger.info("Model compiled succesfully, beginning training")
             model.fit(train_dataset, train_labels,
                       epochs=1,
                       batch_size=100,
                       validation_data=(valid_dataset, valid_labels),
-                      verbose=2)
+                      verbose=2,)
             loss_and_metrics = model.evaluate(test_dataset, test_labels,
                                               batch_size=100,
                                               verbose=0)
             self.accuracy = loss_and_metrics[1]
-            logging.info("Model trained succesfully, accuracy = %.2f", self.accuracy)
+            logger.info("Model trained succesfully, accuracy = %.2f", self.accuracy)
 
     def __str__(self):
         return "{} Accuracy\n".format(
