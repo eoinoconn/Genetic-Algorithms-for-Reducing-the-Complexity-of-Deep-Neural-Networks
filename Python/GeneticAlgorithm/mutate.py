@@ -1,4 +1,4 @@
-from Python.Encoding.chromosome import Chromosome, LAYER_DEPTH, INPUT_SHAPE
+from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH, INPUT_SHAPE
 import random
 import logging
 
@@ -34,7 +34,7 @@ def mutate(chromosome):
 
 def create_parent():
     logging.info("creating parent chromosome")
-    chromosome = Chromosome()
+    chromosome = Genes()
     chromosome.add_layer(convolutional_layer(input_layer=True))
     chromosome.add_layer(flatten_layer())
     chromosome.add_layer(dense_layer())

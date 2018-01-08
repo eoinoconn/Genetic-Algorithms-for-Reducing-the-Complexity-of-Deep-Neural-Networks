@@ -8,7 +8,7 @@ INPUT_SHAPE = (28, 28, 1)
 CLASSES = 10
 
 
-class Chromosome(object):
+class Genes(object):
 
     def __init__(self):
         logging.info("initialising chromosome")
