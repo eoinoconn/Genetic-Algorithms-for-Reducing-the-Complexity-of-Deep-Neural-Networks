@@ -1,4 +1,5 @@
 import logging
+from keras.utils import print_summary
 
 
 class Fitness:
@@ -10,6 +11,7 @@ class Fitness:
             logging.info("building model")
             model = chromosome.build_model()
             model.summary()
+            print_summary(model, print_fn=logging.debug)
             logging.info("Model built succesfully, compiling...")
             model.compile(loss='categorical_crossentropy',
                           optimizer='sgd',
