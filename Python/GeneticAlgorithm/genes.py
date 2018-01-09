@@ -11,7 +11,7 @@ CLASSES = 10
 class Genes(object):
 
     def __init__(self):
-        logger = logging.getLogger('fitness')
+        logger = logging.getLogger('genes')
         logger.info("initialising genes")
         self.genes = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
@@ -20,7 +20,11 @@ class Genes(object):
         if index is None:
             self.genes[self.__len__()] = layer
         else:
-            self.genes[index] = layer
+            genes_length = self.__len__()
+            for i in range(index, genes_length+1):
+                temp_layer = self.genes[i]
+                self.genes[i] = layer
+                layer = temp_layer
 
     def overwrite_layer(self, layer, index):
         self.genes[index] = layer
@@ -29,7 +33,10 @@ class Genes(object):
         if index is None:
             self.genes[self.__len__()] = [0 for x in range(0, LAYER_DEPTH)]
         else:
-            self.genes[index] = [0 for x in range(0, LAYER_DEPTH)]
+            genes_length = self.__len__()
+            for i in range(index, genes_length):
+                self.genes[i] = self.genes[i + 1]
+
 
     def get_layer(self, index):
         return self.genes[index]
@@ -53,6 +60,13 @@ class Genes(object):
             layer = self.get_layer(x)
             yield layer
 
+    def find_flatten(self):
+        count = 0
+        for layer in self.iterate_layers():
+            if layer[0] == 3:
+                return count
+            count += 1
+
     def build_model(self):
         self.model = Sequential()
         output_layer = False
@@ -73,10 +87,15 @@ class Genes(object):
         if layer[0] == 1:   # Dense Layer
             if input_layer:           # input layer
                 self.model.add(Dense(layer[1], input_shape=INPUT_SHAPE, activation='relu'))
+                if layer[3] > 0:
+                    self.model.add(Dropout(layer[3]))
             elif output_layer:        # output layer
                 self.model.add(Dense(CLASSES, activation='softmax'))
             else:               # hidden layer
                 self.model.add(Dense(layer[1], activation='relu'))
+                if layer[3] > 0:
+                    self.model.add(Dropout(layer[3]))
+
         elif layer[0] == 2:     # conv layer
             if input_layer and output_layer:    # input and output
                 self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation=layer[4]))
