@@ -91,6 +91,7 @@ def _get_improvement(new_child, generate_parent, max_generated_chromosomes, logg
             bestParent = child
             continue
         yield child
+        child.Fitness.new_best()
         bestParent = child
 
 
