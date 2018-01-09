@@ -10,11 +10,15 @@ CLASSES = 10
 
 class Genes(object):
 
+    class_id = 1
+
     def __init__(self):
         self.logger = logging.getLogger('genes')
         self.logger.info("initialising genes")
         self.genes = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
+        self.id = self.class_id
+        self.class_id += 1
 
     def add_layer(self, layer, index=None):
         if index is None:
