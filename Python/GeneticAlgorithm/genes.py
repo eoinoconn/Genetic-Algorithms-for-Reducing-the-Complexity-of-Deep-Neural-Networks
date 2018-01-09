@@ -12,24 +12,27 @@ class Genes(object):
 
     def __init__(self):
         logger = logging.getLogger('fitness')
-        logger.info("initialising chromosome")
-        self.chromosome = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
+        logger.info("initialising genes")
+        self.genes = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
 
     def add_layer(self, layer, index=None):
         if index is None:
-            self.chromosome[self.__len__()] = layer
+            self.genes[self.__len__()] = layer
         else:
-            self.chromosome[index] = layer
+            self.genes[index] = layer
+
+    def overwrite_layer(self, layer, index):
+        self.genes[index] = layer
 
     def remove_layer(self, index=None):
         if index is None:
-            self.chromosome[self.__len__()] = [0 for x in range(0, LAYER_DEPTH)]
+            self.genes[self.__len__()] = [0 for x in range(0, LAYER_DEPTH)]
         else:
-            self.chromosome[index] = [0 for x in range(0, LAYER_DEPTH)]
+            self.genes[index] = [0 for x in range(0, LAYER_DEPTH)]
 
     def get_layer(self, index):
-        return self.chromosome[index]
+        return self.genes[index]
 
     def num_dense(self):
         count = 0
@@ -56,12 +59,12 @@ class Genes(object):
         input_layer = True
         for x in range(self.__len__()+1):
             # check if output layer, hidden layer or no layer at all
-            if (self.chromosome[x][0] != 0) and (self.chromosome[x+1][0] == 0):
+            if (self.genes[x][0] != 0) and (self.genes[x+1][0] == 0):
                 output_layer = True
-                self.build_layer(self.chromosome[x], output_layer=output_layer, input_layer=input_layer)
+                self.build_layer(self.genes[x], output_layer=output_layer, input_layer=input_layer)
                 input_layer = False
-            elif self.chromosome[x][0] != 0:
-                self.build_layer(self.chromosome[x], output_layer=output_layer, input_layer=input_layer)
+            elif self.genes[x][0] != 0:
+                self.build_layer(self.genes[x], output_layer=output_layer, input_layer=input_layer)
                 input_layer = False
             else:
                 return self.model
@@ -89,11 +92,11 @@ class Genes(object):
             raise NotImplementedError('Layers not yet implemented')
 
     def __str__(self):
-        return self.chromosome.__str__()
+        return self.genes.__str__()
 
     def __len__(self):
         for x in range(0, MAX_LAYERS):
-            if self.chromosome[x][0] == 0:
+            if self.genes[x][0] == 0:
                 return x
 
     def model_summary(self):

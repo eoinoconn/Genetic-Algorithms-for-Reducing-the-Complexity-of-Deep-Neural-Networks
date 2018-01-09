@@ -23,7 +23,7 @@ def mutate(chromosome):
             logger.info("adding layer")
             add_layer(chromosome)
             mutation_done = True
-        # change layer
+        # change dropout
         elif rand == 2:
             logger.warning("attempting unimplemented mutation")
             raise NotImplementedError
@@ -75,7 +75,7 @@ def flatten_layer():
 # Other variables:
 #   1   layer units
 #   2   input layer
-#   3   <unused>
+#   3   dropout
 #   4   activation
 def dense_layer(input_layer=False):
     logger = logging.getLogger('mutate')
@@ -86,9 +86,19 @@ def dense_layer(input_layer=False):
         layer[2] = 1    # Sets input layer
     else:
         layer[2] = 0    # Sets hidden layer
+    layer[3] = random.randrange(0.2, 0.8, 0.01)
     layer[4] = set_activation()
     logger.info("added dense layer")
     return layer
+
+
+def dropout_layer(genes):
+    while True:
+        layer_index = random.randrange(0, genes.__len__())
+        layer = genes.get_layer(layer_index)
+        if layer[0] == 1:   # check if dense layer
+            layer[3] = random.randrange(0.2, 0.8, 0.01)
+            genes.overwrite_layer(layer, layer_index)
 
 
 def set_activation():
