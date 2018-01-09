@@ -54,7 +54,7 @@ def convolutional_layer(input_layer=False):
     logger = logging.getLogger('mutate')
     layer = [0 for x in range(0, LAYER_DEPTH)]
     layer[0] = 2    # Sets convolutional layer
-    layer[1] = random.randrange(1, 16) * 16     # sets layer units
+    layer[1] = 2 ** random.randrange(4, 9)     # sets layer units
     if input_layer:
         layer[2] = 1    # Sets input layer
     else:
