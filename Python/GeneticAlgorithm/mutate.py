@@ -7,7 +7,7 @@ def mutate(genes):
     mutation_done = False
 
     while not mutation_done:
-        rand = random.randrange(0, 2)
+        rand = random.randrange(0, 3)
         logger = logging.getLogger('mutate')
         logger.info("mutating genes, rand = %f", rand)
 
@@ -25,9 +25,10 @@ def mutate(genes):
             mutation_done = True
         # change dropout
         elif rand == 2:
-            logger.warning("attempting unimplemented mutation")
-            raise NotImplementedError
-        # change hyperparameter
+            logger.info("changing dropout")
+            change_dropout_layer(genes, logger)
+            mutation_done = True
+        # change pooling layer
         elif rand == 3:
             logger.warning("attempting unimplemented mutation")
             raise NotImplementedError
@@ -93,13 +94,15 @@ def dense_layer(input_layer=False):
 
 
 # changes dropout value of a dense layer
-def change_dropout_layer(genes):
+def change_dropout_layer(genes, logger=logging.getLogger(__name__)):
     while True:
         layer_index = random.randrange(0, genes.__len__())
         layer = genes.get_layer(layer_index)
         if layer[0] == 1:   # check if dense layer
             layer[3] = random.uniform(0.2, 0.8)
+            logger.info("set droupout to %f", layer[3])
             genes.overwrite_layer(layer, layer_index)
+            break
 
 
 def set_activation():

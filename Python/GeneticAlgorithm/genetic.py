@@ -77,6 +77,7 @@ def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,
 def _get_improvement(new_child, generate_parent, max_generated_chromosomes, logger):
     chromosomes_generated = 1
     bestParent = generate_parent()
+    bestParent.Fitness.new_best()
     yield bestParent
     while True:
         child = new_child(bestParent)

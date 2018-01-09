@@ -32,7 +32,7 @@ class Fitness:
     def new_best(self):
         logger = logging.getLogger('resultMetrics')
         logger.info("new best chromosome")
-        print_summary(self.model, print_fn=self.logger.info)
+        print_summary(self.model, print_fn=logger.info)
         logger.info("Accuracy: %4.2f\tParameters %d\n", self.accuracy, self.model.count_params())
 
     def __str__(self):
