@@ -80,6 +80,7 @@ def change_pooling(genes, logger):
     layer = genes.get_layer(conv_layer_index)
     layer[5] = random.randrange(1, 3)
     layer[6] = random.randrange(1, 5)
+    genes.overwrite_layer(layer, conv_layer_index)
     logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
 
 
