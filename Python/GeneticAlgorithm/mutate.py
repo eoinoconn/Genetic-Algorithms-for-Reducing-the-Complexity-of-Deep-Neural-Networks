@@ -116,43 +116,32 @@ def set_activation():
 
 def add_layer(genes):
     logger = logging.getLogger('mutate')
-    change_layer = False
-    flatten_index = genes.find_flatten()
-    while not change_layer:
-        rand = random.randrange(0, genes_length)
-        logger.info("adding layer, rand = %d", rand)
-        layer = genes.get_layer(rand)
-        if layer[0] == 1:
-            new_layer = dense_layer()
-            change_layer = True
-        elif layer[0] == 2:
-            new_layer = convolutional_layer()
-            change_layer = True
-        else:
-            continue
-
-    for i in range(rand+1, genes_length+1):
-        temp_layer = genes.get_layer(i)
-        genes.add_layer(new_layer, i)
-        new_layer = temp_layer
+    layer_type = random.randrange(1, 3)     # check which layer type to add
+    flatten_index = genes.find_flatten()    # find the index at which the flatten layer is present
+    logger.info("adding layer type %d", layer_type)
+    if layer_type == 1:     # dense layer
+        new_layer = dense_layer()
+        new_layer_location = random.randrange(flatten_index+1, genes.__len__())
+        logger.info("added at location %d, genes length is %d", new_layer_location, genes.__len__())
+    else:   # convolutional layer
+        new_layer = convolutional_layer()
+        new_layer_location = random.randrange(0, flatten_index+1)
+        logger.info("added at location %d, genes length is %d", new_layer_location, genes.__len__())
+    genes.add_layer(new_layer, new_layer_location)
 
 
 def remove_layer(genes):
     logger = logging.getLogger('mutate')
-    genes_length = genes.__len__()
     while True:
         # randomly pick layer to remove
-        rand = random.randrange(0, genes_length)
-        layer = genes.get_layer(rand)
+        layer_remove_index = random.randrange(0, genes.__len__())
+        layer = genes.get_layer(layer_remove_index)
         # must not pick flatten layer which acts as border between convolutional and dense layers
         # must not pick dense or conv layer if only 1 is present
         if layer[0] == 3 or \
                 (layer[0] == 2 and genes.num_conv() < 2) or \
                 (layer[0] == 1 and genes.num_dense() < 2):
             continue
+        genes.remove_layer(layer_remove_index)
         logger.info("removed layer type %d", layer[0])
-        genes.remove_layer(rand)
-        for i in range(rand, genes_length):
-            temp_layer = genes.get_layer(i+1)
-            genes.add_layer(temp_layer, i)
         break
