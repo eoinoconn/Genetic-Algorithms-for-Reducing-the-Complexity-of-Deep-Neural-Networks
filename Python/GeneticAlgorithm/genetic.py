@@ -48,7 +48,7 @@ def _mutate_custom(parent, custom_mutate, get_fitness):
 
 
 def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,
-             custom_mutate=None, custom_create=None):
+             custom_mutate=None, custom_create=None, max_generated_chromosomes=None):
 
     logger = logging.getLogger('geneticEngine')
 
@@ -67,18 +67,24 @@ def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,
             genes = custom_create()
             return Chromosome(genes, get_fitness(genes))
 
-    for improvement in _get_improvement(fnMutate, fnGenerateParent):
+    for improvement in _get_improvement(fnMutate, fnGenerateParent, max_generated_chromosomes, logger):
         logger.info("found improvement")
         display(improvement.Fitness)
         if not optimalFitness > improvement.Fitness:
             return improvement
 
 
-def _get_improvement(new_child, generate_parent):
+def _get_improvement(new_child, generate_parent, max_generated_chromosomes, logger):
+    chromosomes_generated = 1
     bestParent = generate_parent()
     yield bestParent
     while True:
         child = new_child(bestParent)
+        chromosomes_generated += 1
+        logging.info("chromosomes generated: %d", chromosomes_generated)
+        if max_generated_chromosomes is not None and chromosomes_generated > max_generated_chromosomes:
+            logger.info("max chromosome number reached")
+            return
         if bestParent.Fitness > child.Fitness:
             continue
         if not child.Fitness > bestParent.Fitness:

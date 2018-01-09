@@ -79,7 +79,7 @@ class EncodingTest(unittest.TestCase):
 
         optimalFitness = get_fitness(optimal_fitness=True)
         best = get_best(fnGetFitness, None, optimalFitness, None, fnDisplay,
-                        custom_mutate=fnCustomMutate, custom_create=fnCustomCreate)
+                        custom_mutate=fnCustomMutate, custom_create=fnCustomCreate, max_generated_chromosomes=1000)
         self.assertTrue(not optimalFitness > best.Fitness)
 
 
