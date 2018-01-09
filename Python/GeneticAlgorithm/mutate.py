@@ -3,25 +3,25 @@ import random
 import logging
 
 
-def mutate(chromosome):
+def mutate(genes):
     mutation_done = False
 
     while not mutation_done:
         rand = random.randrange(0, 2)
         logger = logging.getLogger('mutate')
-        logger.info("mutating chromosome, rand = %f", rand)
+        logger.info("mutating genes, rand = %f", rand)
 
         # remove layer
-        # there should always be at least 3 layers in the chromosome.
+        # there should always be at least 3 layers in the genes.
         # the input convolutional, the flatten layer and the dense layer.
-        if chromosome.__len__() > 3 and rand == 0:
+        if genes.__len__() > 3 and rand == 0:
             logger.info("removing layer")
-            remove_layer(chromosome)
+            remove_layer(genes)
             mutation_done = True
         # add layer
         elif rand == 1:
             logger.info("adding layer")
-            add_layer(chromosome)
+            add_layer(genes)
             mutation_done = True
         # change dropout
         elif rand == 2:
@@ -35,13 +35,13 @@ def mutate(chromosome):
 
 def create_parent():
     logger = logging.getLogger('mutate')
-    logger.info("creating parent chromosome")
-    chromosome = Genes()
-    chromosome.add_layer(convolutional_layer(input_layer=True))
-    chromosome.add_layer(flatten_layer())
-    chromosome.add_layer(dense_layer())
-    logger.info("parent chromosome created")
-    return chromosome
+    logger.info("creating parent genes")
+    genes = Genes()
+    genes.add_layer(convolutional_layer(input_layer=True))
+    genes.add_layer(flatten_layer())
+    genes.add_layer(dense_layer())
+    logger.info("parent genes created")
+    return genes
 
 
 # The first value of the layer array is 2 for a convolutional layer
@@ -86,18 +86,19 @@ def dense_layer(input_layer=False):
         layer[2] = 1    # Sets input layer
     else:
         layer[2] = 0    # Sets hidden layer
-    layer[3] = random.randrange(0.2, 0.8, 0.01)
+    layer[3] = random.uniform(0.2, 0.8)
     layer[4] = set_activation()
     logger.info("added dense layer")
     return layer
 
 
-def dropout_layer(genes):
+# changes dropout value of a dense layer
+def change_dropout_layer(genes):
     while True:
         layer_index = random.randrange(0, genes.__len__())
         layer = genes.get_layer(layer_index)
         if layer[0] == 1:   # check if dense layer
-            layer[3] = random.randrange(0.2, 0.8, 0.01)
+            layer[3] = random.uniform(0.2, 0.8)
             genes.overwrite_layer(layer, layer_index)
 
 
@@ -113,14 +114,14 @@ def set_activation():
         return 'elu'
 
 
-def add_layer(chromosome):
+def add_layer(genes):
     logger = logging.getLogger('mutate')
     change_layer = False
-    chromosome_length = chromosome.__len__()
+    flatten_index = genes.find_flatten()
     while not change_layer:
-        rand = random.randrange(0, chromosome_length)
+        rand = random.randrange(0, genes_length)
         logger.info("adding layer, rand = %d", rand)
-        layer = chromosome.get_layer(rand)
+        layer = genes.get_layer(rand)
         if layer[0] == 1:
             new_layer = dense_layer()
             change_layer = True
@@ -130,28 +131,28 @@ def add_layer(chromosome):
         else:
             continue
 
-    for i in range(rand+1, chromosome_length+1):
-        temp_layer = chromosome.get_layer(i)
-        chromosome.add_layer(new_layer, i)
+    for i in range(rand+1, genes_length+1):
+        temp_layer = genes.get_layer(i)
+        genes.add_layer(new_layer, i)
         new_layer = temp_layer
 
 
-def remove_layer(chromosome):
+def remove_layer(genes):
     logger = logging.getLogger('mutate')
-    chromosome_length = chromosome.__len__()
+    genes_length = genes.__len__()
     while True:
         # randomly pick layer to remove
-        rand = random.randrange(0, chromosome_length)
-        layer = chromosome.get_layer(rand)
+        rand = random.randrange(0, genes_length)
+        layer = genes.get_layer(rand)
         # must not pick flatten layer which acts as border between convolutional and dense layers
         # must not pick dense or conv layer if only 1 is present
         if layer[0] == 3 or \
-                (layer[0] == 2 and chromosome.num_conv() < 2) or \
-                (layer[0] == 1 and chromosome.num_dense() < 2):
+                (layer[0] == 2 and genes.num_conv() < 2) or \
+                (layer[0] == 1 and genes.num_dense() < 2):
             continue
         logger.info("removed layer type %d", layer[0])
-        chromosome.remove_layer(rand)
-        for i in range(rand, chromosome_length):
-            temp_layer = chromosome.get_layer(i+1)
-            chromosome.add_layer(temp_layer, i)
+        genes.remove_layer(rand)
+        for i in range(rand, genes_length):
+            temp_layer = genes.get_layer(i+1)
+            genes.add_layer(temp_layer, i)
         break
