@@ -99,9 +99,9 @@ class Genes(object):
             if input_layer and output_layer:    # input and output
                 self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation=layer[4]))
             elif input_layer:           # input layer
-                if layer[5] > 0:    # check for pooling layer
-                    self.pooling_layer(layer)
                 self.model.add(Conv2D(layer[1], (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation='relu'))
+                if layer[5] > 0:  # check for pooling layer
+                    self.pooling_layer(layer)
             elif output_layer:        # output layer
                 self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), activation=layer[4]))
             else:               # hidden layer
