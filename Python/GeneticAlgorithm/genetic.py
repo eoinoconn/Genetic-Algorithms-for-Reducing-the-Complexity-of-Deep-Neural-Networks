@@ -19,6 +19,7 @@ import random
 import statistics
 import sys
 import time
+import logging
 
 
 def _generate_parent(length, geneSet, get_fitness):
@@ -48,6 +49,9 @@ def _mutate_custom(parent, custom_mutate, get_fitness):
 
 def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,
              custom_mutate=None, custom_create=None):
+
+    logger = logging.getLogger('geneticEngine')
+
     if custom_mutate is None:
         def fnMutate(parent):
             return _mutate(parent, geneSet, get_fitness)
@@ -64,6 +68,7 @@ def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,
             return Chromosome(genes, get_fitness(genes))
 
     for improvement in _get_improvement(fnMutate, fnGenerateParent):
+        logger.info("found improvement")
         display(improvement.Fitness)
         if not optimalFitness > improvement.Fitness:
             return improvement
