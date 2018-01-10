@@ -7,7 +7,7 @@ class Fitness:
                  valid_dataset=None,
                  valid_labels=None, test_dataset=None, test_labels=None):
         if optimal_fitness:
-            self.accuracy = 0.90
+            self.accuracy = 0.98
         else:
             # initilise logging objects
             logger_fitness = logging.getLogger('fitness')
