@@ -9,6 +9,8 @@ class Fitness:
         if optimal_fitness:
             self.accuracy = 0.98
         else:
+            self.genes = genes
+
             # initilise logging objects
             logger_fitness = logging.getLogger('fitness')
             logger_genes = logging.getLogger('geneset')
@@ -53,7 +55,7 @@ class Fitness:
 
     def new_best(self):
         logger = logging.getLogger('resultMetrics')
-        logger.info("new best genes")
+        logger.info("new best genes, id = %d", self.genes.id)
         print_summary(self.model, print_fn=logger.info)
         logger.info("Accuracy: %6.4f\tParameters %d\n", self.accuracy, self.model.count_params())
 
