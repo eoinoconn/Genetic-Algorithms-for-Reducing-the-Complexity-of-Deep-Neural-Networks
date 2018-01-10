@@ -39,9 +39,15 @@ def create_parent():
     logger = logging.getLogger('mutate')
     logger.info("creating parent genes")
     genes = Genes()
-    genes.add_layer(convolutional_layer(input_layer=True))
-    genes.add_layer(flatten_layer())
-    genes.add_layer(dense_layer())
+    parent_size = random.randrange(3,7)
+    flatten_layer_index = random.randrange(0, parent_size)
+    for i in range(0,parent_size):
+        if i < flatten_layer_index:
+            genes.add_layer(convolutional_layer())
+        elif i == flatten_layer_index:
+            genes.add_layer(flatten_layer())
+        else:
+            genes.add_layer(dense_layer())
     logger.info("parent genes created")
     return genes
 
