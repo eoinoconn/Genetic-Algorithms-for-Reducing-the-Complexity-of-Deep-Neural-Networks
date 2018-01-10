@@ -10,11 +10,15 @@ CLASSES = 10
 
 class Genes(object):
 
+    class_id = 0
+
     def __init__(self):
-        logger = logging.getLogger('genes')
-        logger.info("initialising genes")
+        self.logger = logging.getLogger('genes')
+        self.logger.info("initialising genes")
         self.genes = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
+        self.id = self.class_id
+        self.class_id += 1
 
     def add_layer(self, layer, index=None):
         if index is None:
@@ -36,7 +40,6 @@ class Genes(object):
             genes_length = self.__len__()
             for i in range(index, genes_length):
                 self.genes[i] = self.genes[i + 1]
-
 
     def get_layer(self, index):
         return self.genes[index]
@@ -101,17 +104,30 @@ class Genes(object):
                 self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation=layer[4]))
             elif input_layer:           # input layer
                 self.model.add(Conv2D(layer[1], (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation='relu'))
+                if layer[5] > 0:  # check for pooling layer
+                    self.pooling_layer(layer)
             elif output_layer:        # output layer
                 self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), activation=layer[4]))
             else:               # hidden layer
                 self.model.add(Conv2D(layer[1], (layer[3], layer[3]), activation=layer[4]))
+                if layer[5] > 0:    # check for pooling layer
+                    self.pooling_layer(layer)
         elif layer[0] == 3:
             self.model.add(Flatten())
         else:
             raise NotImplementedError('Layers not yet implemented')
 
+    def pooling_layer(self, layer):
+        if layer[5] == 1:   # max pooling
+            self.model.add(MaxPooling2D((layer[6], layer[6])))
+        else:
+            self.model.add(AveragePooling2D((layer[6], layer[6])))
+
     def __str__(self):
-        return self.genes.__str__()
+        str = ""
+        for layer in self.iterate_layers():
+            str += layer.__str__() + "\n"
+        return str
 
     def __len__(self):
         for x in range(0, MAX_LAYERS):

@@ -7,7 +7,7 @@ def mutate(genes):
     mutation_done = False
 
     while not mutation_done:
-        rand = random.randrange(0, 3)
+        rand = random.randrange(0, 4)
         logger = logging.getLogger('mutate')
         logger.info("mutating genes, rand = %f", rand)
 
@@ -30,8 +30,9 @@ def mutate(genes):
             mutation_done = True
         # change pooling layer
         elif rand == 3:
-            logger.warning("attempting unimplemented mutation")
-            raise NotImplementedError
+            logger.info("changing pooling")
+            change_pooling(genes, logger)
+            mutation_done = True
 
 
 def create_parent():
@@ -51,6 +52,8 @@ def create_parent():
 #   2   input layer
 #   3   window size
 #   4   activation
+#   5   pooling type(Default 0 = None)
+#   6   pool size
 def convolutional_layer(input_layer=False):
     logger = logging.getLogger('mutate')
     layer = [0 for x in range(0, LAYER_DEPTH)]
@@ -64,6 +67,22 @@ def convolutional_layer(input_layer=False):
     layer[4] = set_activation()
     logger.info("added conv layer")
     return layer
+
+
+# Adds pooling to genes
+#   0   no pooling (Default)
+#   1   max pooling
+#   2   avg pooling
+def change_pooling(genes, logger):
+    # first we need to pick a convolutional layer
+    flatten_index = genes.find_flatten()
+    conv_layer_index = random.randrange(0, flatten_index)
+    layer = genes.get_layer(conv_layer_index)
+    layer[5] = random.randrange(1, 3)
+    layer[6] = random.randrange(1, 5)
+    genes.overwrite_layer(layer, conv_layer_index)
+    logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
+
 
 
 def flatten_layer():
