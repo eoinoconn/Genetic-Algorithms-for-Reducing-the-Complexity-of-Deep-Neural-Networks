@@ -113,10 +113,9 @@ def change_pooling(genes, logger):
     flatten_index = genes.find_flatten()
     conv_layer_index = random.randrange(0, flatten_index)
     layer = genes.get_layer(conv_layer_index)
-    layer[5] = random.randrange(1, 3)
-    layer[6] = random.randrange(1, 5)
     if check_valid_pooling(genes, logger):
-        genes.overwrite_layer(layer, conv_layer_index)
+        layer[5] = random.randrange(1, 3)
+        layer[6] = random.randrange(1, 5)
         logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
         return True
     else:
