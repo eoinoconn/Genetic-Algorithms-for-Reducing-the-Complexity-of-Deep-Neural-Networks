@@ -1,5 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Conv2D, Conv1D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
+from itertools import count
 import logging
 
 MAX_LAYERS = 50
@@ -9,16 +10,18 @@ CLASSES = 10
 
 
 class Genes(object):
-
-    class_id = 0
+    ids = 0
 
     def __init__(self):
         self.logger = logging.getLogger('genes')
         self.logger.info("initialising genes")
         self.genes = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
-        self.id = self.class_id
-        self.class_id += 1
+        self.id = Genes.ids
+        Genes.ids += 1
+
+    def iterate_id(self):
+        self.id += 1
 
     def add_layer(self, layer, index=None):
         if index is None:
@@ -101,15 +104,15 @@ class Genes(object):
 
         elif layer[0] == 2:     # conv layer
             if input_layer and output_layer:    # input and output
-                self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation=layer[4]))
+                self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation='softmax'))
             elif input_layer:           # input layer
                 self.model.add(Conv2D(layer[1], (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation='relu'))
                 if layer[5] > 0:  # check for pooling layer
                     self.pooling_layer(layer)
             elif output_layer:        # output layer
-                self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), activation=layer[4]))
+                self.model.add(Conv2D(CLASSES, (layer[3], layer[3]), activation='softmax'))
             else:               # hidden layer
-                self.model.add(Conv2D(layer[1], (layer[3], layer[3]), activation=layer[4]))
+                self.model.add(Conv2D(layer[1], (layer[3], layer[3]), activation='relu'))
                 if layer[5] > 0:    # check for pooling layer
                     self.pooling_layer(layer)
         elif layer[0] == 3:
