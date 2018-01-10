@@ -28,21 +28,24 @@ class Fitness:
             print_summary(self.model, print_fn=logger_fitness.info)
             print_summary(self.model, print_fn=logger_genes.info)
 
-            logger_fitness.info("Model built succesfully, compiling...")
+            logger_fitness.info("Model built successfully, compiling...")
 
-            self.model.compile(loss='categorical_crossentropy',
-                               optimizer='sgd',
+            # get hyperparameters
+            hyper_params = genes.hyperparameters
+
+            self.model.compile(loss=hyper_params[0],
+                               optimizer=hyper_params[1],
                                metrics=['accuracy'], )
 
             logger_fitness.info("Model compiled succesfully, beginning training")
 
             self.model.fit(train_dataset, train_labels,
-                           epochs=1,
-                           batch_size=100,
+                           epochs=hyper_params[2],
+                           batch_size=hyper_params[3],
                            validation_data=(valid_dataset, valid_labels),
                            verbose=2)
             loss_and_metrics = self.model.evaluate(test_dataset, test_labels,
-                                                   batch_size=100,
+                                                   batch_size=hyper_params[3],
                                                    verbose=0)
 
             self.accuracy = loss_and_metrics[1]

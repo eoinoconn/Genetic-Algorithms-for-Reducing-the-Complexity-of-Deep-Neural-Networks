@@ -51,7 +51,17 @@ def create_parent():
         else:
             genes.add_layer(dense_layer())
     logger.info("parent genes created")
+    logger.info("adding hyperparameters")
+    genes.set_hyperparameters(random_hyperparameters())
     return genes
+
+
+def random_hyperparameters():
+    hyperparameters = [0 for x in range(0, 25)]
+    hyperparameters[0] = 'categorical_crossentropy'    # loss
+    hyperparameters[1] = 'adam'                         # optimizer
+    hyperparameters[2] = 1  # random.randrange(2, 15)   # epochs
+    hyperparameters[3] = random.randrange(50, 200, 25)  # batch size
 
 
 # The first value of the layer array is 2 for a convolutional layer
