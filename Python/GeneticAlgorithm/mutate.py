@@ -1,4 +1,4 @@
-from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH, INPUT_SHAPE
+from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH, INPUT_SHAPE, MAX_LAYERS
 import random
 import logging
 
@@ -14,7 +14,7 @@ def mutate(genes):
         # remove layer
         # there should always be at least 3 layers in the genes.
         # the input convolutional, the flatten layer and the dense layer.
-        if genes.__len__() > 3 and rand == 0:
+        if  rand == 0 and genes.__len__() > 3 and genes.__len__() < MAX_LAYERS:
             logger.info("removing layer")
             remove_layer(genes)
             mutation_done = True
@@ -104,7 +104,7 @@ def check_valid_pooling(genes, logger):
     logger.info("checking for valid geneset; conv dimensions")
     current_dimension = INPUT_SHAPE[0]
     
-    for layer in genes.iterate_layer():
+    for layer in genes.iterate_layers():
         if layer[0] == 2:
             current_dimension -= (layer[3][0] - 1)
             if layer[5] > 0:
