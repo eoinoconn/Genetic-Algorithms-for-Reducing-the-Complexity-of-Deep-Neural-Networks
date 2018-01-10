@@ -10,7 +10,7 @@ CLASSES = 10
 
 class Genes(object):
 
-    class_id = 1
+    class_id = 0
 
     def __init__(self):
         self.logger = logging.getLogger('genes')
@@ -124,7 +124,10 @@ class Genes(object):
             self.model.add(AveragePooling2D((layer[6], layer[6])))
 
     def __str__(self):
-        return self.genes.__str__()
+        str = ""
+        for layer in self.iterate_layers():
+            str += layer.__str__() + "\n"
+        return str
 
     def __len__(self):
         for x in range(0, MAX_LAYERS):

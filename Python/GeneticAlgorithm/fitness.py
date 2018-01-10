@@ -10,8 +10,8 @@ class Fitness:
             self.accuracy = 0.90
         else:
             # initilise logging objects
-            logger_fitness = logging.getLogger('geneset')
-            logger_genes = logging.getLogger('genes')
+            logger_fitness = logging.getLogger('fitness')
+            logger_genes = logging.getLogger('geneset')
 
             # log geneset id
             logger_fitness.info("Geneset id: %d", genes.id)

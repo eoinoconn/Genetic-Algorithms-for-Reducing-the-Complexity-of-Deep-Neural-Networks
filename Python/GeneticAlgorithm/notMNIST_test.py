@@ -56,7 +56,7 @@ def get_fitness(chromo=None, optimal_fitness=False):
     kwag = {"train_dataset": train_dataset, "train_labels": train_labels,
             "valid_dataset": valid_dataset, "valid_labels": valid_labels,
             "test_dataset": test_dataset, "test_labels": test_labels}
-    return Fitness(chromosome=chromo, **kwag)
+    return Fitness(genes=chromo, **kwag)
 
 
 class EncodingTest(unittest.TestCase):
