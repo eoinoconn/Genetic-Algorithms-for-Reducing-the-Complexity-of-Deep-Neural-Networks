@@ -31,8 +31,7 @@ def mutate(genes):
         # change pooling layer
         elif rand == 3:
             logger.info("changing pooling")
-            change_pooling(genes, logger)
-            mutation_done = True
+            mutation_done = change_pooling(genes, logger)
 
         # iterate genes id
         genes.iterate_id()
@@ -89,20 +88,35 @@ def change_pooling(genes, logger):
     layer = genes.get_layer(conv_layer_index)
     layer[5] = random.randrange(1, 3)
     layer[6] = random.randrange(1, 5)
-    # check_valid_pooling(genes)
-    genes.overwrite_layer(layer, conv_layer_index)
-    logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
-
+    if check_valid_pooling(genes, logger):
+        genes.overwrite_layer(layer, conv_layer_index)
+        logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
+        return True
+    else:
+        logger.info("no pooling changes have occurred")
+        return False
 
 # This is a function to check if the mutated geneset has
 # valid dimensions after pooling is altered
-def check_valid_pooling(genes):
-    input_shape = INPUT_SHAPE
+# it does this by calculating the smallest dimension of the 
+# geneset at the last convolutional layer
+def check_valid_pooling(genes, logger):
+    logger.info("checking for valid geneset; conv dimensions")
+    current_dimension = INPUT_SHAPE[0]
+    
     for layer in genes.iterate_layer():
-        if layer[0] == 2 and layer[5] > 0:
-            continue
-        else:
-            continue
+        if layer[0] == 2:
+            current_dimension -= (layer[3][0] - 1)
+            if layer[5] > 0:
+                current_dimension -= int(current_dimension/layer[6])
+        elif layer[0] == 3:
+            break
+    if current_dimension < 1:   # invalid geneset
+        logger.info("Invalid geneset, dimensions less than 0, Dimension: %d", current_dimension)
+        return False
+    else:
+        logger.info("valid geneset found")
+        return True         # valid geneset
 
 
 def flatten_layer():
