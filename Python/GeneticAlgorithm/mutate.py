@@ -98,7 +98,7 @@ def convolutional_layer(input_layer=False):
         layer[2] = 1    # Sets input layer
     else:
         layer[2] = 0    # Sets hidden layer
-    layer[3] = random.randrange(1, 5)   # Sets slide size
+    layer[3] = random.randrange(1, 6)   # Sets slide size
     layer[4] = set_activation()
     logger.info("added conv layer")
     return layer
@@ -129,9 +129,9 @@ def change_pooling(genes, logger):
 # it does this by calculating the smallest dimension of the 
 # geneset at the last convolutional layer
 def check_valid_pooling(genes, logger=logging.getLogger(__name__)):
-    logger.info("checking for valid geneset; conv dimensions")
+
     current_dimension = INPUT_SHAPE[0]
-    
+    logger.info("checking for valid geneset; conv dimensions %d", current_dimension)
     for layer in genes.iterate_layers():
         if layer[0] == 2:
             current_dimension -= (layer[3] - 1)
@@ -143,7 +143,7 @@ def check_valid_pooling(genes, logger=logging.getLogger(__name__)):
         logger.info("Invalid geneset, dimensions less than 0, Dimension: %d", current_dimension)
         return False
     else:
-        logger.info("valid geneset found")
+        logger.info("valid geneset found, min dimension: %d", current_dimension)
         return True         # valid geneset
 
 

@@ -55,7 +55,7 @@ class Fitness:
         logger = logging.getLogger('resultMetrics')
         logger.info("new best genes")
         print_summary(self.model, print_fn=logger.info)
-        logger.info("Accuracy: %4.2f\tParameters %d\n", self.accuracy, self.model.count_params())
+        logger.info("Accuracy: %6.4f\tParameters %d\n", self.accuracy, self.model.count_params())
 
     def __str__(self):
         return "{} Accuracy\n".format(
