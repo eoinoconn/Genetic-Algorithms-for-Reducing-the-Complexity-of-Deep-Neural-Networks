@@ -34,14 +34,17 @@ def mutate(genes):
             change_pooling(genes, logger)
             mutation_done = True
 
+        # iterate genes id
+        genes.iterate_id()
+
 
 def create_parent():
     logger = logging.getLogger('mutate')
     logger.info("creating parent genes")
     genes = Genes()
-    parent_size = random.randrange(3,7)
-    flatten_layer_index = random.randrange(0, parent_size)
-    for i in range(0,parent_size):
+    parent_size = random.randrange(4, 7)
+    flatten_layer_index = random.randrange(1, parent_size-1)
+    for i in range(0, parent_size):
         if i < flatten_layer_index:
             genes.add_layer(convolutional_layer())
         elif i == flatten_layer_index:
@@ -86,9 +89,20 @@ def change_pooling(genes, logger):
     layer = genes.get_layer(conv_layer_index)
     layer[5] = random.randrange(1, 3)
     layer[6] = random.randrange(1, 5)
+    # check_valid_pooling(genes)
     genes.overwrite_layer(layer, conv_layer_index)
     logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
 
+
+# This is a function to check if the mutated geneset has
+# valid dimensions after pooling is altered
+def check_valid_pooling(genes):
+    input_shape = INPUT_SHAPE
+    for layer in genes.iterate_layer():
+        if layer[0] == 2 and layer[5] > 0:
+            continue
+        else:
+            continue
 
 
 def flatten_layer():

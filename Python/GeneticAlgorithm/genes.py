@@ -1,5 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Conv2D, Conv1D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
+from itertools import count
 import logging
 
 MAX_LAYERS = 50
@@ -9,16 +10,18 @@ CLASSES = 10
 
 
 class Genes(object):
-
-    class_id = 0
+    ids = 0
 
     def __init__(self):
         self.logger = logging.getLogger('genes')
         self.logger.info("initialising genes")
         self.genes = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
         self.model = Sequential()
-        self.id = self.class_id
-        self.class_id += 1
+        self.id = Genes.ids
+        Genes.ids += 1
+
+    def iterate_id(self):
+        self.id += 1
 
     def add_layer(self, layer, index=None):
         if index is None:
