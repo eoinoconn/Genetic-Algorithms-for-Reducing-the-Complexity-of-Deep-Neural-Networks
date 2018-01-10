@@ -63,4 +63,4 @@ class Fitness:
         )
 
     def __gt__(self, other):
-        return self.accuracy > (other.accuracy - 0.01)
+        return self.accuracy > other.accuracy
