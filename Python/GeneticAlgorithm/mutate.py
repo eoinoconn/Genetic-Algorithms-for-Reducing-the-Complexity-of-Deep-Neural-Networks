@@ -7,7 +7,7 @@ def mutate(genes):
     mutation_done = False
 
     while not mutation_done:
-        rand = random.randrange(0, 4)
+        rand = random.randrange(0, 5)
         logger = logging.getLogger('mutate')
         logger.info("mutating genes, rand = %f", rand)
 
@@ -32,6 +32,10 @@ def mutate(genes):
         elif rand == 3:
             logger.info("changing pooling")
             mutation_done = change_pooling(genes, logger)
+        elif rand == 4:
+            logger.info("changing hyperparameters")
+            mutate_hyperparameters(genes)
+            mutation_done = True
 
         # iterate genes id
         genes.iterate_id()
@@ -51,7 +55,30 @@ def create_parent():
         else:
             genes.add_layer(dense_layer())
     logger.info("parent genes created")
+    logger.info("adding hyperparameters")
+    genes.set_hyperparameters(random_hyperparameters(logger))
     return genes
+
+
+def random_hyperparameters(logger):
+    hyperparameters = [0 for x in range(0, 25)]
+    hyperparameters[0] = 'categorical_crossentropy'    # loss
+    hyperparameters[1] = 'adam'                         # optimizer
+    hyperparameters[2] = random.randrange(2, 3)   # epochs
+    hyperparameters[3] = random.randrange(50, 200, 25)  # batch size
+    logger.info("Set hyperparameters, loss %s, optimizer %s, epochs %d, batch size %d", hyperparameters[0],
+                hyperparameters[1], hyperparameters[2], hyperparameters[3])
+    return hyperparameters
+
+
+def mutate_hyperparameters(genes):
+    hyper_index = random.randrange(0,2)
+    hyperparameters = genes.hyperparameters
+    if hyper_index == 0:
+        hyperparameters[2] = random.randrange(2, 15)   # epochs
+    else:
+        hyperparameters[3] = random.randrange(50, 200, 25)  # batch size
+    genes.set_hyperparameters(hyperparameters)
 
 
 # The first value of the layer array is 2 for a convolutional layer

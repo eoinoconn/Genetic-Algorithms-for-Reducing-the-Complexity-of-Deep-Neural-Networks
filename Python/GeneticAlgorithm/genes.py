@@ -16,9 +16,13 @@ class Genes(object):
         self.logger = logging.getLogger('genes')
         self.logger.info("initialising genes")
         self.genes = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
+        self.hyperparameters = [0 for x in range(0, 25)]
         self.model = Sequential()
         self.id = Genes.ids
         Genes.ids += 1
+
+    def set_hyperparameters(self, new_hyperparameters):
+        self.hyperparameters = new_hyperparameters
 
     def iterate_id(self):
         self.id += 1
@@ -127,7 +131,7 @@ class Genes(object):
             self.model.add(AveragePooling2D((layer[6], layer[6])))
 
     def __str__(self):
-        str = ""
+        str = self.hyperparameters.__str__() + "\n"
         for layer in self.iterate_layers():
             str += layer.__str__() + "\n"
         return str
