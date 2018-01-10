@@ -23,7 +23,7 @@ def reformat(dataset):
     return dataset
 
 
-def data_preprocess(pickle_file='notMNIST.pickle'):
+def data_preprocess(logger=None, pickle_file='notMNIST.pickle'):
 
     with open(pickle_file, 'rb') as f:
         save = pickle.load(f)
@@ -34,9 +34,10 @@ def data_preprocess(pickle_file='notMNIST.pickle'):
         test_dataset = save['test_dataset']
         test_labels = save['test_labels']
         del save
-        # print('Training set', train_dataset.shape, train_labels.shape)
-        # print('Validation set', valid_dataset.shape, valid_labels.shape)
-        # print('Test set', test_dataset.shape, test_labels.shape)
+        if logger is not None:
+            logger.info('Training set', train_dataset.shape, train_labels.shape)
+            logger.info('Validation set', valid_dataset.shape, valid_labels.shape)
+            logger.info('Test set', test_dataset.shape, test_labels.shape)
 
     train_dataset = reformat(train_dataset)
     valid_dataset = reformat(valid_dataset)
@@ -49,10 +50,10 @@ def data_preprocess(pickle_file='notMNIST.pickle'):
     return train_dataset, train_labels, valid_dataset, valid_labels, test_dataset, test_labels
 
 
-def get_fitness(chromo=None, optimal_fitness=False):
+def get_fitness(logger=None, chromo=None, optimal_fitness=False):
     if optimal_fitness:
         return Fitness(optimal_fitness=True)
-    train_dataset, train_labels, valid_dataset, valid_labels, test_dataset, test_labels = data_preprocess()
+    train_dataset, train_labels, valid_dataset, valid_labels, test_dataset, test_labels = data_preprocess(logger=logger)
     kwag = {"train_dataset": train_dataset, "train_labels": train_labels,
             "valid_dataset": valid_dataset, "valid_labels": valid_labels,
             "test_dataset": test_dataset, "test_labels": test_labels}
@@ -63,9 +64,9 @@ class EncodingTest(unittest.TestCase):
 
     def test_encoding(self):
         logging.config.fileConfig('logging.conf')
+        logger = logging.getLogger('testFile')
 
         def fnDisplay(candidate):
-            logger = logging.getLogger('testFile')
             logger.debug(candidate)
 
         def fnGetFitness(chromo):
@@ -77,7 +78,7 @@ class EncodingTest(unittest.TestCase):
         def fnCustomCreate():
             return create_parent()
 
-        optimalFitness = get_fitness(optimal_fitness=True)
+        optimalFitness = get_fitness(optimal_fitness=True, logger=logger)
         best = get_best(fnGetFitness, None, optimalFitness, None, fnDisplay,
                         custom_mutate=fnCustomMutate, custom_create=fnCustomCreate, max_generated_chromosomes=1000)
         self.assertTrue(not optimalFitness > best.Fitness)
