@@ -96,19 +96,20 @@ def change_pooling(genes, logger):
         logger.info("no pooling changes have occurred")
         return False
 
+
 # This is a function to check if the mutated geneset has
 # valid dimensions after pooling is altered
 # it does this by calculating the smallest dimension of the 
 # geneset at the last convolutional layer
-def check_valid_pooling(genes, logger):
+def check_valid_pooling(genes, logger=logging.getLogger(__name__)):
     logger.info("checking for valid geneset; conv dimensions")
     current_dimension = INPUT_SHAPE[0]
     
     for layer in genes.iterate_layers():
         if layer[0] == 2:
-            current_dimension -= (layer[3][0] - 1)
+            current_dimension -= (layer[3] - 1)
             if layer[5] > 0:
-                current_dimension -= int(current_dimension/layer[6])
+                current_dimension = int(current_dimension/layer[6])
         elif layer[0] == 3:
             break
     if current_dimension < 1:   # invalid geneset
@@ -201,3 +202,4 @@ def remove_layer(genes):
         genes.remove_layer(layer_remove_index)
         logger.info("removed layer type %d", layer[0])
         break
+
