@@ -141,7 +141,7 @@ def dense_layer(input_layer=False):
         layer[2] = 1    # Sets input layer
     else:
         layer[2] = 0    # Sets hidden layer
-    layer[3] = random.uniform(0.2, 0.8)
+    layer[3] = random.uniform(0.2, 0.5)     # Set dropout probability
     layer[4] = set_activation()
     logger.info("added dense layer")
     return layer
@@ -153,7 +153,7 @@ def change_dropout_layer(genes, logger=logging.getLogger(__name__)):
         layer_index = random.randrange(0, genes.__len__())
         layer = genes.get_layer(layer_index)
         if layer[0] == 1:   # check if dense layer
-            layer[3] = random.uniform(0.2, 0.8)
+            layer[3] = random.uniform(0.2, 0.5)
             logger.info("set droupout to %f", layer[3])
             genes.overwrite_layer(layer, layer_index)
             break
