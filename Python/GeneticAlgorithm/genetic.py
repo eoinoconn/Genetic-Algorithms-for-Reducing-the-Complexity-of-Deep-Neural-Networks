@@ -93,7 +93,7 @@ def _get_improvement(new_child, generate_parent, max_generated_chromosomes, maxA
             if maxAge is None:
                 continue
             parent.Age += 1
-            logger.logging("chromosome age: %d", parent.Age)
+            logger.info("chromosome age: %d", parent.Age)
             if maxAge > parent.Age:
                 continue
             index = bisect_left(historicalFitnesses, child.Fitness, 0,
