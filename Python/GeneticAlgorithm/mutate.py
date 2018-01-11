@@ -7,7 +7,7 @@ def mutate(genes):
     mutation_done = False
 
     while not mutation_done:
-        rand = random.randrange(0, 5)
+        rand = random.randrange(0, 4)
         logger = logging.getLogger('mutate')
         logger.info("mutating genes, rand = %f", rand)
 
@@ -15,6 +15,7 @@ def mutate(genes):
         # there should always be at least 3 layers in the genes.
         # the input convolutional, the flatten layer and the dense layer.
         if  rand == 0 and genes.__len__() > 3 and genes.__len__() < MAX_LAYERS:
+            continue
             logger.info("removing layer")
             remove_layer(genes)
             mutation_done = True
@@ -25,6 +26,7 @@ def mutate(genes):
             mutation_done = True
         # change dropout
         elif rand == 2:
+            continue
             logger.info("changing dropout")
             change_dropout_layer(genes, logger)
             mutation_done = True
@@ -113,12 +115,15 @@ def change_pooling(genes, logger):
     flatten_index = genes.find_flatten()
     conv_layer_index = random.randrange(0, flatten_index)
     layer = genes.get_layer(conv_layer_index)
+    temporary_values = [layer[5], layer[6]]
+    layer[5] = random.randrange(1, 3)
+    layer[6] = random.randrange(1, 5)
     if check_valid_geneset(genes, logger):
-        layer[5] = random.randrange(1, 3)
-        layer[6] = random.randrange(1, 5)
         logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
         return True
     else:
+        layer[5] = temporary_values[0]
+        layer[6] = temporary_values[1]
         logger.info("no pooling changes have occurred")
         return False
 
