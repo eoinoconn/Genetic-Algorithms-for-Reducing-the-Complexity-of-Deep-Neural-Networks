@@ -82,7 +82,7 @@ def _get_improvement(new_child, generate_parent, max_generated_chromosomes, logg
     while True:
         child = new_child(bestParent)
         chromosomes_generated += 1
-        logging.info("chromosomes generated: %d", chromosomes_generated)
+        logger.info("chromosomes generated: %d", chromosomes_generated)
         if max_generated_chromosomes is not None and chromosomes_generated > max_generated_chromosomes:
             logger.info("max chromosome number reached")
             return
