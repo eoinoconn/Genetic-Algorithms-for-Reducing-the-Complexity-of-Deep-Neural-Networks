@@ -20,6 +20,8 @@ import statistics
 import sys
 import time
 import logging
+from bisect import bisect_left
+from math import exp					
 
 
 def _generate_parent(length, geneSet, get_fitness):
@@ -48,7 +50,7 @@ def _mutate_custom(parent, custom_mutate, get_fitness):
 
 
 def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,
-             custom_mutate=None, custom_create=None, max_generated_chromosomes=None):
+             custom_mutate=None, custom_create=None, max_generated_chromosomes=None, maxAge=None):
 
     logger = logging.getLogger('geneticEngine')
 
@@ -67,39 +69,61 @@ def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,
             genes = custom_create()
             return Chromosome(genes, get_fitness(genes))
 
-    for improvement in _get_improvement(fnMutate, fnGenerateParent, max_generated_chromosomes, logger):
+    for improvement in _get_improvement(fnMutate, fnGenerateParent, max_generated_chromosomes, maxAge, logger):
         logger.info("found improvement")
         display(improvement.Fitness)
         if not optimalFitness > improvement.Fitness:
             return improvement
 
 
-def _get_improvement(new_child, generate_parent, max_generated_chromosomes, logger):
+def _get_improvement(new_child, generate_parent, max_generated_chromosomes, maxAge, logger):
+    logger.info("max age: %d", maxAge)
     chromosomes_generated = 1
-    bestParent = generate_parent()
-    bestParent.Fitness.new_best()
+    parent = bestParent = generate_parent()
     yield bestParent
+    historicalFitnesses = [bestParent.Fitness]
     while True:
-        child = new_child(bestParent)
+        child = new_child(parent)
         chromosomes_generated += 1
         logger.info("chromosomes generated: %d", chromosomes_generated)
         if max_generated_chromosomes is not None and chromosomes_generated > max_generated_chromosomes:
             logger.info("max chromosome number reached")
             return
-        if bestParent.Fitness > child.Fitness:
+        if parent.Fitness > child.Fitness:
+            if maxAge is None:
+                continue
+            parent.Age += 1
+            logger.logging("chromosome age: %d", parent.Age)
+            if maxAge > parent.Age:
+                continue
+            index = bisect_left(historicalFitnesses, child.Fitness, 0,
+                                len(historicalFitnesses))
+            difference = len(historicalFitnesses) - index
+            proportionSimilar = difference / len(historicalFitnesses)
+            if random.random() < exp(-proportionSimilar):
+                parent = child
+                continue
+            parent = bestParent
+            parent.Age = 0
             continue
-        if not child.Fitness > bestParent.Fitness:
+        if not child.Fitness > parent.Fitness:
+            # same fitness
+            child.Age = parent.Age + 1
+            parent = child
+            continue
+        parent = child
+        parent.Age = 0
+        if child.Fitness > bestParent.Fitness:
+            yield child
             bestParent = child
-            continue
-        yield child
-        child.Fitness.new_best()
-        bestParent = child
+            historicalFitnesses.append(child.Fitness)
 
 
 class Chromosome:
     def __init__(self, genes, fitness):
         self.Genes = genes
         self.Fitness = fitness
+        self.Age = 0
 
 
 class Benchmark:
