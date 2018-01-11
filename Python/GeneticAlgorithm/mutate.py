@@ -44,16 +44,19 @@ def mutate(genes):
 def create_parent():
     logger = logging.getLogger('mutate')
     logger.info("creating parent genes")
-    genes = Genes()
-    parent_size = random.randrange(4, 7)
-    flatten_layer_index = random.randrange(1, parent_size-1)
-    for i in range(0, parent_size):
-        if i < flatten_layer_index:
-            genes.add_layer(convolutional_layer())
-        elif i == flatten_layer_index:
-            genes.add_layer(flatten_layer())
-        else:
-            genes.add_layer(dense_layer())
+    while True:
+        genes = Genes()
+        parent_size = random.randrange(4, 7)
+        flatten_layer_index = random.randrange(1, parent_size - 1)
+        for i in range(0, parent_size):
+            if i < flatten_layer_index:
+                genes.add_layer(convolutional_layer())
+            elif i == flatten_layer_index:
+                genes.add_layer(flatten_layer())
+            else:
+                genes.add_layer(dense_layer())
+        if check_valid_geneset(genes, logger):
+            break
     logger.info("parent genes created")
     logger.info("adding hyperparameters")
     genes.set_hyperparameters(random_hyperparameters(logger))
@@ -100,6 +103,8 @@ def convolutional_layer(input_layer=False):
         layer[2] = 0    # Sets hidden layer
     layer[3] = random.randrange(1, 6)   # Sets slide size
     layer[4] = set_activation()
+    layer[5] = random.randrange(1, 3)
+    layer[6] = random.randrange(2, 5)
     logger.info("added conv layer")
     return layer
 
@@ -115,7 +120,7 @@ def change_pooling(genes, logger):
     layer = genes.get_layer(conv_layer_index)
     temporary_values = [layer[5], layer[6]]
     layer[5] = random.randrange(1, 3)
-    layer[6] = random.randrange(1, 5)
+    layer[6] = random.randrange(2, 5)
     if check_valid_geneset(genes, logger):
         logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
         return True
