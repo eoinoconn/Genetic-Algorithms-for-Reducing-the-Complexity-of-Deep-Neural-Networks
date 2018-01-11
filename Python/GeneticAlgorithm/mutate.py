@@ -7,7 +7,7 @@ def mutate(genes):
     mutation_done = False
 
     while not mutation_done:
-        rand = random.randrange(0, 4)
+        rand = random.randrange(0, 5)
         logger = logging.getLogger('mutate')
         logger.info("mutating genes, rand = %f", rand)
 
@@ -15,7 +15,6 @@ def mutate(genes):
         # there should always be at least 3 layers in the genes.
         # the input convolutional, the flatten layer and the dense layer.
         if  rand == 0 and genes.__len__() > 3 and genes.__len__() < MAX_LAYERS:
-            continue
             logger.info("removing layer")
             remove_layer(genes)
             mutation_done = True
@@ -26,7 +25,6 @@ def mutate(genes):
             mutation_done = True
         # change dropout
         elif rand == 2:
-            continue
             logger.info("changing dropout")
             change_dropout_layer(genes, logger)
             mutation_done = True
@@ -219,6 +217,7 @@ def add_layer(genes):
     logger.info("added at location %d, genes length is %d", new_layer_location, genes.__len__())
     if not check_valid_geneset(genes, logger):
         genes.remove_layer(index=new_layer_location)
+        logger.info("geneset not valid, removing layer at %d", new_layer_location)
 
 
 def remove_layer(genes):
