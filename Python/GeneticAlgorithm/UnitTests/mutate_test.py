@@ -15,11 +15,11 @@ class TestMutate(unittest.TestCase):
 
     def test_check_valid_padding_bad(self):
         self.setup_bad_chromosome()
-        self.assertFalse(check_valid_pooling(self.chromosome))
+        self.assertFalse(check_valid_geneset(self.chromosome))
 
     def test_check_valid_padding_good(self):
         self.setup_good_chromosome()
-        self.assertTrue(check_valid_pooling(self.chromosome))
+        self.assertTrue(check_valid_geneset(self.chromosome))
 
     def setup_good_chromosome(self):
         # add 3 dense layers

@@ -113,13 +113,16 @@ def change_pooling(genes, logger):
     flatten_index = genes.find_flatten()
     conv_layer_index = random.randrange(0, flatten_index)
     layer = genes.get_layer(conv_layer_index)
-    if check_valid_pooling(genes, logger):
+    logger.info(genes.__str__())
+    if check_valid_geneset(genes, logger):
         layer[5] = random.randrange(1, 3)
         layer[6] = random.randrange(1, 5)
         logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
+        logger.info(genes.__str__())
         return True
     else:
         logger.info("no pooling changes have occurred")
+        logger.info(genes.__str__())
         return False
 
 
@@ -127,7 +130,7 @@ def change_pooling(genes, logger):
 # valid dimensions after pooling is altered
 # it does this by calculating the smallest dimension of the 
 # geneset at the last convolutional layer
-def check_valid_pooling(genes, logger=logging.getLogger(__name__)):
+def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
 
     current_dimension = INPUT_SHAPE[0]
     logger.info("checking for valid geneset; conv dimensions %d", current_dimension)
@@ -201,16 +204,19 @@ def add_layer(genes):
     logger = logging.getLogger('mutate')
     layer_type = random.randrange(1, 3)     # check which layer type to add
     flatten_index = genes.find_flatten()    # find the index at which the flatten layer is present
-    logger.info("adding layer type %d", layer_type)
+
     if layer_type == 1:     # dense layer
         new_layer = dense_layer()
         new_layer_location = random.randrange(flatten_index+1, genes.__len__())
-        logger.info("added at location %d, genes length is %d", new_layer_location, genes.__len__())
+        logger.info("adding layer type dense")
     else:   # convolutional layer
         new_layer = convolutional_layer()
         new_layer_location = random.randrange(0, flatten_index+1)
-        logger.info("added at location %d, genes length is %d", new_layer_location, genes.__len__())
+        logger.info("adding layer type convolutional")
     genes.add_layer(new_layer, new_layer_location)
+    logger.info("added at location %d, genes length is %d", new_layer_location, genes.__len__())
+    if not check_valid_geneset(genes, logger):
+        genes.remove_layer(index=new_layer_location)
 
 
 def remove_layer(genes):
