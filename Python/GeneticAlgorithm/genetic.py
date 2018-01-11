@@ -80,7 +80,7 @@ def _get_improvement(new_child, generate_parent, max_generated_chromosomes, maxA
     logger.info("max age: %d", maxAge)
     chromosomes_generated = 1
     parent = bestParent = generate_parent()
-    bestParent.Fitness.new_best()
+    bestParent.Fitness.new_best(bestParent.Age)
     yield bestParent
     historicalFitnesses = [bestParent.Fitness]
     while True:
@@ -115,7 +115,7 @@ def _get_improvement(new_child, generate_parent, max_generated_chromosomes, maxA
         parent = child
         parent.Age = 0
         if child.Fitness > bestParent.Fitness:
-            child.Fitness.new_best()
+            child.Fitness.new_best(child.Age)
             yield child
             bestParent = child
             historicalFitnesses.append(child.Fitness)
