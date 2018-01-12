@@ -1,0 +1,126 @@
+2018-01-12 00:15:39,970 - resultMetrics - INFO - new best genes, id = 0, age = 0
+2018-01-12 00:15:39,970 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:15:39,970 - resultMetrics - INFO - Layer (type)                 Output Shape              Param #   
+2018-01-12 00:15:39,970 - resultMetrics - INFO - =================================================================
+2018-01-12 00:15:39,970 - resultMetrics - INFO - conv2d_1 (Conv2D)            (None, 24, 24, 256)       6656      
+2018-01-12 00:15:39,971 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:15:39,971 - resultMetrics - INFO - average_pooling2d_1 (Average (None, 8, 8, 256)         0         
+2018-01-12 00:15:39,971 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:15:39,971 - resultMetrics - INFO - flatten_1 (Flatten)          (None, 16384)             0         
+2018-01-12 00:15:39,971 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:15:39,971 - resultMetrics - INFO - dense_1 (Dense)              (None, 256)               4194560   
+2018-01-12 00:15:39,971 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:15:39,972 - resultMetrics - INFO - dropout_1 (Dropout)          (None, 256)               0         
+2018-01-12 00:15:39,972 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:15:39,972 - resultMetrics - INFO - dense_2 (Dense)              (None, 10)                2570      
+2018-01-12 00:15:39,972 - resultMetrics - INFO - =================================================================
+2018-01-12 00:15:39,972 - resultMetrics - INFO - Total params: 4,203,786
+2018-01-12 00:15:39,972 - resultMetrics - INFO - Trainable params: 4,203,786
+2018-01-12 00:15:39,973 - resultMetrics - INFO - Non-trainable params: 0
+2018-01-12 00:15:39,973 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:15:39,973 - resultMetrics - INFO - Accuracy: 0.9480	Parameters 4203786
+
+2018-01-12 00:25:06,864 - resultMetrics - INFO - new best genes, id = 36, age = 0
+2018-01-12 00:25:06,864 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:06,864 - resultMetrics - INFO - Layer (type)                 Output Shape              Param #   
+2018-01-12 00:25:06,864 - resultMetrics - INFO - =================================================================
+2018-01-12 00:25:06,865 - resultMetrics - INFO - conv2d_49 (Conv2D)           (None, 24, 24, 32)        832       
+2018-01-12 00:25:06,865 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:06,865 - resultMetrics - INFO - max_pooling2d_24 (MaxPooling (None, 12, 12, 32)        0         
+2018-01-12 00:25:06,865 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:06,866 - resultMetrics - INFO - conv2d_50 (Conv2D)           (None, 12, 12, 256)       8448      
+2018-01-12 00:25:06,866 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:06,866 - resultMetrics - INFO - max_pooling2d_25 (MaxPooling (None, 4, 4, 256)         0         
+2018-01-12 00:25:06,866 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:06,867 - resultMetrics - INFO - flatten_36 (Flatten)         (None, 4096)              0         
+2018-01-12 00:25:06,867 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:06,867 - resultMetrics - INFO - dense_63 (Dense)             (None, 128)               524416    
+2018-01-12 00:25:06,867 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:06,868 - resultMetrics - INFO - dropout_28 (Dropout)         (None, 128)               0         
+2018-01-12 00:25:06,868 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:06,868 - resultMetrics - INFO - dense_64 (Dense)             (None, 10)                1290      
+2018-01-12 00:25:06,868 - resultMetrics - INFO - =================================================================
+2018-01-12 00:25:06,869 - resultMetrics - INFO - Total params: 534,986
+2018-01-12 00:25:06,869 - resultMetrics - INFO - Trainable params: 534,986
+2018-01-12 00:25:06,869 - resultMetrics - INFO - Non-trainable params: 0
+2018-01-12 00:25:06,870 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:06,870 - resultMetrics - INFO - Accuracy: 0.9490	Parameters 534986
+
+2018-01-12 00:25:38,827 - resultMetrics - INFO - new best genes, id = 38, age = 0
+2018-01-12 00:25:38,827 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:38,827 - resultMetrics - INFO - Layer (type)                 Output Shape              Param #   
+2018-01-12 00:25:38,827 - resultMetrics - INFO - =================================================================
+2018-01-12 00:25:38,828 - resultMetrics - INFO - conv2d_53 (Conv2D)           (None, 24, 24, 32)        832       
+2018-01-12 00:25:38,828 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:38,828 - resultMetrics - INFO - max_pooling2d_28 (MaxPooling (None, 12, 12, 32)        0         
+2018-01-12 00:25:38,828 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:38,828 - resultMetrics - INFO - conv2d_54 (Conv2D)           (None, 12, 12, 256)       8448      
+2018-01-12 00:25:38,828 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:38,829 - resultMetrics - INFO - max_pooling2d_29 (MaxPooling (None, 4, 4, 256)         0         
+2018-01-12 00:25:38,829 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:38,829 - resultMetrics - INFO - flatten_38 (Flatten)         (None, 4096)              0         
+2018-01-12 00:25:38,829 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:38,829 - resultMetrics - INFO - dense_67 (Dense)             (None, 128)               524416    
+2018-01-12 00:25:38,829 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:38,829 - resultMetrics - INFO - dropout_30 (Dropout)         (None, 128)               0         
+2018-01-12 00:25:38,830 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:38,830 - resultMetrics - INFO - dense_68 (Dense)             (None, 10)                1290      
+2018-01-12 00:25:38,830 - resultMetrics - INFO - =================================================================
+2018-01-12 00:25:38,830 - resultMetrics - INFO - Total params: 534,986
+2018-01-12 00:25:38,830 - resultMetrics - INFO - Trainable params: 534,986
+2018-01-12 00:25:38,830 - resultMetrics - INFO - Non-trainable params: 0
+2018-01-12 00:25:38,831 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:25:38,831 - resultMetrics - INFO - Accuracy: 0.9500	Parameters 534986
+
+2018-01-12 00:26:30,994 - resultMetrics - INFO - new best genes, id = 41, age = 0
+2018-01-12 00:26:30,994 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:26:30,994 - resultMetrics - INFO - Layer (type)                 Output Shape              Param #   
+2018-01-12 00:26:30,994 - resultMetrics - INFO - =================================================================
+2018-01-12 00:26:30,995 - resultMetrics - INFO - conv2d_59 (Conv2D)           (None, 24, 24, 32)        832       
+2018-01-12 00:26:30,995 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:26:30,995 - resultMetrics - INFO - max_pooling2d_33 (MaxPooling (None, 12, 12, 32)        0         
+2018-01-12 00:26:30,995 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:26:30,995 - resultMetrics - INFO - conv2d_60 (Conv2D)           (None, 12, 12, 256)       8448      
+2018-01-12 00:26:30,995 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:26:30,996 - resultMetrics - INFO - average_pooling2d_27 (Averag (None, 4, 4, 256)         0         
+2018-01-12 00:26:30,996 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:26:30,996 - resultMetrics - INFO - flatten_41 (Flatten)         (None, 4096)              0         
+2018-01-12 00:26:30,996 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:26:30,996 - resultMetrics - INFO - dense_73 (Dense)             (None, 128)               524416    
+2018-01-12 00:26:30,996 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:26:30,997 - resultMetrics - INFO - dropout_33 (Dropout)         (None, 128)               0         
+2018-01-12 00:26:30,997 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:26:30,997 - resultMetrics - INFO - dense_74 (Dense)             (None, 10)                1290      
+2018-01-12 00:26:30,997 - resultMetrics - INFO - =================================================================
+2018-01-12 00:26:30,997 - resultMetrics - INFO - Total params: 534,986
+2018-01-12 00:26:30,997 - resultMetrics - INFO - Trainable params: 534,986
+2018-01-12 00:26:30,998 - resultMetrics - INFO - Non-trainable params: 0
+2018-01-12 00:26:30,998 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:26:30,998 - resultMetrics - INFO - Accuracy: 0.9510	Parameters 534986
+
+2018-01-12 00:28:16,928 - resultMetrics - INFO - new best genes, id = 48, age = 0
+2018-01-12 00:28:16,928 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:28:16,928 - resultMetrics - INFO - Layer (type)                 Output Shape              Param #   
+2018-01-12 00:28:16,928 - resultMetrics - INFO - =================================================================
+2018-01-12 00:28:16,929 - resultMetrics - INFO - conv2d_73 (Conv2D)           (None, 24, 24, 32)        832       
+2018-01-12 00:28:16,929 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:28:16,929 - resultMetrics - INFO - max_pooling2d_41 (MaxPooling (None, 6, 6, 32)          0         
+2018-01-12 00:28:16,929 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:28:16,929 - resultMetrics - INFO - conv2d_74 (Conv2D)           (None, 6, 6, 256)         8448      
+2018-01-12 00:28:16,929 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:28:16,930 - resultMetrics - INFO - max_pooling2d_42 (MaxPooling (None, 3, 3, 256)         0         
+2018-01-12 00:28:16,930 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:28:16,930 - resultMetrics - INFO - flatten_48 (Flatten)         (None, 2304)              0         
+2018-01-12 00:28:16,930 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:28:16,930 - resultMetrics - INFO - dense_88 (Dense)             (None, 128)               295040    
+2018-01-12 00:28:16,930 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:28:16,931 - resultMetrics - INFO - dropout_41 (Dropout)         (None, 128)               0         
+2018-01-12 00:28:16,931 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:28:16,931 - resultMetrics - INFO - dense_89 (Dense)             (None, 10)                1290      
+2018-01-12 00:28:16,931 - resultMetrics - INFO - =================================================================
+2018-01-12 00:28:16,931 - resultMetrics - INFO - Total params: 305,610
+2018-01-12 00:28:16,931 - resultMetrics - INFO - Trainable params: 305,610
+2018-01-12 00:28:16,931 - resultMetrics - INFO - Non-trainable params: 0
+2018-01-12 00:28:16,932 - resultMetrics - INFO - _________________________________________________________________
+2018-01-12 00:28:16,932 - resultMetrics - INFO - Accuracy: 0.9520	Parameters 305610
+
