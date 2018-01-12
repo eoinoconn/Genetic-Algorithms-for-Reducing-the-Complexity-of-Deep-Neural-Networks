@@ -1,5 +1,6 @@
 import logging
 from keras.utils import print_summary
+from keras.callbacks import EarlyStopping
 
 
 class Fitness:
@@ -41,10 +42,13 @@ class Fitness:
 
             logger_fitness.info("Model compiled succesfully, beginning training")
 
+            early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.005, patience=2, verbose=0, mode='auto')
+
             self.model.fit(train_dataset, train_labels,
                            epochs=hyper_params[2],
                            batch_size=hyper_params[3],
                            validation_data=(valid_dataset, valid_labels),
+                           callbacks=early_stopping,
                            verbose=2)
             loss_and_metrics = self.model.evaluate(test_dataset, test_labels,
                                                    batch_size=hyper_params[3],
