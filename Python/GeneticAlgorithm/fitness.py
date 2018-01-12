@@ -48,7 +48,7 @@ class Fitness:
                            epochs=hyper_params[2],
                            batch_size=hyper_params[3],
                            validation_data=(valid_dataset, valid_labels),
-                           callbacks=early_stopping,
+                           callbacks=[early_stopping],
                            verbose=2)
             loss_and_metrics = self.model.evaluate(test_dataset, test_labels,
                                                    batch_size=hyper_params[3],
