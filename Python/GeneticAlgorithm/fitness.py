@@ -17,7 +17,7 @@ class Fitness:
 
             # log setup variable
             logger_fitness = logging.getLogger('fitness')
-            logger_genes = logging.getLogger('Beta: %4.2f', self.fitness())
+            logger_fitness.info('Beta: %4.2f', self.fitness())
 
         else:
 
