@@ -13,7 +13,12 @@ class Fitness:
 
         if optimal_fitness:
             self.accuracy = 0.98
-            self.parameters = 1000000
+            self.parameters = 100000
+
+            # log setup variable
+            logger_fitness = logging.getLogger('fitness')
+            logger_genes = logging.getLogger('Beta: %4.2f', self.fitness())
+
         else:
 
             self.genes = genes
@@ -65,7 +70,7 @@ class Fitness:
 
             self.accuracy = loss_and_metrics[1]
             logger_fitness.info("Model trained succesfully, fitness = %4.2f, accuracy = %.2f, parameters = %d",
-                                self.fitness()
+                                self.fitness(),
                                 self.accuracy, self.parameters)
 
     def fitness(self):
