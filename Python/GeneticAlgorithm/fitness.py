@@ -8,11 +8,15 @@ class Fitness:
                  train_dataset=None, train_labels=None,
                  valid_dataset=None, valid_labels=None,
                  test_dataset=None, test_labels=None):
+
+        self.beta = beta
+
         if optimal_fitness:
             self.accuracy = 0.98
+            self.parameters = 1000000
         else:
+
             self.genes = genes
-            self.beta = beta
 
             # initilise logging objects
             logger_fitness = logging.getLogger('fitness')
@@ -60,7 +64,8 @@ class Fitness:
             self.parameters = self.model.count_params()
 
             self.accuracy = loss_and_metrics[1]
-            logger_fitness.info("Model trained succesfully, accuracy = %.2f, parameters = %d",
+            logger_fitness.info("Model trained succesfully, fitness = %4.2f, accuracy = %.2f, parameters = %d",
+                                self.fitness()
                                 self.accuracy, self.parameters)
 
     def fitness(self):
@@ -70,11 +75,14 @@ class Fitness:
         logger = logging.getLogger('resultMetrics')
         logger.info("new best genes, id = %d, age = %d", self.genes.id, age)
         print_summary(self.model, print_fn=logger.info)
-        logger.info("Accuracy: %6.4f\tParameters %d\n", self.accuracy, self.parameters)
+        logger.info("Fitness: %4.2f\tAccuracy: %6.4f\tParameters %d\n", self.fitness(), self.accuracy, self.parameters)
 
     def __str__(self):
-        return "{} Accuracy\n".format(
-            self.accuracy
+        return "Fitness: {:4.2f}\tAccuracy: {:4.2f}\tParameters: {:4.2f}\n".format(
+            self.fitness(),
+            self.accuracy,
+            self.parameters
+
         )
 
     def __gt__(self, other):
