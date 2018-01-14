@@ -4,13 +4,15 @@ from keras.callbacks import EarlyStopping
 
 
 class Fitness:
-    def __init__(self, optimal_fitness=False, genes=None, train_dataset=None, train_labels=None,
-                 valid_dataset=None,
-                 valid_labels=None, test_dataset=None, test_labels=None):
+    def __init__(self, optimal_fitness=False, genes=None, beta=0.0000001,
+                 train_dataset=None, train_labels=None,
+                 valid_dataset=None, valid_labels=None,
+                 test_dataset=None, test_labels=None):
         if optimal_fitness:
             self.accuracy = 0.98
         else:
             self.genes = genes
+            self.beta = beta
 
             # initilise logging objects
             logger_fitness = logging.getLogger('fitness')
@@ -54,14 +56,21 @@ class Fitness:
                                                    batch_size=hyper_params[3],
                                                    verbose=0)
 
-            self.accuracy = loss_and_metrics[1]
-            logger_fitness.info("Model trained succesfully, accuracy = %.2f", self.accuracy)
+            # store num of model parameters
+            self.parameters = self.model.count_params()
 
+            self.accuracy = loss_and_metrics[1]
+            logger_fitness.info("Model trained succesfully, accuracy = %.2f, parameters = %d",
+                                self.accuracy, self.parameters)
+
+    def fitness(self):
+        return self.accuracy - (self.beta * self.parameters)
+        
     def new_best(self, age):
         logger = logging.getLogger('resultMetrics')
         logger.info("new best genes, id = %d, age = %d", self.genes.id, age)
         print_summary(self.model, print_fn=logger.info)
-        logger.info("Accuracy: %6.4f\tParameters %d\n", self.accuracy, self.model.count_params())
+        logger.info("Accuracy: %6.4f\tParameters %d\n", self.accuracy, self.parameters)
 
     def __str__(self):
         return "{} Accuracy\n".format(
@@ -69,4 +78,4 @@ class Fitness:
         )
 
     def __gt__(self, other):
-        return self.accuracy > other.accuracy
+        return self.fitness() > other.fitness()
