@@ -17,7 +17,7 @@ class Fitness:
 
             # log setup variable
             logger_fitness = logging.getLogger('fitness')
-            logger_fitness.info('Beta: %4.2f', self.fitness())
+            logger_fitness.info('Beta: %10.10f', self.beta)
 
         else:
 
@@ -55,12 +55,22 @@ class Fitness:
 
             early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.005, patience=2, verbose=0, mode='auto')
 
-            self.model.fit(train_dataset, train_labels,
-                           epochs=hyper_params[2],
-                           batch_size=hyper_params[3],
-                           validation_data=(valid_dataset, valid_labels),
-                           callbacks=[early_stopping],
-                           verbose=2)
+            if valid_dataset is None:
+                self.model.fit(train_dataset, train_labels,
+                               epochs=hyper_params[2],
+                               batch_size=hyper_params[3],
+                               validation_split=0.16,
+                               callbacks=[early_stopping],
+                               verbose=2)
+
+            else:
+                self.model.fit(train_dataset, train_labels,
+                               epochs=hyper_params[2],
+                               batch_size=hyper_params[3],
+                               validation_data=(valid_dataset, valid_labels),
+                               callbacks=[early_stopping],
+                               verbose=2)
+
             loss_and_metrics = self.model.evaluate(test_dataset, test_labels,
                                                    batch_size=hyper_params[3],
                                                    verbose=0)
@@ -69,7 +79,7 @@ class Fitness:
             self.parameters = self.model.count_params()
 
             self.accuracy = loss_and_metrics[1]
-            logger_fitness.info("Model trained succesfully, fitness = %4.2f, accuracy = %.2f, parameters = %d",
+            logger_fitness.info("Model trained succesfully, fitness = %.6f, accuracy = %.6f, parameters = %d",
                                 self.fitness(),
                                 self.accuracy, self.parameters)
 
@@ -80,10 +90,10 @@ class Fitness:
         logger = logging.getLogger('resultMetrics')
         logger.info("new best genes, id = %d, age = %d", self.genes.id, age)
         print_summary(self.model, print_fn=logger.info)
-        logger.info("Fitness: %4.2f\tAccuracy: %6.4f\tParameters %d\n", self.fitness(), self.accuracy, self.parameters)
+        logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness(), self.accuracy, self.parameters)
 
     def __str__(self):
-        return "Fitness: {:4.2f}\tAccuracy: {:4.2f}\tParameters: {:4.2f}\n".format(
+        return "Fitness: {:.6f}\tAccuracy: {:.6f}\tParameters: {}\n".format(
             self.fitness(),
             self.accuracy,
             self.parameters
