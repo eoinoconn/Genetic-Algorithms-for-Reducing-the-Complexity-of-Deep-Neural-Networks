@@ -3,9 +3,9 @@ In this file we will test the encoding and train a basic network using the built
 
 """
 from __future__ import print_function
-from Python.GeneticAlgorithm.fitness import *
-from Python.GeneticAlgorithm.mutate import *
-from Python.GeneticAlgorithm.genetic import *
+from GeneticAlgorithm.fitness import *
+from GeneticAlgorithm.mutate import *
+from GeneticAlgorithm.genetic import *
 
 import numpy as np
 from six.moves import cPickle as pickle
