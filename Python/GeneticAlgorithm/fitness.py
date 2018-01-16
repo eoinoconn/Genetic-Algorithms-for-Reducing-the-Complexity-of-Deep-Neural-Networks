@@ -12,8 +12,8 @@ class Fitness:
         self.beta = beta
 
         if optimal_fitness:
-            self.accuracy = 0.98
-            self.parameters = 100000
+            self.accuracy = 0.99
+            self.parameters = 10000
 
             # log setup variable
             logger_fitness = logging.getLogger('fitness')
