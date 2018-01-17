@@ -23,7 +23,7 @@ def reformat(dataset):
     return dataset
 
 
-def data_preprocess(logger=None, pickle_file='MNIST.pickle'):
+def data_preprocess(logger=None, pickle_file='fashionMNIST.pickle'):
     logging.getLogger('resultMetrics').info("Data file: %s", pickle_file)
     with open(pickle_file, 'rb') as f:
         save = pickle.load(f)
