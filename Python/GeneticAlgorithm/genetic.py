@@ -113,12 +113,13 @@ def _get_improvement(new_child, generate_parent, max_generated_chromosomes, maxA
             parent = child
             continue
         parent = child
-        parent.Age = 0
+
         if child.Fitness > bestParent.Fitness:
             child.Fitness.new_best(child.Age)
             yield child
             bestParent = child
             historicalFitnesses.append(child.Fitness)
+        parent.Age = 0
 
 
 class Chromosome:

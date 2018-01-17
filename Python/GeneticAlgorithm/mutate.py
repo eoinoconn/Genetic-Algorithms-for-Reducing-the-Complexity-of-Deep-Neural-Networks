@@ -1,4 +1,4 @@
-from GeneticAlgorithm.genes import Genes, LAYER_DEPTH, INPUT_SHAPE, MAX_LAYERS
+from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH, INPUT_SHAPE, MAX_LAYERS
 import random
 import logging
 
