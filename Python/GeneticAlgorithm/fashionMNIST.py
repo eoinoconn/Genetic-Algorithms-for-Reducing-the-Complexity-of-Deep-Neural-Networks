@@ -7,6 +7,7 @@ from Python.GeneticAlgorithm.fitness import *
 from Python.GeneticAlgorithm.mutate import *
 from Python.GeneticAlgorithm.genetic import *
 
+from keras.datasets import fashion_mnist
 import numpy as np
 from six.moves import cPickle as pickle
 import keras as keras
@@ -25,16 +26,14 @@ def reformat(dataset):
 
 def data_preprocess(logger=None, pickle_file='fashionMNIST.pickle'):
     logging.getLogger('resultMetrics').info("Data file: %s", pickle_file)
-    with open(pickle_file, 'rb') as f:
-        save = pickle.load(f)
-        train_dataset = save['train_dataset']
-        train_labels = save['train_labels']
-        test_dataset = save['test_dataset']
-        test_labels = save['test_labels']
-        del save
-        if logger is not None:
-            logger.info('Training set', train_dataset.shape, train_labels.shape)
-            logger.info('Test set', test_dataset.shape, test_labels.shape)
+    from keras.datasets import fashion_mnist
+
+    (train_dataset, train_labels), (test_dataset, test_labels) = fashion_mnist.load_data()
+
+    train_dataset = train_dataset[:60000]
+    train_labels = train_labels[:60000]
+    test_dataset = test_dataset[:10000]
+    test_labels = test_labels[:10000]
 
     train_dataset = reformat(train_dataset)
     test_dataset = reformat(test_dataset)
