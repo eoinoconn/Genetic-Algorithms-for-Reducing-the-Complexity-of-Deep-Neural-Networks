@@ -25,7 +25,7 @@ def reformat(dataset):
 
 
 def data_preprocess(logger=None, pickle_file='fashionMNIST.pickle'):
-    logging.getLogger('resultMetrics').info("Data file: %s", pickle_file)
+
     from keras.datasets import fashion_mnist
 
     (train_dataset, train_labels), (test_dataset, test_labels) = fashion_mnist.load_data()
@@ -59,6 +59,8 @@ class EncodingTest(unittest.TestCase):
     def test_encoding(self):
         logging.config.fileConfig('logging.conf')
         logger = logging.getLogger('testFile')
+
+        logging.getLogger('resultMetrics').info("Data file: fashionMNIST")
 
         def fnDisplay(candidate):
             logger.debug(candidate)
