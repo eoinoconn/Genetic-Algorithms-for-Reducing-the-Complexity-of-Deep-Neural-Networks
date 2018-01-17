@@ -24,7 +24,7 @@ def reformat(dataset):
 
 
 def data_preprocess(logger=None, pickle_file='notMNIST.pickle'):
-
+    logging.getLogger('resultMetrics').info("Data file: %s", pickle_file)
     with open(pickle_file, 'rb') as f:
         save = pickle.load(f)
         train_dataset = save['train_dataset']
