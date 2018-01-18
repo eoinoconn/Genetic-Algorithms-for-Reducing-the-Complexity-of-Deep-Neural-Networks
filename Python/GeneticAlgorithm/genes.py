@@ -4,7 +4,7 @@ from itertools import count
 import logging
 
 MAX_LAYERS = 50
-LAYER_DEPTH = 50
+LAYER_DEPTH = 8
 INPUT_SHAPE = (28, 28, 1)
 CLASSES = 10
 
@@ -15,7 +15,7 @@ class Genes(object):
     def __init__(self):
         self.logger = logging.getLogger('genes')
         self.logger.info("initialising genes")
-        self.genes = [[0 for x in range(0,LAYER_DEPTH)] for y in range(0,MAX_LAYERS)]
+        self.genes = [[0 for x in range(0, LAYER_DEPTH)] for y in range(0, MAX_LAYERS)]
         self.hyperparameters = [0 for x in range(0, 25)]
         self.model = Sequential()
         self.id = Genes.ids
@@ -79,16 +79,13 @@ class Genes(object):
 
     def build_model(self):
         self.model = Sequential()
-        output_layer = False
         input_layer = True
         for x in range(self.__len__()+1):
             # check if output layer, hidden layer or no layer at all
-            if (self.genes[x][0] != 0) and (self.genes[x+1][0] == 0):
-                output_layer = True
-                self.build_layer(self.genes[x], output_layer=output_layer, input_layer=input_layer)
-                input_layer = False
-            elif self.genes[x][0] != 0:
-                self.build_layer(self.genes[x], output_layer=output_layer, input_layer=input_layer)
+            if (self.genes[x][0] != 0) and (self.genes[x+1][0] == 0):       # Check if output layer
+                self.build_layer(self.genes[x], output_layer=True)
+            elif self.genes[x][0] != 0:                                     # else check if not empty layer
+                self.build_layer(self.genes[x], input_layer=input_layer)
                 input_layer = False
             else:
                 return self.model

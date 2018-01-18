@@ -46,8 +46,8 @@ def create_parent():
     logger.info("creating parent genes")
     while True:
         genes = Genes()
-        parent_size = random.randrange(4, 7)
-        flatten_layer_index = random.randrange(1, parent_size - 1)
+        parent_size = random.randrange(2, 7)
+        flatten_layer_index = random.randrange(0, parent_size - 1)
         for i in range(0, parent_size):
             if i < flatten_layer_index:
                 genes.add_layer(convolutional_layer())
@@ -64,7 +64,7 @@ def create_parent():
 
 
 def random_hyperparameters(logger):
-    hyperparameters = [0 for x in range(0, 25)]
+    hyperparameters = [0 for x in range(0, 4)]
     hyperparameters[0] = 'categorical_crossentropy'    # loss
     hyperparameters[1] = 'adam'                         # optimizer
     hyperparameters[2] = 15   # epochs
@@ -88,7 +88,7 @@ def mutate_hyperparameters(genes):
 # Other variables:
 #   1   layer units
 #   2   input layer
-#   3   window size
+#   3   kernal size
 #   4   activation
 #   5   pooling type(Default 0 = None)
 #   6   pool size
