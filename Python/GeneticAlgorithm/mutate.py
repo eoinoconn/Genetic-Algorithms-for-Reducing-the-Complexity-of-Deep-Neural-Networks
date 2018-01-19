@@ -9,7 +9,7 @@ def mutate(genes):
     while not mutation_done:
         rand = random.randrange(0, 5)
         logger = logging.getLogger('mutate')
-        logger.info("mutating genes, rand = %f", rand)
+        logger.info("mutating genes, rand = %d", rand)
 
         # remove layer
         # there should always be at least 3 layers in the genes.

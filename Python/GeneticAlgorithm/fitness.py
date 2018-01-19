@@ -61,7 +61,6 @@ class Fitness:
                                batch_size=hyper_params[3],
                                validation_split=0.16,
                                callbacks=[early_stopping],
-                               verbose=2)
 
             else:
                 self.model.fit(train_dataset, train_labels,
@@ -69,11 +68,11 @@ class Fitness:
                                batch_size=hyper_params[3],
                                validation_data=(valid_dataset, valid_labels),
                                callbacks=[early_stopping],
-                               verbose=2)
 
             loss_and_metrics = self.model.evaluate(test_dataset, test_labels,
                                                    batch_size=hyper_params[3],
                                                    verbose=0)
+                                                   verbose=1)
 
             # store num of model parameters
             self.parameters = self.model.count_params()
