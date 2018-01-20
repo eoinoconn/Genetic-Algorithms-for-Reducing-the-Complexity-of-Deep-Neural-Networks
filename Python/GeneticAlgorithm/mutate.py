@@ -14,7 +14,7 @@ def mutate(genes):
         # remove layer
         # there should always be at least 2 layers in the genes.
         # the input convolutional, the flatten layer and the dense layer.
-        if rand == 0 and genes.__len__() > 2 and genes.__len__() < MAX_LAYERS:
+        if rand == 0 and 2 < genes.__len__() < MAX_LAYERS:
             logger.info("removing layer")
             remove_layer(genes)
             mutation_done = True
