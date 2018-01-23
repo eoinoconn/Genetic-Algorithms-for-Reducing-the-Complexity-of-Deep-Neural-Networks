@@ -3,6 +3,8 @@ from keras.layers import Dense, Activation, Conv2D, Conv1D, MaxPooling2D, Dropou
 from itertools import count
 import logging
 
+from Python.GeneticAlgorithm.fitness import assess_chromosome_fitness
+
 MAX_LAYERS = 50
 LAYER_DEPTH = 8
 INPUT_SHAPE = (28, 28, 1)
@@ -18,6 +20,7 @@ class Genes(object):
         self.genes = [[0 for x in range(0, LAYER_DEPTH)] for y in range(0, MAX_LAYERS)]
         self.hyperparameters = [0 for x in range(0, 25)]
         self.model = Sequential()
+        self.fitness = None
         self.id = Genes.ids
         Genes.ids += 1
 
@@ -143,3 +146,7 @@ class Genes(object):
 
     def model_summary(self):
         self.model.summary()
+
+    def assess_fitness(self):
+        self.fitness = assess_chromosome_fitness(genes=self)
+
