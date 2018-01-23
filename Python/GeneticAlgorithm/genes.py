@@ -117,7 +117,10 @@ class Genes(object):
                 if layer[5] > 0:    # check for pooling layer
                     self.pooling_layer(layer)
         elif layer[0] == 3:
-            self.model.add(Flatten())
+            if input_layer:
+                self.model.add(Flatten())
+            else:
+                self.model.add(Flatten(input_shape=INPUT_SHAPE))
         else:
             raise NotImplementedError('Layers not yet implemented')
 

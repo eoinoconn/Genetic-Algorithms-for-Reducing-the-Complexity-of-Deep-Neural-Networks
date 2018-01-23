@@ -57,19 +57,15 @@ class Fitness:
 
             early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.005, patience=2, verbose=0, mode='auto')
 
-            TB_callback = TensorBoard(log_dir='./Graph', histogram_freq=0,
-                                        write_graph=True, write_images=True)
-
-            graph_file = "graph_{}".format(genes.id)
-
-            plot_model(self.model, to_file=graph_file)
+            # TB_callback = TensorBoard(log_dir='./Graph', histogram_freq=0,
+            #                            write_graph=True, write_images=True)
 
             if valid_dataset is None:
                 self.model.fit(train_dataset, train_labels,
                                epochs=hyper_params[2],
                                batch_size=hyper_params[3],
                                validation_split=0.16,
-                               callbacks=[early_stopping, TB_callback],
+                               callbacks=[early_stopping],
                                verbose=2)
 
             else:
