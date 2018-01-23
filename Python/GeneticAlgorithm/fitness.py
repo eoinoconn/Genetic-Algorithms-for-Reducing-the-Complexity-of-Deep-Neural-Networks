@@ -76,15 +76,9 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                         fitness,
                         accuracy,
                         parameters)
-    return fitness
+    return fitness, accuracy, parameters
 
 
 def cost_function(accuracy, efficiency_balance, parameters):
     return accuracy - (efficiency_balance * parameters)
 
-
-def new_best(genes, age):
-    logger = logging.getLogger('resultMetrics')
-    logger.info("new best genes, id = %d, age = %d", genes.id, age)
-    print_summary(model, print_fn=logger.info)
-    logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", fitness(), accuracy, parameters)

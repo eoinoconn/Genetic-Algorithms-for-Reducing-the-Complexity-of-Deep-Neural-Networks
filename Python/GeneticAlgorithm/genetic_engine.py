@@ -19,11 +19,18 @@ def get_best(max_generations, fn_unpack_training_data):
 
     generation = 1
     population = create_population(logger)
-    logger.info("Generation number: %d", generation)
+    best_chromosome = population[0]
+
     while generation < max_generations:
-        assess_population_fitness(population, training_data, logger)
+        logger.info("Generation number: %d", generation)
+        best_child = assess_population_fitness(population, training_data, logger)
+        if best_child > best_chromosome:
+            best_chromosome = best_child
+            best_chromosome.log()
         mutate_population(population, logger)
         generation += 1
+
+    return best_chromosome
 
 
 def create_population(logger):
@@ -41,6 +48,7 @@ def assess_population_fitness(population, training_data, logger):
         chromosome.assess_fitness(training_data)
         i += 1
     population.sort(key=operator.attrgetter('fitness'))
+    return population[-1]
 
 
 def mutate_population(population, logger):
@@ -49,8 +57,3 @@ def mutate_population(population, logger):
         logger.info("mutating chromosome %d", i+1)
         mutate(chromosome)
         i += 1
-
-
-
-
-

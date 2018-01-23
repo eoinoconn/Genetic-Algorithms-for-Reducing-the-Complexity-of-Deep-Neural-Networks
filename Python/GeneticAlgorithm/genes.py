@@ -2,6 +2,7 @@ import logging
 
 from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
 from keras.models import Sequential
+from keras.utils import print_summary
 
 from Python.GeneticAlgorithm.fitness import assess_chromosome_fitness
 
@@ -21,6 +22,8 @@ class Genes(object):
         self.hyperparameters = [0 for x in range(0, 25)]
         self.model = Sequential()
         self.fitness = None
+        self.accuracy = None
+        self.parameters = None
         self.id = Genes.ids
         Genes.ids += 1
 
@@ -148,5 +151,13 @@ class Genes(object):
         self.model.summary()
 
     def assess_fitness(self, training_data):
-        self.fitness = assess_chromosome_fitness(self, **training_data)
+        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self, **training_data)
 
+    def log(self, log_file='resultMetrics'):
+        logger = logging.getLogger(log_file)
+        logger.info("new best chromosome, id = %d", self.id)
+        print_summary(self.model, print_fn=logger.info)
+        logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness, self.accuracy, self.parameters)
+
+    def __gt__(self, other):
+        return self.fitness > other.fitness
