@@ -4,10 +4,11 @@ from keras.callbacks import EarlyStopping
 from keras.utils import print_summary
 
 
-def assess_chromosome_fitness(self, genes=None, efficiency_balance=0.0000001,
+def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                               train_dataset=None, train_labels=None,
                               valid_dataset=None, valid_labels=None,
                               test_dataset=None, test_labels=None):
+
     genes = genes
 
     # initilise logging objects
@@ -26,8 +27,8 @@ def assess_chromosome_fitness(self, genes=None, efficiency_balance=0.0000001,
     model = genes.build_model()
 
     # log geneset model
-    print_summary(self.model, print_fn=logger_fitness.info)
-    print_summary(self.model, print_fn=logger_genes.info)
+    print_summary(model, print_fn=logger_fitness.info)
+    print_summary(model, print_fn=logger_genes.info)
 
     logger_fitness.info("Model built successfully, compiling...")
 
@@ -75,14 +76,15 @@ def assess_chromosome_fitness(self, genes=None, efficiency_balance=0.0000001,
                         fitness,
                         accuracy,
                         parameters)
+    return fitness
 
 
 def cost_function(accuracy, efficiency_balance, parameters):
     return accuracy - (efficiency_balance * parameters)
 
 
-def new_best(self, age):
+def new_best(genes, age):
     logger = logging.getLogger('resultMetrics')
-    logger.info("new best genes, id = %d, age = %d", self.genes.id, age)
-    print_summary(self.model, print_fn=logger.info)
-    logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness(), self.accuracy, self.parameters)
+    logger.info("new best genes, id = %d, age = %d", genes.id, age)
+    print_summary(model, print_fn=logger.info)
+    logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", fitness(), accuracy, parameters)

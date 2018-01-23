@@ -1,7 +1,7 @@
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Conv2D, Conv1D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
-from itertools import count
 import logging
+
+from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
+from keras.models import Sequential
 
 from Python.GeneticAlgorithm.fitness import assess_chromosome_fitness
 
@@ -121,9 +121,9 @@ class Genes(object):
                     self.pooling_layer(layer)
         elif layer[0] == 3:
             if input_layer:
-                self.model.add(Flatten())
-            else:
                 self.model.add(Flatten(input_shape=INPUT_SHAPE))
+            else:
+                self.model.add(Flatten())
         else:
             raise NotImplementedError('Layers not yet implemented')
 
@@ -147,6 +147,6 @@ class Genes(object):
     def model_summary(self):
         self.model.summary()
 
-    def assess_fitness(self):
-        self.fitness = assess_chromosome_fitness(genes=self)
+    def assess_fitness(self, training_data):
+        self.fitness = assess_chromosome_fitness(self, **training_data)
 
