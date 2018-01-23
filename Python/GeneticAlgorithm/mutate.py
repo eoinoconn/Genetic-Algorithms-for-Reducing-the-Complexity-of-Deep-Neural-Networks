@@ -97,19 +97,9 @@ def change_conv_filter_num(genes, logger):
 def create_parent():
     logger = logging.getLogger('mutate')
     logger.info("creating parent genes")
-    while True:
-        genes = Genes()
-        parent_size = random.randrange(2, 7)
-        flatten_layer_index = random.randrange(0, parent_size - 1)
-        for i in range(0, parent_size):
-            if i < flatten_layer_index:
-                genes.add_layer(convolutional_layer())
-            elif i == flatten_layer_index:
-                genes.add_layer(flatten_layer())
-            else:
-                genes.add_layer(dense_layer())
-        if check_valid_geneset(genes, logger):
-            break
+    genes = Genes()
+    genes.add_layer(flatten_layer())
+    genes.add_layer(dense_layer())
     logger.info("parent genes created")
     logger.info("adding hyperparameters")
     genes.set_hyperparameters(random_hyperparameters(logger))
@@ -120,8 +110,8 @@ def random_hyperparameters(logger):
     hyperparameters = [0 for x in range(0, 4)]
     hyperparameters[0] = 'categorical_crossentropy'    # loss
     hyperparameters[1] = 'adam'                         # optimizer
-    hyperparameters[2] = 15   # epochs
-    hyperparameters[3] = random.randrange(50, 200, 25)  # batch size
+    hyperparameters[2] = 10   # epochs
+    hyperparameters[3] = 128  # batch size
     logger.info("Set hyperparameters, loss %s, optimizer %s, epochs %d, batch size %d", hyperparameters[0],
                 hyperparameters[1], hyperparameters[2], hyperparameters[3])
     return hyperparameters
