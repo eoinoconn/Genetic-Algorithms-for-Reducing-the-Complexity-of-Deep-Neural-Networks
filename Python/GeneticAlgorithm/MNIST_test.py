@@ -37,7 +37,7 @@ def reformat(dataset):
 class MNISTTest(unittest.TestCase):
 
     def test_encoding(self):
-        logging.config.fileConfig('logging.conf')
+        logging.config.fileConfig('logs/logging.conf')
         logger = logging.getLogger('testFile')
 
         logger.info("starting test...")
