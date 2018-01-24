@@ -76,7 +76,5 @@ def select_best(population):
 
 def spawn_children(population):
     parent_chromosomes = select_best(population)
-    number_of_parents = parent_chromosomes.__len__()
-    pairs = int(number_of_parents / 2)
-    for i in range(0,pairs):
-        print(i)
+    while parent_chromosomes.__len__() > 1:
+        
