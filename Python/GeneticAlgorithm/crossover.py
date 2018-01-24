@@ -18,24 +18,30 @@ def crossover(parent_1, parent_2):
         rand = randrange(0, 2)
         if rand == 0:
             layer = copy_parent_2.get_layer(0)
+            copy_parent_1.remove_layer(0)
             copy_parent_2.remove_layer(0)
         else:
             layer = copy_parent_1.get_layer(0)
             copy_parent_1.remove_layer(0)
+            copy_parent_2.remove_layer(0)
 
         child.overwrite_layer(layer, i)
 
     child.add_layer(flatten_layer())
+    copy_parent_1.remove_layer(0)
+    copy_parent_2.remove_layer(0)
 
     for i in range(0, child_dense_layers):
         rand = randrange(0, 2)
         if rand == 0:
             layer = copy_parent_2.get_layer(0)
+            copy_parent_1.remove_layer(0)
             copy_parent_2.remove_layer(0)
         else:
             layer = copy_parent_1.get_layer(0)
             copy_parent_1.remove_layer(0)
+            copy_parent_2.remove_layer(0)
 
-        child.overwrite_layer(layer, i+child_conv_layers)
+        child.overwrite_layer(layer, i+child_conv_layers+1)
 
     return None
