@@ -1,7 +1,10 @@
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Conv2D, Conv1D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
-from itertools import count
 import logging
+
+from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
+from keras.models import Sequential
+from keras.utils import print_summary
+
+from Python.GeneticAlgorithm.fitness import assess_chromosome_fitness
 
 MAX_LAYERS = 50
 LAYER_DEPTH = 8
@@ -18,6 +21,9 @@ class Genes(object):
         self.genes = [[0 for x in range(0, LAYER_DEPTH)] for y in range(0, MAX_LAYERS)]
         self.hyperparameters = [0 for x in range(0, 25)]
         self.model = Sequential()
+        self.fitness = None
+        self.accuracy = None
+        self.parameters = None
         self.id = Genes.ids
         Genes.ids += 1
 
@@ -118,9 +124,9 @@ class Genes(object):
                     self.pooling_layer(layer)
         elif layer[0] == 3:
             if input_layer:
-                self.model.add(Flatten())
-            else:
                 self.model.add(Flatten(input_shape=INPUT_SHAPE))
+            else:
+                self.model.add(Flatten())
         else:
             raise NotImplementedError('Layers not yet implemented')
 
@@ -143,3 +149,15 @@ class Genes(object):
 
     def model_summary(self):
         self.model.summary()
+
+    def assess_fitness(self, training_data):
+        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self, **training_data)
+
+    def log(self, log_file='resultMetrics'):
+        logger = logging.getLogger(log_file)
+        logger.info("new best chromosome, id = %d", self.id)
+        print_summary(self.model, print_fn=logger.info)
+        logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness, self.accuracy, self.parameters)
+
+    def __gt__(self, other):
+        return self.fitness > other.fitness

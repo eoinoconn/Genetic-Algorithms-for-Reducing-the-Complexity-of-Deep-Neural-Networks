@@ -10,6 +10,7 @@ def mutate(genes):
         rand = random.randrange(0, 4)
         logger = logging.getLogger('mutate')
         logger.info("mutating genes, rand = %d", rand)
+        logger.info("gene size %d", genes.__len__())
 
         # remove layer
         # there should always be at least 2 layers in the genes.
@@ -39,24 +40,41 @@ def mutate(genes):
 
 
 def change_parameters(genes, logger):
-    rand = random.randrange(0,2)
+    while True:
+        layer_index = random.randrange(0, genes.__len__())
+        if genes.get_layer(layer_index)[0] == 1:
+            logger.info("Changing dense layer")
+            change_dense_layer_parameter(genes, logger)
+            break
+        elif genes.get_layer(layer_index)[0] == 2:
+            logger.info("Changing conv layer")
+            change_conv_layer_parameter(genes, logger)
+            break
+
+
+def change_dense_layer_parameter(genes, logger):
+    rand = random.randrange(0, 2)
+    if rand == 0:     # change dense layer unit number
+        logger.info("Changing dense layer unit number")
+        change_dense_units(genes, logger)
+        return True
+    elif rand == 1:     # change dropout layer probability
+        logger.info("Changing dropout")
+        change_dropout_layer(genes, logger)
+        return True
+
+
+def change_conv_layer_parameter(genes, logger):
+    rand = random.randrange(0, 3)
     if rand == 0:   # change conv layer kernel size
         logger.info("Changing convolutional kernel size")
         change_conv_kernel(genes, logger)
         return True
-    elif rand == 2:     # change conv layer filter number
+    elif rand == 1:     # change conv layer filter number
         logger.info("Changing convolutional filter number")
         change_conv_filter_num(genes, logger)
         return True
-    elif rand == 2:     # change dense layer unit number
-        logger.info("Changing dense layer unit number")
-        change_dense_units(genes, logger)
-        return True
-    elif rand == 3:     # change dropout layer probability
-        logger.info("Changing dropout")
-        change_dropout_layer(genes, logger)
-        return True
-    elif rand == 4:     # change pooling layer
+    elif rand == 2:     # change pooling layer
         logger.info("Changing pooling")
         return change_pooling(genes, logger)
 
@@ -97,19 +115,9 @@ def change_conv_filter_num(genes, logger):
 def create_parent():
     logger = logging.getLogger('mutate')
     logger.info("creating parent genes")
-    while True:
-        genes = Genes()
-        parent_size = random.randrange(2, 7)
-        flatten_layer_index = random.randrange(0, parent_size - 1)
-        for i in range(0, parent_size):
-            if i < flatten_layer_index:
-                genes.add_layer(convolutional_layer())
-            elif i == flatten_layer_index:
-                genes.add_layer(flatten_layer())
-            else:
-                genes.add_layer(dense_layer())
-        if check_valid_geneset(genes, logger):
-            break
+    genes = Genes()
+    genes.add_layer(flatten_layer())
+    genes.add_layer(dense_layer())
     logger.info("parent genes created")
     logger.info("adding hyperparameters")
     genes.set_hyperparameters(random_hyperparameters(logger))
@@ -120,8 +128,8 @@ def random_hyperparameters(logger):
     hyperparameters = [0 for x in range(0, 4)]
     hyperparameters[0] = 'categorical_crossentropy'    # loss
     hyperparameters[1] = 'adam'                         # optimizer
-    hyperparameters[2] = 15   # epochs
-    hyperparameters[3] = random.randrange(50, 200, 25)  # batch size
+    hyperparameters[2] = 10   # epochs
+    hyperparameters[3] = 128  # batch size
     logger.info("Set hyperparameters, loss %s, optimizer %s, epochs %d, batch size %d", hyperparameters[0],
                 hyperparameters[1], hyperparameters[2], hyperparameters[3])
     return hyperparameters
