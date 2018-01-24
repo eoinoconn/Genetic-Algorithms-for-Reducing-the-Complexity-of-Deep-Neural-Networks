@@ -12,12 +12,19 @@ INPUT_SHAPE = (28, 28, 1)
 CLASSES = 10
 
 
-class Genes(object):
+class LoggerMixin():
+    @property
+    def logger(self):
+        # component = "{}.{}".format(type(self).__module__, type(self).__name__)
+        return logging.getLogger('genes')
+
+
+class Genes(LoggerMixin):
     ids = 0
 
     def __init__(self):
-        self.logger = logging.getLogger('genes')
-        self.logger.info("initialising genes")
+        # self.logger = logging.getLogger('genes')
+        # self.logger.info("initialising genes")
         self.genes = [[0 for x in range(0, LAYER_DEPTH)] for y in range(0, MAX_LAYERS)]
         self.hyperparameters = [0 for x in range(0, 25)]
         self.model = Sequential()
@@ -57,14 +64,14 @@ class Genes(object):
     def get_layer(self, index):
         return self.genes[index]
 
-    def num_dense(self):
+    def num_dense_layers(self):
         count = 0
         for layer in self.iterate_layers():
             if layer[0] == 1:
                 count += 1
         return count
 
-    def num_conv(self):
+    def num_conv_layers(self):
         count = 0
         for layer in self.iterate_layers():
             if layer[0] == 2:
