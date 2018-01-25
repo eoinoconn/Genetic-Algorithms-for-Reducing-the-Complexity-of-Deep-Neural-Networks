@@ -20,6 +20,7 @@ def crossover(parent_1, parent_2):
 
     child = Genes()
     logger.info("Child gene has id %d", child.id)
+    logger.info("conv layers %d, dense layers: %d", child_conv_layers, child_dense_layers)
 
     for i in range(0, child_conv_layers):
         rand = randrange(0, 2)
@@ -33,6 +34,9 @@ def crossover(parent_1, parent_2):
             copy_parent_2.remove_layer(0)
 
         child.overwrite_layer(layer, i)
+        copy_parent_1.log_geneset('crossover')
+        copy_parent_2.log_geneset('crossover')
+        child.log_geneset('crossover')
 
     child.add_layer(flatten_layer())
     copy_parent_1.remove_layer(0)
@@ -50,6 +54,9 @@ def crossover(parent_1, parent_2):
             copy_parent_2.remove_layer(0)
 
         child.overwrite_layer(layer, i+child_conv_layers+1)
+        copy_parent_1.log_geneset('crossover')
+        copy_parent_2.log_geneset('crossover')
+        child.log_geneset('crossover')
 
     child.set_hyperparameters(parent_1.hyperparameters)
     child.log_geneset()

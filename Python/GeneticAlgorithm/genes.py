@@ -22,12 +22,12 @@ class LoggerMixin:
         logger = logging.getLogger(log_file)
         logger.info("Geneset id: %d", self.id)
         print_summary(self.build_model(), print_fn=logger.info)
-        logger.info(self.genes.__str__())
+        logger.info(self.__str__() + '\n')
 
     def log_best(self, log_file='resultMetrics'):
         logger = logging.getLogger(log_file)
         logger.info("new best chromosome, id = %d", self.id)
-        print_summary(self.model, print_fn=logger.info)
+        print_summary(self.build_model(), print_fn=logger.info)
         logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness, self.accuracy, self.parameters)
 
 
@@ -98,18 +98,18 @@ class Genes(LoggerMixin, ModelMixin):
         # self.logger.info("initialising genes")
         self.genes = [[0 for x in range(0, LAYER_DEPTH)] for y in range(0, MAX_LAYERS)]
         self.hyperparameters = [0 for x in range(0, 25)]
-        self.model = None
         self.fitness = None
         self.accuracy = None
         self.parameters = None
         self.id = Genes.ids
+        self.age = 0
         Genes.ids += 1
+
+    def increment_age(self):
+        self.age += 1
 
     def set_hyperparameters(self, new_hyperparameters):
         self.hyperparameters = new_hyperparameters
-
-    def iterate_id(self):
-        self.id += 1
 
     def add_layer(self, layer, index=None):
         if index is None:

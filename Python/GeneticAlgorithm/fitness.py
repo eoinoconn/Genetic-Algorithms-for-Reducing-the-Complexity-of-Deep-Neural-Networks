@@ -9,6 +9,8 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                               valid_dataset=None, valid_labels=None,
                               test_dataset=None, test_labels=None):
 
+    genes.log_geneset()
+
     # initilise logging objects
     logger_fitness = logging.getLogger('fitness')
     logger_genes = logging.getLogger('geneset')
