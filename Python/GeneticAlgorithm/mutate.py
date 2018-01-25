@@ -292,8 +292,8 @@ def remove_layer(genes):
         # must not pick flatten layer which acts as border between convolutional and dense layers
         # must not pick dense or conv layer if only 1 is present
         if layer[0] == 3 or \
-                (layer[0] == 2 and genes.num_conv() < 2) or \
-                (layer[0] == 1 and genes.num_dense() < 2):
+                (layer[0] == 2 and genes.num_conv_layers() < 2) or \
+                (layer[0] == 1 and genes.num_dense_layers() < 2):
             continue
         genes.remove_layer(layer_remove_index)
         logger.info("removed layer type %d", layer[0])
