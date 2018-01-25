@@ -18,7 +18,13 @@ class LoggerMixin:
         # component = "{}.{}".format(type(self).__module__, type(self).__name__)
         return logging.getLogger('genes')
 
-    def log(self, log_file='resultMetrics'):
+    def log_geneset(self, log_file='geneset'):
+        logger = logging.getLogger(log_file)
+        logger.info("Geneset id: %d", self.id)
+        print_summary(self.build_model(), print_fn=logger.info)
+        logger.info(self.genes.__str__())
+
+    def log_best(self, log_file='resultMetrics'):
         logger = logging.getLogger(log_file)
         logger.info("new best chromosome, id = %d", self.id)
         print_summary(self.model, print_fn=logger.info)
@@ -59,7 +65,7 @@ class ModelMixin:
             elif input_layer:           # input layer
                 model.add(Conv2D(layer[1], (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation='relu'))
                 if layer[5] > 0:  # check for pooling layer
-                    self.pooling_layer(layer)
+                    self.pooling_layer(model, layer)
             elif output_layer:        # output layer
                 model.add(Conv2D(CLASSES, (layer[3], layer[3]), activation='softmax'))
             else:               # hidden layer

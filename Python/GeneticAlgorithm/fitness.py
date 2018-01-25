@@ -9,18 +9,12 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                               valid_dataset=None, valid_labels=None,
                               test_dataset=None, test_labels=None):
 
-    genes = genes
-
     # initilise logging objects
     logger_fitness = logging.getLogger('fitness')
     logger_genes = logging.getLogger('geneset')
 
     # log geneset id
     logger_fitness.info("Geneset id: %d", genes.id)
-    logger_genes.info("Geneset id: %d", genes.id)
-
-    # log gene shape
-    logger_genes.info(genes.__str__())
 
     # build model
     logger_fitness.info("building model")
@@ -28,7 +22,6 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
     # log geneset model
     print_summary(model, print_fn=logger_fitness.info)
-    print_summary(model, print_fn=logger_genes.info)
 
     logger_fitness.info("Model built successfully, compiling...")
 
@@ -37,7 +30,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
     model.compile(loss=hyper_params[0],
                   optimizer=hyper_params[1],
-                  metrics=['accuracy'], )
+                  metrics=['accuracy'])
 
     logger_fitness.info("Model compiled succesfully, beginning training")
 
