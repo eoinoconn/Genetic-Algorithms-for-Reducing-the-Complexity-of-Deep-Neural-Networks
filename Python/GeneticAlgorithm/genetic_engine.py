@@ -7,9 +7,10 @@ import operator
 import logging
 import numpy as np
 
-POOL_SIZE = 6
+POOL_SIZE = 10
 IMAGE_SIZE = 28
 NUM_LABELS = 10
+MAX_CROSSOVERS = 2
 
 
 def get_best(max_generations, fn_unpack_training_data):
@@ -25,6 +26,7 @@ def get_best(max_generations, fn_unpack_training_data):
 
     while generation < max_generations:
         logger.info("Generation number: %d", generation)
+        logger.info("pool size: %d", population.__len__())
 
         # Assign population fitness
         best_child = assess_population_fitness(population, training_data, logger)
@@ -40,6 +42,8 @@ def get_best(max_generations, fn_unpack_training_data):
         # mutate pool
         mutate_population(population, logger)
         generation += 1
+
+        logger.info("End of generation %d \n\n", generation)
 
     return best_chromosome
 
@@ -59,7 +63,7 @@ def assess_population_fitness(population, training_data, logger):
         chromosome.assess_fitness(training_data)
         i += 1
     population.sort(key=operator.attrgetter('fitness'))
-    return population[-1]
+    return population[0]
 
 
 def mutate_population(population, logger):
@@ -72,6 +76,8 @@ def mutate_population(population, logger):
 
 def spawn_children(population):
     child_chromosomes = []
-    while population.__len__() > 1:
+    spawned_children = 0
+    while population.__len__() > 1 and spawned_children < MAX_CROSSOVERS:
         child_chromosomes.append(crossover(population.pop(), population.pop()))
+        spawned_children += 1
     return child_chromosomes
