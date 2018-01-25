@@ -1,4 +1,6 @@
 from keras.utils import to_categorical
+
+from Python.GeneticAlgorithm.crossover import crossover
 from Python.GeneticAlgorithm.mutate import create_parent, mutate
 from keras.datasets import mnist
 import operator
@@ -24,18 +26,16 @@ def get_best(max_generations, fn_unpack_training_data):
     while generation < max_generations:
         logger.info("Generation number: %d", generation)
 
-        spawn_children(population)
-
         # Assign population fitness
         best_child = assess_population_fitness(population, training_data, logger)
 
         # if new best chromosome found, save it
         if best_child > best_chromosome:
             best_chromosome = best_child
-            best_chromosome.log()
+            best_chromosome.log
 
         # select best chromosomes
-
+        population.append(spawn_children(population))
 
         # mutate pool
         mutate_population(population, logger)
@@ -70,11 +70,8 @@ def mutate_population(population, logger):
         i += 1
 
 
-def select_best(population):
-    return population[:3]
-
-
 def spawn_children(population):
-    parent_chromosomes = select_best(population)
-    while parent_chromosomes.__len__() > 1:
-        
+    child_chromosomes = []
+    while population.__len__() > 1:
+        child_chromosomes.append(crossover(population.pop(), population.pop()))
+    return child_chromosomes

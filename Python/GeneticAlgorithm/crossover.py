@@ -44,4 +44,4 @@ def crossover(parent_1, parent_2):
 
         child.overwrite_layer(layer, i+child_conv_layers+1)
 
-    return None
+    return child
