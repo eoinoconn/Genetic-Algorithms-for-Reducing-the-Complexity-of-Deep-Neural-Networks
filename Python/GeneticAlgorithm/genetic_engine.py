@@ -32,10 +32,10 @@ def get_best(max_generations, fn_unpack_training_data):
         # if new best chromosome found, save it
         if best_child > best_chromosome:
             best_chromosome = best_child
-            best_chromosome.log
+            best_chromosome.log_best
 
         # select best chromosomes
-        population.append(spawn_children(population))
+        population.extend(spawn_children(population))
 
         # mutate pool
         mutate_population(population, logger)
