@@ -35,9 +35,6 @@ def mutate(genes):
             mutate_hyperparameters(genes)
             mutation_done = True
 
-        # iterate genes id
-        genes.iterate_id()
-
 
 def change_parameters(genes, logger):
     while True:
@@ -128,7 +125,7 @@ def random_hyperparameters(logger):
     hyperparameters = [0 for x in range(0, 4)]
     hyperparameters[0] = 'categorical_crossentropy'    # loss
     hyperparameters[1] = 'adam'                         # optimizer
-    hyperparameters[2] = 10   # epochs
+    hyperparameters[2] = 3   # epochs
     hyperparameters[3] = 128  # batch size
     logger.info("Set hyperparameters, loss %s, optimizer %s, epochs %d, batch size %d", hyperparameters[0],
                 hyperparameters[1], hyperparameters[2], hyperparameters[3])
@@ -139,7 +136,7 @@ def mutate_hyperparameters(genes):
     hyper_index = random.randrange(0,2)
     hyperparameters = genes.hyperparameters
     if hyper_index == 0:
-        hyperparameters[2] = 15   # epochs
+        hyperparameters[2] = 3   # epochs
     else:
         hyperparameters[3] = random.randrange(50, 200, 25)  # batch size
     genes.set_hyperparameters(hyperparameters)
@@ -295,7 +292,7 @@ def remove_layer(genes):
         # must not pick flatten layer which acts as border between convolutional and dense layers
         # must not pick dense or conv layer if only 1 is present
         if layer[0] == 3 or \
-                (layer[0] == 1 and genes.num_dense() < 2):
+                (layer[0] == 1 and genes.num_dense_layers() < 2):
             continue
         genes.remove_layer(layer_remove_index)
         logger.info("removed layer type %d", layer[0])

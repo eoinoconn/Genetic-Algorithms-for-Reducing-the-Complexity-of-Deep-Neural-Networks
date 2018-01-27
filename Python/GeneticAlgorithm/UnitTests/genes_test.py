@@ -52,7 +52,7 @@ class TestGenes(unittest.TestCase):
         layer[0] = 1
         layer[1] = 10
         self.chromo.add_layer(layer)
-        self.chromo.build_model()
+        self.chromo.build_model
 
     def testBuildModel2DConv(self):
         layer = [0 for i in range(0, LAYER_DEPTH)]
@@ -76,7 +76,7 @@ class TestGenes(unittest.TestCase):
         layer[3] = 2
         layer[4] = 'relu'
         self.chromo.add_layer(layer)
-        self.chromo.build_model()
+        self.chromo.build_model
 
     def setup_fake_chromosome(self):
         # add 3 dense layers

@@ -1,13 +1,16 @@
 from keras.utils import to_categorical
+
+from Python.GeneticAlgorithm.crossover import crossover
 from Python.GeneticAlgorithm.mutate import create_parent, mutate
 from keras.datasets import mnist
 import operator
 import logging
 import numpy as np
 
-POOL_SIZE = 6
+POOL_SIZE = 10
 IMAGE_SIZE = 28
 NUM_LABELS = 10
+MAX_CROSSOVERS = 2
 
 
 def get_best(max_generations, fn_unpack_training_data):
@@ -23,13 +26,27 @@ def get_best(max_generations, fn_unpack_training_data):
 
     while generation < max_generations:
         logger.info("Generation number: %d", generation)
+        logger.info("pool size: %d", population.__len__())
+
+        # iterate the age of every chromosome in the population by 1
+        age_population(population)
+
+        # Assign population fitness
         best_child = assess_population_fitness(population, training_data, logger)
+
+        # if new best chromosome found, save it
         if best_child > best_chromosome:
             best_chromosome = best_child
-            best_chromosome.log()
-        mutate_population(population, logger)
-        generation += 1
+        best_chromosome.log_best()
 
+        # select best chromosomes
+        population.extend(spawn_children(population))
+
+        # mutate pool
+        mutate_population(population, logger)
+
+        logger.info("End of generation %d \n\n", generation)
+        generation += 1
     return best_chromosome
 
 
@@ -57,3 +74,17 @@ def mutate_population(population, logger):
         logger.info("mutating chromosome %d", i+1)
         mutate(chromosome)
         i += 1
+
+
+def spawn_children(population):
+    child_chromosomes = []
+    spawned_children = 0
+    while population.__len__() > 1 and spawned_children < MAX_CROSSOVERS:
+        child_chromosomes.append(crossover(population.pop(), population.pop()))
+        spawned_children += 1
+    return child_chromosomes
+
+
+def age_population(population):
+    for chromosome in population:
+        chromosome.increment_age()
