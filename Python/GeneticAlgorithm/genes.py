@@ -21,10 +21,10 @@ class LoggerMixin:
     def log_geneset(self, log_file='geneset'):
         logger = logging.getLogger(log_file)
         logger.info("Geneset id: %d", self.id)
-        print_summary(self.build_model(), print_fn=logger.info)
-        logger.info(self.__str__() + '\n')
+        logger.info(self.__str__() + "\n")
 
     def log_best(self, log_file='resultMetrics'):
+        self.log_geneset()
         logger = logging.getLogger(log_file)
         logger.info("new best chromosome, id = %d", self.id)
         print_summary(self.build_model(), print_fn=logger.info)

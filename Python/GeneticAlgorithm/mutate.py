@@ -297,4 +297,3 @@ def remove_layer(genes):
         genes.remove_layer(layer_remove_index)
         logger.info("removed layer type %d", layer[0])
         break
-
