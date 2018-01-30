@@ -125,7 +125,7 @@ def random_hyperparameters(logger):
     hyperparameters = [0 for x in range(0, 4)]
     hyperparameters[0] = 'categorical_crossentropy'    # loss
     hyperparameters[1] = 'adam'                         # optimizer
-    hyperparameters[2] = 3   # epochs
+    hyperparameters[2] = 15   # epochs
     hyperparameters[3] = 128  # batch size
     logger.info("Set hyperparameters, loss %s, optimizer %s, epochs %d, batch size %d", hyperparameters[0],
                 hyperparameters[1], hyperparameters[2], hyperparameters[3])
@@ -136,7 +136,7 @@ def mutate_hyperparameters(genes):
     hyper_index = random.randrange(0,2)
     hyperparameters = genes.hyperparameters
     if hyper_index == 0:
-        hyperparameters[2] = 3   # epochs
+        hyperparameters[2] = 15   # epochs
     else:
         hyperparameters[3] = random.randrange(50, 200, 25)  # batch size
     genes.set_hyperparameters(hyperparameters)

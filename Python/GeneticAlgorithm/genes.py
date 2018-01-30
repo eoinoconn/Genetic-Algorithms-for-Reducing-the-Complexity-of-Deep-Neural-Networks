@@ -20,13 +20,13 @@ class LoggerMixin:
 
     def log_geneset(self, log_file='geneset'):
         logger = logging.getLogger(log_file)
-        logger.info("Geneset id: %d", self.id)
+        logger.info("Geneset id: %d, age: %d", self.id, self.age)
         logger.info(self.__str__() + "\n")
 
     def log_best(self, log_file='resultMetrics'):
         self.log_geneset()
         logger = logging.getLogger(log_file)
-        logger.info("new best chromosome, id = %d", self.id)
+        logger.info("new best chromosome, id = %d, age = %d", self.id, self.age)
         print_summary(self.build_model(), print_fn=logger.info)
         logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness, self.accuracy, self.parameters)
 

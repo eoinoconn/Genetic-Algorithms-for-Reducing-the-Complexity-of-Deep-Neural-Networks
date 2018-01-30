@@ -46,6 +46,8 @@ def get_best(max_generations, fn_unpack_training_data):
         # mutate pool
         mutate_population(population, logger)
 
+        increment_population_age(population)
+
         logger.info("End of generation %d \n\n", generation)
         generation += 1
     return best_chromosome
@@ -80,11 +82,20 @@ def spawn_children(population, logger):
     child_chromosomes = []
     spawned_children = 0
     while population.__len__() > 1 and spawned_children < MAX_CROSSOVERS:
-        child_chromosomes.append(crossover(population.pop(), population.pop()))
-        spawned_children += 1
+        parent_1 = population.pop()
+        parent_2 = population.pop()
+        logger.info("Spawning children from chromosomes %d and %d", parent_1.id, parent_2.id)
+        child_chromosomes.append(crossover(parent_1, parent_2))
+        child_chromosomes.append(crossover(parent_2, parent_1))
+        spawned_children += 2
     return child_chromosomes
 
 
 def age_population(population):
+    for chromosome in population:
+        chromosome.increment_age()
+
+
+def increment_population_age(population):
     for chromosome in population:
         chromosome.increment_age()
