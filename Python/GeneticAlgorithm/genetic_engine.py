@@ -8,10 +8,10 @@ import logging
 from random import shuffle
 import numpy as np
 
-POOL_SIZE = 10
+POOL_SIZE = 30
 IMAGE_SIZE = 28
 NUM_LABELS = 10
-MAX_CROSSOVERS = 2
+MAX_CROSSOVERS = 4
 
 
 def get_best(max_generations, fn_unpack_training_data):

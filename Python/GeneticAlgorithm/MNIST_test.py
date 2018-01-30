@@ -43,7 +43,7 @@ class MNISTTest(unittest.TestCase):
         logger.info("starting test...")
 
         start = time.time()
-        best = get_best(10, unpack_training_data)
+        best = get_best(200, unpack_training_data)
         end = time.time()
 
         logger.info("time to best %f", end-start)
