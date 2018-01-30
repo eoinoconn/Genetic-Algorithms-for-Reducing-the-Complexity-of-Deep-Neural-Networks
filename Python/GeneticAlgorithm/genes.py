@@ -89,6 +89,13 @@ class ModelMixin:
     def model_summary(self):
         self.build_model().summary()
 
+    def inception_module(self, model):
+        tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')
+        tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')
+        tower_2 = Conv2D(64, (1, 1), padding='same', activation='relu')
+        tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')
+        tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')
+        tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')
 
 class Genes(LoggerMixin, ModelMixin):
     ids = 0
