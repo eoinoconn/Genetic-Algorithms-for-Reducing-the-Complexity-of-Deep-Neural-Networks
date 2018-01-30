@@ -160,6 +160,7 @@ class Genes(LoggerMixin, ModelMixin):
             if layer[0] == 3:
                 return count
             count += 1
+        return -1
 
     def __str__(self):
         str = self.hyperparameters.__str__() + "\n"

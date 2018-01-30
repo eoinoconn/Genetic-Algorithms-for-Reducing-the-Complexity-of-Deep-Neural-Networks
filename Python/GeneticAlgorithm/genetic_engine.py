@@ -5,6 +5,7 @@ from Python.GeneticAlgorithm.mutate import create_parent, mutate
 from keras.datasets import mnist
 import operator
 import logging
+from random import shuffle
 import numpy as np
 
 POOL_SIZE = 10
@@ -37,10 +38,10 @@ def get_best(max_generations, fn_unpack_training_data):
         # if new best chromosome found, save it
         if best_child > best_chromosome:
             best_chromosome = best_child
-        best_chromosome.log_best()
+            best_chromosome.log_best()
 
         # select best chromosomes
-        population.extend(spawn_children(population))
+        population.extend(spawn_children(population, logger))
 
         # mutate pool
         mutate_population(population, logger)
@@ -59,24 +60,23 @@ def create_population(logger):
 
 
 def assess_population_fitness(population, training_data, logger):
-    i = 0
     for chromosome in population:
-        logger.info("getting fitness of chromosome %d", i+1)
+        logger.info("getting fitness of chromosome %d", chromosome.id)
         chromosome.assess_fitness(training_data)
-        i += 1
     population.sort(key=operator.attrgetter('fitness'))
     return population[-1]
 
 
 def mutate_population(population, logger):
-    i = 0
+    mutations_completed = 0
+    shuffle(population)
     for chromosome in population:
-        logger.info("mutating chromosome %d", i+1)
+        logger.info("mutating chromosome %d", chromosome.id)
         mutate(chromosome)
-        i += 1
+        mutations_completed += 1
 
 
-def spawn_children(population):
+def spawn_children(population, logger):
     child_chromosomes = []
     spawned_children = 0
     while population.__len__() > 1 and spawned_children < MAX_CROSSOVERS:
