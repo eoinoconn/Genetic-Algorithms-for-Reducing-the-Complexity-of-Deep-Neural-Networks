@@ -34,7 +34,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                   optimizer=hyper_params[1],
                   metrics=['accuracy'])
 
-    logger_fitness.info("Model compiled succesfully, beginning training")
+    logger_fitness.info("Model compiled succesfully, beginning training...")
 
     early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.005, patience=2, verbose=0, mode='auto')
 
@@ -47,7 +47,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                   batch_size=hyper_params[3],
                   validation_split=0.16,
                   callbacks=[early_stopping],
-                  verbose=2)
+                  verbose=0)
 
     else:
         model.fit(train_dataset, train_labels,
@@ -55,11 +55,12 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                   batch_size=hyper_params[3],
                   validation_data=(valid_dataset, valid_labels),
                   callbacks=[early_stopping],
-                  verbose=2)
+                  verbose=0)
 
+    logger_fitness.info("Model trained succesfully, beginning evaluation...")
     loss_and_metrics = model.evaluate(test_dataset, test_labels,
                                       batch_size=hyper_params[3],
-                                      verbose=1)
+                                      verbose=0)
 
     # store num of model parameters
     parameters = model.count_params()
@@ -67,7 +68,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
     fitness = cost_function(accuracy, efficiency_balance, parameters)
 
-    logger_fitness.info("Model trained succesfully, fitness = %.6f, accuracy = %.6f, parameters = %d",
+    logger_fitness.info("Model evaluated succesfully, fitness = %.6f, accuracy = %.6f, parameters = %d",
                         fitness,
                         accuracy,
                         parameters)
