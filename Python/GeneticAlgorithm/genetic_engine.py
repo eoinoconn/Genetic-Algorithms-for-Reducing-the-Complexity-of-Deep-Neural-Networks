@@ -8,7 +8,7 @@ import logging
 import random
 import numpy as np
 
-POOL_SIZE = 30
+POOL_SIZE = 20
 random.seed(1994)
 
 IMAGE_SIZE = 28
