@@ -31,8 +31,8 @@ def get_best(max_generations, fn_unpack_training_data):
         logger.info("Generation number: %d", generation)
         logger.info("pool size: %d", population.__len__())
 
-        # iterate the age of every chromosome in the population by 1
-        age_population(population)
+        # mutate pool
+        mutate_population(population, logger)
 
         # Assign population fitness
         best_child = assess_population_fitness(population, training_data, logger)
@@ -45,8 +45,8 @@ def get_best(max_generations, fn_unpack_training_data):
         # select best chromosomes
         population.extend(spawn_children(population, logger))
 
-        # mutate pool
-        mutate_population(population, logger)
+        # iterate the age of every chromosome in the population by 1
+        age_population(population)
 
         logger.info("End of generation %d \n\n", generation)
         generation += 1
