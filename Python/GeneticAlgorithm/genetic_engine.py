@@ -5,10 +5,12 @@ from Python.GeneticAlgorithm.mutate import create_parent, mutate
 from keras.datasets import mnist
 import operator
 import logging
-from random import shuffle
+import random
 import numpy as np
 
 POOL_SIZE = 30
+random.seed(1994)
+
 IMAGE_SIZE = 28
 NUM_LABELS = 10
 MAX_CROSSOVERS = 4
@@ -46,8 +48,6 @@ def get_best(max_generations, fn_unpack_training_data):
         # mutate pool
         mutate_population(population, logger)
 
-        increment_population_age(population)
-
         logger.info("End of generation %d \n\n", generation)
         generation += 1
     return best_chromosome
@@ -71,7 +71,7 @@ def assess_population_fitness(population, training_data, logger):
 
 def mutate_population(population, logger):
     mutations_completed = 0
-    shuffle(population)
+    random.shuffle(population)
     for chromosome in population:
         logger.info("mutating chromosome %d", chromosome.id)
         mutate(chromosome)
@@ -95,7 +95,3 @@ def age_population(population):
     for chromosome in population:
         chromosome.increment_age()
 
-
-def increment_population_age(population):
-    for chromosome in population:
-        chromosome.increment_age()

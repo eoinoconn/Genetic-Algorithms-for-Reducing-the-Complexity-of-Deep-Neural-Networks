@@ -2,6 +2,8 @@ from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH, INPUT_SHAPE, MAX_L
 import random
 import logging
 
+random.seed(1994)
+
 
 def mutate(genes):
     mutation_done = False

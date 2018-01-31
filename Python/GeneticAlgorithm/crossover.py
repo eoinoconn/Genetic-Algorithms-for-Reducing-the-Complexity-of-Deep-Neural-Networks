@@ -1,9 +1,11 @@
 import copy
 import logging
-from random import randrange
+import random
 
 from Python.GeneticAlgorithm.genes import Genes
 from Python.GeneticAlgorithm.mutate import flatten_layer
+
+random.seed(1994)
 
 
 def crossover(dom_parent, parent_2):
@@ -53,7 +55,7 @@ def copy_to_child(child, dom_parent, parent_2, layer_type, num_layers, child_ind
         parameters_added = False
         layer = []
         while not parameters_added:
-            rand = randrange(1, 3)
+            rand = random.randrange(1, 3)
             logger.info("Choosing parent %d", rand)
             if rand == 2 and parent_2.get_layer(0)[0] == layer_type:
                 layer = parent_2.get_layer(0)
