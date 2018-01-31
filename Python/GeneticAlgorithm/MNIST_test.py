@@ -4,6 +4,8 @@ In this file we will test the encoding and train a basic network using the built
 """
 from __future__ import print_function
 import time
+
+from Python.GeneticAlgorithm.fitness import assess_chromosome_fitness, evaluate_best_chromosome
 from Python.GeneticAlgorithm.genetic_engine import *
 
 
@@ -16,6 +18,19 @@ num_labels = 10
 
 
 def unpack_training_data():
+    (train_dataset, train_labels), (test_dataset, test_labels) = mnist.load_data()
+
+    train_dataset = reformat(train_dataset)
+    test_dataset = reformat(test_dataset)
+
+    train_labels = to_categorical(train_labels, NUM_LABELS)
+    test_labels = to_categorical(test_labels, NUM_LABELS)
+
+    return {"train_dataset": train_dataset, "train_labels": train_labels,
+            "valid_dataset": None, "valid_labels": None}
+
+
+def unpack_testing_data():
     (train_dataset, train_labels), (test_dataset, test_labels) = mnist.load_data()
 
     train_dataset = reformat(train_dataset)
@@ -43,11 +58,11 @@ class MNISTTest(unittest.TestCase):
         logger.info("starting test...")
 
         start = time.time()
-        best = get_best(200, unpack_training_data)
+        best = get_best(3, unpack_training_data)
         end = time.time()
 
         logger.info("time to best %f", end-start)
-        self.assertTrue(best.fitness > 0.99)
+        self.assertTrue(evaluate_best_chromosome(best, **unpack_testing_data()) > 0.99)
 
 
 if __name__ == '__main__':
