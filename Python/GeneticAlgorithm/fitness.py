@@ -14,7 +14,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
     logger_genes = logging.getLogger('geneset')
 
     # log geneset id
-    logger_fitness.info("Geneset id: %d", genes.id)
+    logger_fitness.info("Geneset id: %d\tAge: %d", genes.id, genes.age)
 
     # build model
     logger_fitness.info("building model")
