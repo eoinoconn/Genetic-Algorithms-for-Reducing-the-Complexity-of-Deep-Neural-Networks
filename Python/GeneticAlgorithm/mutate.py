@@ -1,8 +1,10 @@
-from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH, INPUT_SHAPE, MAX_LAYERS
+from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH, MAX_LAYERS
 import random
 import logging
 
 random.seed(1994)
+
+EPOCHS = 20
 
 
 def mutate(genes):
@@ -111,10 +113,10 @@ def change_conv_filter_num(genes, logger):
             break
 
 
-def create_parent():
+def create_parent(input_shape):
     logger = logging.getLogger('mutate')
     logger.info("creating parent genes")
-    genes = Genes()
+    genes = Genes(input_shape)
     genes.add_layer(flatten_layer())
     genes.add_layer(dense_layer())
     logger.info("parent genes created")
@@ -127,7 +129,7 @@ def random_hyperparameters(logger):
     hyperparameters = [0 for x in range(0, 4)]
     hyperparameters[0] = 'categorical_crossentropy'    # loss
     hyperparameters[1] = 'adam'                         # optimizer
-    hyperparameters[2] = 15   # epochs
+    hyperparameters[2] = EPOCHS   # epochs
     hyperparameters[3] = 128  # batch size
     logger.info("Set hyperparameters, loss %s, optimizer %s, epochs %d, batch size %d", hyperparameters[0],
                 hyperparameters[1], hyperparameters[2], hyperparameters[3])
@@ -138,7 +140,7 @@ def mutate_hyperparameters(genes):
     hyper_index = random.randrange(0,2)
     hyperparameters = genes.hyperparameters
     if hyper_index == 0:
-        hyperparameters[2] = 15   # epochs
+        hyperparameters[2] = EPOCHS   # epochs
     else:
         hyperparameters[3] = random.randrange(50, 200, 25)  # batch size
     genes.set_hyperparameters(hyperparameters)
@@ -197,7 +199,7 @@ def change_pooling(genes, logger):
 # geneset at the last convolutional layer
 def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
 
-    current_dimension = INPUT_SHAPE[0]
+    current_dimension = genes.input_shape[0]
     logger.info("checking for valid geneset; conv dimensions %d", current_dimension)
     for layer in genes.iterate_layers():
         if layer[0] == 2:

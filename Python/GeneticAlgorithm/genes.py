@@ -8,7 +8,6 @@ from Python.GeneticAlgorithm.fitness import assess_chromosome_fitness
 
 MAX_LAYERS = 50
 LAYER_DEPTH = 8
-INPUT_SHAPE = (28, 28, 1)
 CLASSES = 10
 
 
@@ -49,7 +48,7 @@ class ModelMixin:
     def build_layer(self, model, layer, input_layer=False, output_layer=False):
         if layer[0] == 1:   # Dense Layer
             if input_layer:           # input layer
-                model.add(Dense(layer[1], input_shape=INPUT_SHAPE, activation='relu'))
+                model.add(Dense(layer[1], input_shape=self.input_shape, activation='relu'))
                 if layer[3] > 0:
                     model.add(Dropout(layer[3]))
             elif output_layer:        # output layer
@@ -61,9 +60,9 @@ class ModelMixin:
 
         elif layer[0] == 2:     # conv layer
             if input_layer and output_layer:    # input and output
-                model.add(Conv2D(CLASSES, (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation='softmax'))
+                model.add(Conv2D(CLASSES, (layer[3], layer[3]), input_shape=self.input_shape, activation='softmax'))
             elif input_layer:           # input layer
-                model.add(Conv2D(layer[1], (layer[3], layer[3]), input_shape=INPUT_SHAPE, activation='relu'))
+                model.add(Conv2D(layer[1], (layer[3], layer[3]), input_shape=self.input_shape, activation='relu'))
                 if layer[5] > 0:  # check for pooling layer
                     self.pooling_layer(model, layer)
             elif output_layer:        # output layer
@@ -74,7 +73,7 @@ class ModelMixin:
                     self.pooling_layer(model, layer)
         elif layer[0] == 3:
             if input_layer:
-                model.add(Flatten(input_shape=INPUT_SHAPE))
+                model.add(Flatten(input_shape=self.input_shape))
             else:
                 model.add(Flatten())
         else:
@@ -97,17 +96,17 @@ class ModelMixin:
         tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')
         tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')
 
+
 class Genes(LoggerMixin, ModelMixin):
     ids = 0
 
-    def __init__(self):
-        # self.logger = logging.getLogger('genes')
-        # self.logger.info("initialising genes")
+    def __init__(self, input_shape):
         self.genes = [[0 for x in range(0, LAYER_DEPTH)] for y in range(0, MAX_LAYERS)]
         self.hyperparameters = [0 for x in range(0, 25)]
         self.fitness = None
         self.accuracy = None
         self.parameters = None
+        self.input_shape = input_shape
         self.id = Genes.ids
         self.age = 0
         Genes.ids += 1
