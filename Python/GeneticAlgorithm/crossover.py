@@ -3,37 +3,46 @@ import logging
 import random
 
 from Python.GeneticAlgorithm.genes import Genes
-from Python.GeneticAlgorithm.mutate import flatten_layer
+from Python.GeneticAlgorithm.mutate import flatten_layer, check_valid_geneset
 
 random.seed(1994)
 
 
-def crossover(dom_parent, parent_2):
+def crossover(dom_parent, parent_2, input_shape):
 
     logger = logging.getLogger('crossover')
     logger.info("breeding parents")
     logger.info("Dominant parent 1 id: %d\tSecond parent 2 id:%d", dom_parent.id, parent_2.id)
 
-    child_conv_layers = dom_parent.num_conv_layers()
-    child_dense_layers = dom_parent.num_dense_layers()
+    invalid_chromosome = False
 
-    copy_dom_parent_1 = copy.deepcopy(dom_parent)
-    copy_parent_2 = copy.deepcopy(parent_2)
+    while not invalid_chromosome:
+        child_conv_layers = dom_parent.num_conv_layers()
+        child_dense_layers = dom_parent.num_dense_layers()
 
-    child = Genes()
-    logger.info("Child gene has id %d", child.id)
-    logger.info("conv layers %d, dense layers: %d", child_conv_layers, child_dense_layers)
+        copy_dom_parent_1 = copy.deepcopy(dom_parent)
+        copy_parent_2 = copy.deepcopy(parent_2)
 
-    copy_to_child(child, copy_dom_parent_1, copy_parent_2, 2, child_conv_layers, 0, logger)
+        child = Genes(input_shape)
+        logger.info("Child gene has id %d", child.id)
+        logger.info("conv layers %d, dense layers: %d", child_conv_layers, child_dense_layers)
 
-    child.add_layer(flatten_layer())
-    delete_to_flatten(copy_dom_parent_1)
-    delete_to_flatten(copy_parent_2)
+        copy_to_child(child, copy_dom_parent_1, copy_parent_2, 2, child_conv_layers, 0, logger)
 
-    copy_to_child(child, copy_dom_parent_1, copy_parent_2, 1, child_dense_layers, child_conv_layers+1, logger)
+        child.add_layer(flatten_layer())
+        delete_to_flatten(copy_dom_parent_1)
+        delete_to_flatten(copy_parent_2)
 
-    child.set_hyperparameters(dom_parent.hyperparameters)
-    child.log_geneset(log_file='crossover')
+        copy_to_child(child, copy_dom_parent_1, copy_parent_2, 1, child_dense_layers, child_conv_layers+1, logger)
+
+        if check_valid_geneset(child):
+            logger.info("geneset is valid")
+            invalid_chromosome = True
+        else:
+            logger.info("geneset invalid")
+
+        child.set_hyperparameters(dom_parent.hyperparameters)
+        child.log_geneset(log_file='crossover')
 
     return child
 
