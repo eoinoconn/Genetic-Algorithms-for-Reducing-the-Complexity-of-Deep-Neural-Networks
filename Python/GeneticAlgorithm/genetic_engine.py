@@ -2,24 +2,28 @@ from keras.utils import to_categorical
 
 from Python.GeneticAlgorithm.crossover import crossover
 from Python.GeneticAlgorithm.mutate import create_parent, mutate
-from keras.datasets import cifar10
+from keras.datasets import cifar10, mnist
 import operator
 import logging
 import random
+from keras import backend as K
+import io
+import csv
 import numpy as np
 
-POOL_SIZE = 10
+POOL_SIZE = 4
 random.seed(1994)
 
-# IMAGE_SIZE = 32
 NUM_LABELS = 10
-MAX_CROSSOVERS = 4
+MAX_CROSSOVERS = 2
 
 
 def get_best(max_generations, input_shape, fn_unpack_training_data):
 
     logger = logging.getLogger('geneticEngine')
     logger.info('Starting genetic engine...')
+
+    setup_csvlogger()
 
     training_data = fn_unpack_training_data()
 
@@ -41,6 +45,8 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
         if best_child > best_chromosome:
             best_chromosome = best_child
             best_chromosome.log_best()
+
+        intermitent_logging(best_child)
 
         # select best chromosomes
         population.extend(spawn_children(population, input_shape, logger))
@@ -95,3 +101,16 @@ def age_population(population):
     for chromosome in population:
         chromosome.increment_age()
 
+
+def intermitent_logging(chromosome):
+    with open('logs/trend.csv', 'a', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        spamwriter.writerow([chromosome.id, chromosome.age, chromosome.accuracy, chromosome.fitness, chromosome.parameters])
+
+
+def setup_csvlogger():
+    with open('logs/trend.csv', 'w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        spamwriter.writerow([0])
