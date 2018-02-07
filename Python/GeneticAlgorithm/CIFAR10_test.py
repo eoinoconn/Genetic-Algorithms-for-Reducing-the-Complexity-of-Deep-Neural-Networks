@@ -14,13 +14,23 @@ import logging
 from logging import config
 
 num_labels = 10
+img_rows = 32
+img_cols = 32
 
 
 def unpack_training_data():
     (train_dataset, train_labels), (test_dataset, test_labels) = cifar10.load_data()
 
+    if K.image_data_format() == 'channels_first':
+        train_dataset = train_dataset.reshape(train_dataset.shape[0], 3, img_rows, img_cols)
+
+    else:
+        train_dataset = train_dataset.reshape(train_dataset.shape[0], img_rows, img_cols, 3)
+
     train_labels = to_categorical(train_labels, NUM_LABELS)
-    test_labels = to_categorical(test_labels, NUM_LABELS)
+
+    train_dataset = train_dataset.astype('float32')
+    train_dataset /= 255
 
     return {"train_dataset": train_dataset, "train_labels": train_labels,
             "valid_dataset": None, "valid_labels": None}
@@ -29,19 +39,31 @@ def unpack_training_data():
 def unpack_testing_data():
     (train_dataset, train_labels), (test_dataset, test_labels) = cifar10.load_data()
 
-    print('x_train shape:', train_dataset.shape)
+    print('train_dataset shape:', train_dataset.shape)
     print(train_dataset.shape[0], 'train samples')
     print(test_dataset.shape[0], 'test samples')
 
+    if K.image_data_format() == 'channels_first':
+        train_dataset = train_dataset.reshape(train_dataset.shape[0], 3, img_rows, img_cols)
+        test_dataset = test_dataset.reshape(test_dataset.shape[0], 3, img_rows, img_cols)
+    else:
+        train_dataset = train_dataset.reshape(train_dataset.shape[0], img_rows, img_cols, 3)
+        test_dataset = test_dataset.reshape(test_dataset.shape[0], img_rows, img_cols, 3)
+
     train_labels = to_categorical(train_labels, NUM_LABELS)
     test_labels = to_categorical(test_labels, NUM_LABELS)
+
+    train_dataset = train_dataset.astype('float32')
+    test_dataset = test_dataset.astype('float32')
+    train_dataset /= 255
+    test_dataset /= 255
 
     return {"train_dataset": train_dataset, "train_labels": train_labels,
             "valid_dataset": None, "valid_labels": None,
             "test_dataset": test_dataset, "test_labels": test_labels}
 
 
-class MNISTTest(unittest.TestCase):
+class CIFAR10Test(unittest.TestCase):
 
     def test_encoding(self):
         logging.config.fileConfig('logs/logging.conf')
