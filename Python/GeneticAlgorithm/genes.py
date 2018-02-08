@@ -1,7 +1,7 @@
 import logging
 
-from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D
-from keras.models import Sequential
+from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D, concatenate, Input
+from keras.models import Sequential, Model
 from keras.utils import print_summary
 
 from Python.GeneticAlgorithm.fitness import assess_chromosome_fitness
@@ -33,68 +33,60 @@ class LoggerMixin:
 class ModelMixin:
 
     def build_model(self):
-        model = Sequential()
-        input_layer = True
+        input_layer = Input(shape=self.input_shape)
+        model = input_layer
         for x in range(self.__len__()+1):
             # check if output layer, hidden layer or no layer at all
             if (self.genes[x][0] != 0) and (self.genes[x+1][0] == 0):       # Check if output layer
-                self.build_layer(model, self.genes[x], output_layer=True)
+                model = self.build_layer(model, self.genes[x], output_layer=True)
             elif self.genes[x][0] != 0:                                     # else check if not empty layer
-                self.build_layer(model, self.genes[x], input_layer=input_layer)
-                input_layer = False
+                model = self.build_layer(model, self.genes[x])
             else:
+                return Model(inputs=input_layer, outputs=model)
+
+    def build_layer(self, model, layer, output_layer=False):
+        if layer[0] == 1:   # Dense Layer
+            if output_layer:        # output layer
+                return Dense(CLASSES, activation='softmax')(model)
+            else:               # hidden layer
+                model = Dense(layer[1], activation='relu')(model)
+                if layer[3] > 0:
+                    model = Dropout(layer[3])(model)
                 return model
 
-    def build_layer(self, model, layer, input_layer=False, output_layer=False):
-        if layer[0] == 1:   # Dense Layer
-            if input_layer:           # input layer
-                model.add(Dense(layer[1], input_shape=self.input_shape, activation='relu'))
-                if layer[3] > 0:
-                    model.add(Dropout(layer[3]))
-            elif output_layer:        # output layer
-                model.add(Dense(CLASSES, activation='softmax'))
-            else:               # hidden layer
-                model.add(Dense(layer[1], activation='relu'))
-                if layer[3] > 0:
-                    model.add(Dropout(layer[3]))
-
         elif layer[0] == 2:     # conv layer
-            if input_layer and output_layer:    # input and output
-                model.add(Conv2D(CLASSES, (layer[3], layer[3]), input_shape=self.input_shape, activation='softmax'))
-            elif input_layer:           # input layer
-                model.add(Conv2D(layer[1], (layer[3], layer[3]), input_shape=self.input_shape, activation='relu'))
-                if layer[5] > 0:  # check for pooling layer
-                    self.pooling_layer(model, layer)
-            elif output_layer:        # output layer
-                model.add(Conv2D(CLASSES, (layer[3], layer[3]), activation='softmax'))
-            else:               # hidden layer
-                model.add(Conv2D(layer[1], (layer[3], layer[3]), activation='relu'))
-                if layer[5] > 0:    # check for pooling layer
-                    self.pooling_layer(model, layer)
-        elif layer[0] == 3:
-            if input_layer:
-                model.add(Flatten(input_shape=self.input_shape))
-            else:
-                model.add(Flatten())
+            # hidden layer
+            model = Conv2D(layer[1], (layer[3], layer[3]), activation='relu')(model)
+            if layer[5] > 0:    # check for pooling layer
+                model = self.pooling_layer(model, layer)
+            return model
+
+        elif layer[0] == 3:     # Flatten layer
+            return Flatten()(model)
+
+        elif layer[0] == 4:
+            return self.inception_module(model)
+
         else:
             raise NotImplementedError('Layers not yet implemented')
 
-    def pooling_layer(self, model, layer):
+    def pooling_layer(self, input_layer, layer):
         if layer[5] == 1:   # max pooling
-            model.add(MaxPooling2D((layer[6], layer[6])))
+            return MaxPooling2D((layer[6], layer[6]))(input_layer)
         else:
-            model.add(AveragePooling2D((layer[6], layer[6])))
+            return AveragePooling2D((layer[6], layer[6]))(input_layer)
 
     def model_summary(self):
         self.build_model().summary()
 
-    def inception_module(self, model):
-        tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')
-        tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')
-        tower_2 = Conv2D(64, (1, 1), padding='same', activation='relu')
-        tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')
-        tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')
-        tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')
+    def inception_module(self, input_layer):
+        tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_layer)
+        tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')(tower_1)
+        tower_2 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_layer)
+        tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')(tower_2)
+        tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(input_layer)
+        tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')(tower_3)
+        return concatenate([tower_1, tower_2, tower_3], axis=1)
 
 
 class Genes(LoggerMixin, ModelMixin):

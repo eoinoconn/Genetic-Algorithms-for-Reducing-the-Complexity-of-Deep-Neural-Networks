@@ -243,6 +243,12 @@ def dense_layer(input_layer=False):
     return layer
 
 
+def inception_layer():
+    layer = [0 for x in range(LAYER_DEPTH)]
+    layer[0] = 4
+    return layer
+
+
 # changes dropout value of a dense layer
 def change_dropout_layer(genes, logger=logging.getLogger(__name__)):
     while True:
@@ -269,13 +275,17 @@ def set_activation():
 
 def add_layer(genes):
     logger = logging.getLogger('mutate')
-    layer_type = random.randrange(1, 3)     # check which layer type to add
+    layer_type = random.randrange(1, 4)     # check which layer type to add
     flatten_index = genes.find_flatten()    # find the index at which the flatten layer is present
 
     if layer_type == 1:     # dense layer
         new_layer = dense_layer()
         new_layer_location = random.randrange(flatten_index+1, genes.__len__())
         logger.info("adding layer type dense")
+    elif layer_type == 2:
+        new_layer = inception_layer()
+        new_layer_location = random.randrange(0, flatten_index + 1)
+        logger.info("adding layer type Inception")
     else:   # convolutional layer
         new_layer = convolutional_layer()
         new_layer_location = random.randrange(0, flatten_index+1)
