@@ -1,6 +1,0 @@
-Results
-
-Ran algorithm with convolutional and dense layers, accuracy maxed out at 86%
-
-Ran into issues with GPU memory, not sure what caused it, may need to look tearing down object properly. Added much more in depth 
-logging which should help learnin more about the issue in the future

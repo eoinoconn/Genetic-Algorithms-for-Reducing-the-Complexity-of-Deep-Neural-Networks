@@ -5,8 +5,8 @@ In this file we will test the encoding and train a basic network using the built
 from __future__ import print_function
 import time
 
-from Python.GeneticAlgorithm.fitness import assess_chromosome_fitness, evaluate_best_chromosome
-from Python.GeneticAlgorithm.genetic_engine import *
+from GeneticAlgorithm.fitness import assess_chromosome_fitness, evaluate_best_chromosome
+from GeneticAlgorithm.genetic_engine import *
 
 
 import unittest
@@ -67,7 +67,7 @@ def unpack_testing_data():
 class MNISTTest(unittest.TestCase):
 
     def test_encoding(self):
-        logging.config.fileConfig('logs/logging.conf')
+        logging.config.fileConfig('GeneticAlgorithm/logs/logging.conf')
         logger = logging.getLogger('testFile')
 
         logger.info("starting test...")

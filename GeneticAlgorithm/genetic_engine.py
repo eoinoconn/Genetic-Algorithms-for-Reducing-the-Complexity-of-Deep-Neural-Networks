@@ -1,7 +1,7 @@
 from keras.utils import to_categorical
 
-from Python.GeneticAlgorithm.crossover import crossover
-from Python.GeneticAlgorithm.mutate import create_parent, mutate
+from GeneticAlgorithm.crossover import crossover
+from GeneticAlgorithm.mutate import create_parent, mutate
 from keras.datasets import cifar10, mnist
 import operator
 import logging
@@ -103,14 +103,14 @@ def age_population(population):
 
 
 def intermitent_logging(chromosome):
-    with open('logs/trend.csv', 'a', newline='') as csvfile:
+    with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow([chromosome.id, chromosome.age, chromosome.accuracy, chromosome.fitness, chromosome.parameters])
 
 
 def setup_csvlogger():
-    with open('logs/trend.csv', 'w', newline='') as csvfile:
+    with open('GeneticAlgorithm/logs/trend.csv', 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow([0])

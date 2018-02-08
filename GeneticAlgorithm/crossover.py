@@ -2,8 +2,8 @@ import copy
 import logging
 import random
 
-from Python.GeneticAlgorithm.genes import Genes
-from Python.GeneticAlgorithm.mutate import flatten_layer, check_valid_geneset
+from GeneticAlgorithm.genes import Genes
+from GeneticAlgorithm.mutate import flatten_layer, check_valid_geneset
 
 random.seed(1994)
 
