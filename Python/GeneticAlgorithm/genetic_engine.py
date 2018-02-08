@@ -11,11 +11,11 @@ import io
 import csv
 import numpy as np
 
-POOL_SIZE = 4
+POOL_SIZE = 10
 random.seed(1994)
 
 NUM_LABELS = 10
-MAX_CROSSOVERS = 2
+MAX_CROSSOVERS = 4
 
 
 def get_best(max_generations, input_shape, fn_unpack_training_data):
