@@ -275,14 +275,14 @@ def set_activation():
 
 def add_layer(genes):
     logger = logging.getLogger('mutate')
-    layer_type = random.randrange(1, 4)     # check which layer type to add
+    layer_type = random.randrange(0, 5)     # check which layer type to add
     flatten_index = genes.find_flatten()    # find the index at which the flatten layer is present
 
-    if layer_type == 1:     # dense layer
+    if layer_type < 2:     # dense layer
         new_layer = dense_layer()
         new_layer_location = random.randrange(flatten_index+1, genes.__len__())
         logger.info("adding layer type dense")
-    elif layer_type == 2:
+    elif layer_type == 2:   # inception module
         new_layer = inception_layer()
         new_layer_location = random.randrange(0, flatten_index + 1)
         logger.info("adding layer type Inception")
