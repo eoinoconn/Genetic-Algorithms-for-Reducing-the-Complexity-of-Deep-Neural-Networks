@@ -4,7 +4,7 @@ from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AverageP
 from keras.models import Sequential, Model
 from keras.utils import print_summary
 
-from Python.GeneticAlgorithm.fitness import assess_chromosome_fitness
+from GeneticAlgorithm.fitness import assess_chromosome_fitness
 
 MAX_LAYERS = 50
 LAYER_DEPTH = 8
