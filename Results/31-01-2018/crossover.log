@@ -1,0 +1,1353 @@
+2018-01-31 15:07:02,863 - crossover - INFO - breeding parents
+2018-01-31 15:07:02,863 - crossover - INFO - Dominant parent 1 id: 1	Second parent 2 id:7
+2018-01-31 15:07:02,865 - crossover - INFO - Child gene has id 20
+2018-01-31 15:07:02,865 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:07:02,865 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:07:02,865 - crossover - INFO - Choosing parent 1
+2018-01-31 15:07:02,865 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:07:02,865 - crossover - INFO - Choosing parent 1
+2018-01-31 15:07:02,865 - crossover - INFO - Geneset id: 20, age: 0
+2018-01-31 15:07:02,865 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 64, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.31193176642043746, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:07:02,866 - crossover - INFO - breeding parents
+2018-01-31 15:07:02,866 - crossover - INFO - Dominant parent 1 id: 7	Second parent 2 id:1
+2018-01-31 15:07:02,867 - crossover - INFO - Child gene has id 21
+2018-01-31 15:07:02,867 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:07:02,867 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:07:02,867 - crossover - INFO - Choosing parent 2
+2018-01-31 15:07:02,867 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:07:02,867 - crossover - INFO - Choosing parent 2
+2018-01-31 15:07:02,868 - crossover - INFO - Geneset id: 21, age: 0
+2018-01-31 15:07:02,868 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 64, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.31193176642043746, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:07:02,868 - crossover - INFO - breeding parents
+2018-01-31 15:07:02,868 - crossover - INFO - Dominant parent 1 id: 13	Second parent 2 id:16
+2018-01-31 15:07:02,869 - crossover - INFO - Child gene has id 22
+2018-01-31 15:07:02,869 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:07:02,869 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:07:02,870 - crossover - INFO - Choosing parent 2
+2018-01-31 15:07:02,870 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:07:02,870 - crossover - INFO - Choosing parent 2
+2018-01-31 15:07:02,870 - crossover - INFO - Geneset id: 22, age: 0
+2018-01-31 15:07:02,870 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 16, 0, 3, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.36448344354000684, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:07:02,870 - crossover - INFO - breeding parents
+2018-01-31 15:07:02,870 - crossover - INFO - Dominant parent 1 id: 16	Second parent 2 id:13
+2018-01-31 15:07:02,871 - crossover - INFO - Child gene has id 23
+2018-01-31 15:07:02,872 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:07:02,872 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:07:02,872 - crossover - INFO - Choosing parent 2
+2018-01-31 15:07:02,872 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:07:02,872 - crossover - INFO - Choosing parent 2
+2018-01-31 15:07:02,872 - crossover - INFO - Geneset id: 23, age: 0
+2018-01-31 15:07:02,872 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 5, 'relu', 1, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.24744538621300163, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:13:59,275 - crossover - INFO - breeding parents
+2018-01-31 15:13:59,275 - crossover - INFO - Dominant parent 1 id: 20	Second parent 2 id:6
+2018-01-31 15:13:59,277 - crossover - INFO - Child gene has id 24
+2018-01-31 15:13:59,277 - crossover - INFO - conv layers 2, dense layers: 1
+2018-01-31 15:13:59,277 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:13:59,277 - crossover - INFO - Choosing parent 1
+2018-01-31 15:13:59,278 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 15:13:59,278 - crossover - INFO - Choosing parent 1
+2018-01-31 15:13:59,278 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:13:59,278 - crossover - INFO - Choosing parent 1
+2018-01-31 15:13:59,278 - crossover - INFO - Geneset id: 24, age: 0
+2018-01-31 15:13:59,278 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 5, 'relu', 2, 2, 0]
+[2, 64, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.31193176642043746, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:13:59,279 - crossover - INFO - breeding parents
+2018-01-31 15:13:59,279 - crossover - INFO - Dominant parent 1 id: 6	Second parent 2 id:20
+2018-01-31 15:13:59,280 - crossover - INFO - Child gene has id 25
+2018-01-31 15:13:59,281 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:13:59,281 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:13:59,281 - crossover - INFO - Choosing parent 1
+2018-01-31 15:13:59,281 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:13:59,281 - crossover - INFO - Choosing parent 1
+2018-01-31 15:13:59,281 - crossover - INFO - Geneset id: 25, age: 0
+2018-01-31 15:13:59,281 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 175]
+[2, 32, 0, 4, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.3554501592600436, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:13:59,282 - crossover - INFO - breeding parents
+2018-01-31 15:13:59,282 - crossover - INFO - Dominant parent 1 id: 10	Second parent 2 id:14
+2018-01-31 15:13:59,283 - crossover - INFO - Child gene has id 26
+2018-01-31 15:13:59,283 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:13:59,283 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:13:59,284 - crossover - INFO - Choosing parent 1
+2018-01-31 15:13:59,284 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:13:59,284 - crossover - INFO - Choosing parent 1
+2018-01-31 15:13:59,284 - crossover - INFO - Geneset id: 26, age: 0
+2018-01-31 15:13:59,284 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 128, 0, 5, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 32, 0, 0.3335591680448031, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:13:59,284 - crossover - INFO - breeding parents
+2018-01-31 15:13:59,284 - crossover - INFO - Dominant parent 1 id: 14	Second parent 2 id:10
+2018-01-31 15:13:59,286 - crossover - INFO - Child gene has id 27
+2018-01-31 15:13:59,286 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 15:13:59,286 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:13:59,286 - crossover - INFO - Choosing parent 1
+2018-01-31 15:13:59,286 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:13:59,286 - crossover - INFO - Choosing parent 2
+2018-01-31 15:13:59,287 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 15:13:59,287 - crossover - INFO - Choosing parent 1
+2018-01-31 15:13:59,287 - crossover - INFO - Geneset id: 27, age: 0
+2018-01-31 15:13:59,287 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 32, 0, 0.3335591680448031, 'relu', 0, 0, 0]
+[1, 16, 0, 0.36421088168374405, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:22:26,529 - crossover - INFO - breeding parents
+2018-01-31 15:22:26,529 - crossover - INFO - Dominant parent 1 id: 23	Second parent 2 id:24
+2018-01-31 15:22:26,532 - crossover - INFO - Child gene has id 28
+2018-01-31 15:22:26,532 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:22:26,532 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:22:26,532 - crossover - INFO - Choosing parent 1
+2018-01-31 15:22:26,533 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:22:26,533 - crossover - INFO - Choosing parent 2
+2018-01-31 15:22:26,533 - crossover - INFO - Geneset id: 28, age: 0
+2018-01-31 15:22:26,534 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 5, 'relu', 1, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.40974405515462786, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:22:26,534 - crossover - INFO - breeding parents
+2018-01-31 15:22:26,534 - crossover - INFO - Dominant parent 1 id: 24	Second parent 2 id:23
+2018-01-31 15:22:26,536 - crossover - INFO - Child gene has id 29
+2018-01-31 15:22:26,537 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 15:22:26,537 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:22:26,537 - crossover - INFO - Choosing parent 2
+2018-01-31 15:22:26,538 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 15:22:26,538 - crossover - INFO - Choosing parent 1
+2018-01-31 15:22:26,538 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:22:26,539 - crossover - INFO - Choosing parent 2
+2018-01-31 15:22:26,539 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 15:22:26,539 - crossover - INFO - Choosing parent 1
+2018-01-31 15:22:26,539 - crossover - INFO - Geneset id: 29, age: 0
+2018-01-31 15:22:26,540 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 5, 'relu', 1, 4, 0]
+[2, 128, 0, 5, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.24744538621300163, 'relu', 0, 0, 0]
+[1, 16, 0, 0.40974405515462786, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:22:26,540 - crossover - INFO - breeding parents
+2018-01-31 15:22:26,540 - crossover - INFO - Dominant parent 1 id: 4	Second parent 2 id:0
+2018-01-31 15:22:26,543 - crossover - INFO - Child gene has id 30
+2018-01-31 15:22:26,543 - crossover - INFO - conv layers 2, dense layers: 1
+2018-01-31 15:22:26,543 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:22:26,544 - crossover - INFO - Choosing parent 2
+2018-01-31 15:22:26,544 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 15:22:26,544 - crossover - INFO - Choosing parent 1
+2018-01-31 15:22:26,545 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:22:26,545 - crossover - INFO - Choosing parent 1
+2018-01-31 15:22:26,545 - crossover - INFO - Geneset id: 30, age: 0
+2018-01-31 15:22:26,546 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 125]
+[2, 32, 0, 2, 'relu', 1, 3, 0]
+[2, 128, 0, 2, 'relu', 1, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.3019311723789879, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:22:26,546 - crossover - INFO - breeding parents
+2018-01-31 15:22:26,546 - crossover - INFO - Dominant parent 1 id: 0	Second parent 2 id:4
+2018-01-31 15:22:26,548 - crossover - INFO - Child gene has id 31
+2018-01-31 15:22:26,549 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:22:26,549 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:22:26,549 - crossover - INFO - Choosing parent 2
+2018-01-31 15:22:26,549 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:22:26,550 - crossover - INFO - Choosing parent 2
+2018-01-31 15:22:26,550 - crossover - INFO - Geneset id: 31, age: 0
+2018-01-31 15:22:26,550 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 2, 'relu', 1, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.3019311723789879, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:31:01,715 - crossover - INFO - breeding parents
+2018-01-31 15:31:01,715 - crossover - INFO - Dominant parent 1 id: 11	Second parent 2 id:22
+2018-01-31 15:31:01,716 - crossover - INFO - Child gene has id 32
+2018-01-31 15:31:01,716 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:31:01,717 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:31:01,717 - crossover - INFO - Choosing parent 1
+2018-01-31 15:31:01,717 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:31:01,717 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,717 - crossover - INFO - Geneset id: 32, age: 0
+2018-01-31 15:31:01,717 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.28979111609691466, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:31:01,717 - crossover - INFO - breeding parents
+2018-01-31 15:31:01,717 - crossover - INFO - Dominant parent 1 id: 22	Second parent 2 id:11
+2018-01-31 15:31:01,719 - crossover - INFO - Child gene has id 33
+2018-01-31 15:31:01,719 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:31:01,719 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:31:01,719 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,719 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:31:01,719 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,719 - crossover - INFO - Geneset id: 33, age: 0
+2018-01-31 15:31:01,719 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.32939743995253157, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:31:01,720 - crossover - INFO - breeding parents
+2018-01-31 15:31:01,720 - crossover - INFO - Dominant parent 1 id: 30	Second parent 2 id:5
+2018-01-31 15:31:01,721 - crossover - INFO - Child gene has id 34
+2018-01-31 15:31:01,721 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:31:01,721 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:31:01,721 - crossover - INFO - Choosing parent 1
+2018-01-31 15:31:01,721 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:31:01,722 - crossover - INFO - Choosing parent 1
+2018-01-31 15:31:01,722 - crossover - INFO - Geneset id: 34, age: 0
+2018-01-31 15:31:01,722 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 125]
+[2, 32, 0, 2, 'relu', 1, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.3019311723789879, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:31:01,722 - crossover - INFO - breeding parents
+2018-01-31 15:31:01,722 - crossover - INFO - Dominant parent 1 id: 5	Second parent 2 id:30
+2018-01-31 15:31:01,723 - crossover - INFO - Child gene has id 35
+2018-01-31 15:31:01,723 - crossover - INFO - conv layers 2, dense layers: 1
+2018-01-31 15:31:01,724 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:31:01,724 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,724 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 15:31:01,724 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,724 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,724 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,724 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,724 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,724 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,725 - crossover - INFO - Choosing parent 2
+2018-01-31 15:31:01,725 - crossover - INFO - Choosing parent 1
+2018-01-31 15:31:01,725 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:31:01,725 - crossover - INFO - Choosing parent 1
+2018-01-31 15:31:01,725 - crossover - INFO - Geneset id: 35, age: 0
+2018-01-31 15:31:01,725 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 1, 3, 0]
+[2, 16, 0, 5, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 32, 0, 0.28288668275583867, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:39:56,115 - crossover - INFO - breeding parents
+2018-01-31 15:39:56,116 - crossover - INFO - Dominant parent 1 id: 35	Second parent 2 id:21
+2018-01-31 15:39:56,117 - crossover - INFO - Child gene has id 36
+2018-01-31 15:39:56,117 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:39:56,118 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:39:56,118 - crossover - INFO - Choosing parent 1
+2018-01-31 15:39:56,118 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:39:56,118 - crossover - INFO - Choosing parent 2
+2018-01-31 15:39:56,118 - crossover - INFO - Geneset id: 36, age: 0
+2018-01-31 15:39:56,118 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 1, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:39:56,118 - crossover - INFO - breeding parents
+2018-01-31 15:39:56,119 - crossover - INFO - Dominant parent 1 id: 21	Second parent 2 id:35
+2018-01-31 15:39:56,120 - crossover - INFO - Child gene has id 37
+2018-01-31 15:39:56,121 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 15:39:56,121 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:39:56,121 - crossover - INFO - Choosing parent 2
+2018-01-31 15:39:56,121 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 15:39:56,121 - crossover - INFO - Choosing parent 2
+2018-01-31 15:39:56,121 - crossover - INFO - Choosing parent 2
+2018-01-31 15:39:56,121 - crossover - INFO - Choosing parent 1
+2018-01-31 15:39:56,122 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:39:56,122 - crossover - INFO - Choosing parent 1
+2018-01-31 15:39:56,122 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 15:39:56,122 - crossover - INFO - Choosing parent 2
+2018-01-31 15:39:56,122 - crossover - INFO - Geneset id: 37, age: 0
+2018-01-31 15:39:56,122 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 32, 0, 2, 'relu', 1, 3, 0]
+[2, 256, 0, 3, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+[1, 32, 0, 0.28288668275583867, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:39:56,123 - crossover - INFO - breeding parents
+2018-01-31 15:39:56,123 - crossover - INFO - Dominant parent 1 id: 31	Second parent 2 id:9
+2018-01-31 15:39:56,124 - crossover - INFO - Child gene has id 38
+2018-01-31 15:39:56,125 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 15:39:56,125 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:39:56,125 - crossover - INFO - Choosing parent 2
+2018-01-31 15:39:56,125 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:39:56,125 - crossover - INFO - Choosing parent 2
+2018-01-31 15:39:56,125 - crossover - INFO - Geneset id: 38, age: 0
+2018-01-31 15:39:56,126 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.26366492239723144, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:39:56,126 - crossover - INFO - breeding parents
+2018-01-31 15:39:56,126 - crossover - INFO - Dominant parent 1 id: 9	Second parent 2 id:31
+2018-01-31 15:39:56,127 - crossover - INFO - Child gene has id 39
+2018-01-31 15:39:56,127 - crossover - INFO - conv layers 1, dense layers: 3
+2018-01-31 15:39:56,127 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:39:56,128 - crossover - INFO - Choosing parent 2
+2018-01-31 15:39:56,128 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:39:56,128 - crossover - INFO - Choosing parent 1
+2018-01-31 15:39:56,128 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 15:39:56,128 - crossover - INFO - Choosing parent 1
+2018-01-31 15:39:56,128 - crossover - INFO - Layer type: 1	layer num: 3
+2018-01-31 15:39:56,128 - crossover - INFO - Choosing parent 2
+2018-01-31 15:39:56,129 - crossover - INFO - Geneset id: 39, age: 0
+2018-01-31 15:39:56,129 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 2, 'relu', 1, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.26366492239723144, 'relu', 0, 0, 0]
+[1, 64, 0, 0.24270994735637175, 'relu', 0, 0, 0]
+[1, 128, 0, 0.3019311723789879, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:50:18,906 - crossover - INFO - breeding parents
+2018-01-31 15:50:18,906 - crossover - INFO - Dominant parent 1 id: 32	Second parent 2 id:27
+2018-01-31 15:50:18,908 - crossover - INFO - Child gene has id 40
+2018-01-31 15:50:18,908 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 15:50:18,908 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:50:18,909 - crossover - INFO - Choosing parent 1
+2018-01-31 15:50:18,909 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:50:18,909 - crossover - INFO - Choosing parent 1
+2018-01-31 15:50:18,909 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 15:50:18,909 - crossover - INFO - Choosing parent 2
+2018-01-31 15:50:18,910 - crossover - INFO - Geneset id: 40, age: 0
+2018-01-31 15:50:18,910 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4499028585611106, 'relu', 0, 0, 0]
+[1, 128, 0, 0.21454759564661716, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:50:18,910 - crossover - INFO - breeding parents
+2018-01-31 15:50:18,910 - crossover - INFO - Dominant parent 1 id: 27	Second parent 2 id:32
+2018-01-31 15:50:18,912 - crossover - INFO - Child gene has id 41
+2018-01-31 15:50:18,912 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 15:50:18,912 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:50:18,912 - crossover - INFO - Choosing parent 1
+2018-01-31 15:50:18,912 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:50:18,913 - crossover - INFO - Choosing parent 2
+2018-01-31 15:50:18,913 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 15:50:18,913 - crossover - INFO - Choosing parent 2
+2018-01-31 15:50:18,913 - crossover - INFO - Geneset id: 41, age: 0
+2018-01-31 15:50:18,913 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4499028585611106, 'relu', 0, 0, 0]
+[1, 256, 0, 0.28979111609691466, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:50:18,913 - crossover - INFO - breeding parents
+2018-01-31 15:50:18,914 - crossover - INFO - Dominant parent 1 id: 33	Second parent 2 id:37
+2018-01-31 15:50:18,915 - crossover - INFO - Child gene has id 42
+2018-01-31 15:50:18,915 - crossover - INFO - conv layers 2, dense layers: 1
+2018-01-31 15:50:18,915 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:50:18,915 - crossover - INFO - Choosing parent 1
+2018-01-31 15:50:18,915 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 15:50:18,915 - crossover - INFO - Choosing parent 1
+2018-01-31 15:50:18,915 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:50:18,916 - crossover - INFO - Choosing parent 1
+2018-01-31 15:50:18,916 - crossover - INFO - Geneset id: 42, age: 0
+2018-01-31 15:50:18,916 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[2, 256, 0, 4, 'relu', 1, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.32939743995253157, 'relu', 0, 0, 0]
+
+
+2018-01-31 15:50:18,916 - crossover - INFO - breeding parents
+2018-01-31 15:50:18,916 - crossover - INFO - Dominant parent 1 id: 37	Second parent 2 id:33
+2018-01-31 15:50:18,917 - crossover - INFO - Child gene has id 43
+2018-01-31 15:50:18,917 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 15:50:18,917 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 15:50:18,918 - crossover - INFO - Choosing parent 2
+2018-01-31 15:50:18,918 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 15:50:18,918 - crossover - INFO - Choosing parent 2
+2018-01-31 15:50:18,918 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 15:50:18,918 - crossover - INFO - Choosing parent 1
+2018-01-31 15:50:18,918 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 15:50:18,918 - crossover - INFO - Choosing parent 1
+2018-01-31 15:50:18,918 - crossover - INFO - Geneset id: 43, age: 0
+2018-01-31 15:50:18,918 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[2, 256, 0, 4, 'relu', 1, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+[1, 32, 0, 0.28288668275583867, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:00:46,422 - crossover - INFO - breeding parents
+2018-01-31 16:00:46,422 - crossover - INFO - Dominant parent 1 id: 40	Second parent 2 id:38
+2018-01-31 16:00:46,423 - crossover - INFO - Child gene has id 44
+2018-01-31 16:00:46,423 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 16:00:46,424 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:00:46,424 - crossover - INFO - Choosing parent 2
+2018-01-31 16:00:46,424 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 16:00:46,424 - crossover - INFO - Choosing parent 1
+2018-01-31 16:00:46,424 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:00:46,424 - crossover - INFO - Choosing parent 1
+2018-01-31 16:00:46,424 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:00:46,424 - crossover - INFO - Choosing parent 1
+2018-01-31 16:00:46,425 - crossover - INFO - Geneset id: 44, age: 0
+2018-01-31 16:00:46,425 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 4, 'relu', 2, 3, 0]
+[2, 32, 0, 2, 'relu', 1, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4499028585611106, 'relu', 0, 0, 0]
+[1, 128, 0, 0.21454759564661716, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:00:46,425 - crossover - INFO - breeding parents
+2018-01-31 16:00:46,425 - crossover - INFO - Dominant parent 1 id: 38	Second parent 2 id:40
+2018-01-31 16:00:46,426 - crossover - INFO - Child gene has id 45
+2018-01-31 16:00:46,426 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:00:46,427 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:00:46,427 - crossover - INFO - Choosing parent 2
+2018-01-31 16:00:46,427 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:00:46,427 - crossover - INFO - Choosing parent 2
+2018-01-31 16:00:46,427 - crossover - INFO - Geneset id: 45, age: 0
+2018-01-31 16:00:46,427 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 1, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4499028585611106, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:00:46,427 - crossover - INFO - breeding parents
+2018-01-31 16:00:46,428 - crossover - INFO - Dominant parent 1 id: 41	Second parent 2 id:43
+2018-01-31 16:00:46,429 - crossover - INFO - Child gene has id 46
+2018-01-31 16:00:46,429 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:00:46,429 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:00:46,429 - crossover - INFO - Choosing parent 1
+2018-01-31 16:00:46,430 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:00:46,430 - crossover - INFO - Choosing parent 2
+2018-01-31 16:00:46,430 - crossover - INFO - Geneset id: 46, age: 0
+2018-01-31 16:00:46,430 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:00:46,430 - crossover - INFO - breeding parents
+2018-01-31 16:00:46,431 - crossover - INFO - Dominant parent 1 id: 43	Second parent 2 id:41
+2018-01-31 16:00:46,433 - crossover - INFO - Child gene has id 47
+2018-01-31 16:00:46,433 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 16:00:46,433 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:00:46,433 - crossover - INFO - Choosing parent 2
+2018-01-31 16:00:46,433 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 16:00:46,433 - crossover - INFO - Choosing parent 2
+2018-01-31 16:00:46,434 - crossover - INFO - Choosing parent 1
+2018-01-31 16:00:46,434 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:00:46,434 - crossover - INFO - Choosing parent 1
+2018-01-31 16:00:46,434 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:00:46,434 - crossover - INFO - Choosing parent 2
+2018-01-31 16:00:46,434 - crossover - INFO - Geneset id: 47, age: 0
+2018-01-31 16:00:46,434 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+[1, 64, 0, 0.4499028585611106, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:10:58,133 - crossover - INFO - breeding parents
+2018-01-31 16:10:58,133 - crossover - INFO - Dominant parent 1 id: 47	Second parent 2 id:46
+2018-01-31 16:10:58,135 - crossover - INFO - Child gene has id 48
+2018-01-31 16:10:58,135 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 16:10:58,135 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:10:58,135 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,135 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 16:10:58,136 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,136 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,136 - crossover - INFO - Choosing parent 1
+2018-01-31 16:10:58,136 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:10:58,136 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,136 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:10:58,137 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,137 - crossover - INFO - Choosing parent 1
+2018-01-31 16:10:58,137 - crossover - INFO - Geneset id: 48, age: 0
+2018-01-31 16:10:58,137 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 75]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:10:58,137 - crossover - INFO - breeding parents
+2018-01-31 16:10:58,137 - crossover - INFO - Dominant parent 1 id: 46	Second parent 2 id:47
+2018-01-31 16:10:58,139 - crossover - INFO - Child gene has id 49
+2018-01-31 16:10:58,139 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:10:58,139 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:10:58,139 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,140 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:10:58,140 - crossover - INFO - Choosing parent 1
+2018-01-31 16:10:58,140 - crossover - INFO - Geneset id: 49, age: 0
+2018-01-31 16:10:58,140 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:10:58,140 - crossover - INFO - breeding parents
+2018-01-31 16:10:58,141 - crossover - INFO - Dominant parent 1 id: 3	Second parent 2 id:42
+2018-01-31 16:10:58,142 - crossover - INFO - Child gene has id 50
+2018-01-31 16:10:58,142 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:10:58,142 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:10:58,142 - crossover - INFO - Choosing parent 1
+2018-01-31 16:10:58,143 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:10:58,143 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,143 - crossover - INFO - Geneset id: 50, age: 0
+2018-01-31 16:10:58,143 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 5, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:10:58,143 - crossover - INFO - breeding parents
+2018-01-31 16:10:58,143 - crossover - INFO - Dominant parent 1 id: 42	Second parent 2 id:3
+2018-01-31 16:10:58,145 - crossover - INFO - Child gene has id 51
+2018-01-31 16:10:58,145 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 16:10:58,145 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:10:58,145 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,145 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 16:10:58,145 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,145 - crossover - INFO - Choosing parent 1
+2018-01-31 16:10:58,146 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:10:58,146 - crossover - INFO - Choosing parent 1
+2018-01-31 16:10:58,146 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:10:58,146 - crossover - INFO - Choosing parent 2
+2018-01-31 16:10:58,146 - crossover - INFO - Geneset id: 51, age: 0
+2018-01-31 16:10:58,146 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 175]
+[2, 128, 0, 5, 'relu', 2, 3, 0]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+[1, 64, 0, 0.2841232646685999, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:21:07,877 - crossover - INFO - breeding parents
+2018-01-31 16:21:07,878 - crossover - INFO - Dominant parent 1 id: 48	Second parent 2 id:50
+2018-01-31 16:21:07,879 - crossover - INFO - Child gene has id 52
+2018-01-31 16:21:07,880 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 16:21:07,880 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:21:07,880 - crossover - INFO - Choosing parent 1
+2018-01-31 16:21:07,880 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 16:21:07,880 - crossover - INFO - Choosing parent 1
+2018-01-31 16:21:07,880 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:21:07,880 - crossover - INFO - Choosing parent 2
+2018-01-31 16:21:07,881 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:21:07,881 - crossover - INFO - Choosing parent 1
+2018-01-31 16:21:07,881 - crossover - INFO - Geneset id: 52, age: 0
+2018-01-31 16:21:07,881 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 75]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[2, 32, 0, 3, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:21:07,881 - crossover - INFO - breeding parents
+2018-01-31 16:21:07,881 - crossover - INFO - Dominant parent 1 id: 50	Second parent 2 id:48
+2018-01-31 16:21:07,883 - crossover - INFO - Child gene has id 53
+2018-01-31 16:21:07,883 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:21:07,883 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:21:07,883 - crossover - INFO - Choosing parent 2
+2018-01-31 16:21:07,884 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:21:07,884 - crossover - INFO - Choosing parent 2
+2018-01-31 16:21:07,884 - crossover - INFO - Geneset id: 53, age: 0
+2018-01-31 16:21:07,884 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:21:07,884 - crossover - INFO - breeding parents
+2018-01-31 16:21:07,885 - crossover - INFO - Dominant parent 1 id: 45	Second parent 2 id:15
+2018-01-31 16:21:07,886 - crossover - INFO - Child gene has id 54
+2018-01-31 16:21:07,886 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:21:07,886 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:21:07,886 - crossover - INFO - Choosing parent 2
+2018-01-31 16:21:07,886 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:21:07,886 - crossover - INFO - Choosing parent 1
+2018-01-31 16:21:07,887 - crossover - INFO - Geneset id: 54, age: 0
+2018-01-31 16:21:07,887 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 5, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4499028585611106, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:21:07,887 - crossover - INFO - breeding parents
+2018-01-31 16:21:07,887 - crossover - INFO - Dominant parent 1 id: 15	Second parent 2 id:45
+2018-01-31 16:21:07,888 - crossover - INFO - Child gene has id 55
+2018-01-31 16:21:07,888 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:21:07,888 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:21:07,889 - crossover - INFO - Choosing parent 2
+2018-01-31 16:21:07,889 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:21:07,889 - crossover - INFO - Choosing parent 2
+2018-01-31 16:21:07,889 - crossover - INFO - Geneset id: 55, age: 0
+2018-01-31 16:21:07,889 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 1, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4499028585611106, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:33:00,128 - crossover - INFO - breeding parents
+2018-01-31 16:33:00,128 - crossover - INFO - Dominant parent 1 id: 53	Second parent 2 id:49
+2018-01-31 16:33:00,129 - crossover - INFO - Child gene has id 56
+2018-01-31 16:33:00,129 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:33:00,129 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:33:00,130 - crossover - INFO - Choosing parent 2
+2018-01-31 16:33:00,130 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:33:00,130 - crossover - INFO - Choosing parent 1
+2018-01-31 16:33:00,130 - crossover - INFO - Geneset id: 56, age: 0
+2018-01-31 16:33:00,130 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:33:00,130 - crossover - INFO - breeding parents
+2018-01-31 16:33:00,131 - crossover - INFO - Dominant parent 1 id: 49	Second parent 2 id:53
+2018-01-31 16:33:00,132 - crossover - INFO - Child gene has id 57
+2018-01-31 16:33:00,132 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:33:00,132 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:33:00,132 - crossover - INFO - Choosing parent 2
+2018-01-31 16:33:00,133 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:33:00,133 - crossover - INFO - Choosing parent 2
+2018-01-31 16:33:00,133 - crossover - INFO - Geneset id: 57, age: 0
+2018-01-31 16:33:00,133 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:33:00,133 - crossover - INFO - breeding parents
+2018-01-31 16:33:00,133 - crossover - INFO - Dominant parent 1 id: 52	Second parent 2 id:51
+2018-01-31 16:33:00,135 - crossover - INFO - Child gene has id 58
+2018-01-31 16:33:00,135 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 16:33:00,135 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:33:00,135 - crossover - INFO - Choosing parent 2
+2018-01-31 16:33:00,135 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 16:33:00,135 - crossover - INFO - Choosing parent 2
+2018-01-31 16:33:00,135 - crossover - INFO - Choosing parent 1
+2018-01-31 16:33:00,135 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:33:00,135 - crossover - INFO - Choosing parent 1
+2018-01-31 16:33:00,136 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:33:00,136 - crossover - INFO - Choosing parent 1
+2018-01-31 16:33:00,136 - crossover - INFO - Geneset id: 58, age: 0
+2018-01-31 16:33:00,136 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 175]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:33:00,136 - crossover - INFO - breeding parents
+2018-01-31 16:33:00,136 - crossover - INFO - Dominant parent 1 id: 51	Second parent 2 id:52
+2018-01-31 16:33:00,137 - crossover - INFO - Child gene has id 59
+2018-01-31 16:33:00,137 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 16:33:00,138 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:33:00,138 - crossover - INFO - Choosing parent 2
+2018-01-31 16:33:00,138 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:33:00,138 - crossover - INFO - Choosing parent 1
+2018-01-31 16:33:00,138 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:33:00,138 - crossover - INFO - Choosing parent 2
+2018-01-31 16:33:00,138 - crossover - INFO - Geneset id: 59, age: 0
+2018-01-31 16:33:00,138 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 175]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:43:52,123 - crossover - INFO - breeding parents
+2018-01-31 16:43:52,124 - crossover - INFO - Dominant parent 1 id: 57	Second parent 2 id:18
+2018-01-31 16:43:52,125 - crossover - INFO - Child gene has id 60
+2018-01-31 16:43:52,126 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:43:52,126 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:43:52,126 - crossover - INFO - Choosing parent 1
+2018-01-31 16:43:52,126 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:43:52,126 - crossover - INFO - Choosing parent 1
+2018-01-31 16:43:52,126 - crossover - INFO - Geneset id: 60, age: 0
+2018-01-31 16:43:52,127 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:43:52,127 - crossover - INFO - breeding parents
+2018-01-31 16:43:52,127 - crossover - INFO - Dominant parent 1 id: 18	Second parent 2 id:57
+2018-01-31 16:43:52,129 - crossover - INFO - Child gene has id 61
+2018-01-31 16:43:52,129 - crossover - INFO - conv layers 2, dense layers: 1
+2018-01-31 16:43:52,129 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:43:52,129 - crossover - INFO - Choosing parent 1
+2018-01-31 16:43:52,129 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 16:43:52,129 - crossover - INFO - Choosing parent 2
+2018-01-31 16:43:52,129 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:43:52,129 - crossover - INFO - Choosing parent 2
+2018-01-31 16:43:52,130 - crossover - INFO - Geneset id: 61, age: 0
+2018-01-31 16:43:52,130 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 50]
+[2, 64, 0, 1, 'relu', 2, 3, 0]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:43:52,130 - crossover - INFO - breeding parents
+2018-01-31 16:43:52,130 - crossover - INFO - Dominant parent 1 id: 26	Second parent 2 id:58
+2018-01-31 16:43:52,131 - crossover - INFO - Child gene has id 62
+2018-01-31 16:43:52,131 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 16:43:52,131 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:43:52,132 - crossover - INFO - Choosing parent 2
+2018-01-31 16:43:52,132 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:43:52,132 - crossover - INFO - Choosing parent 1
+2018-01-31 16:43:52,132 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:43:52,132 - crossover - INFO - Choosing parent 2
+2018-01-31 16:43:52,132 - crossover - INFO - Geneset id: 62, age: 0
+2018-01-31 16:43:52,132 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 75]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:43:52,132 - crossover - INFO - breeding parents
+2018-01-31 16:43:52,133 - crossover - INFO - Dominant parent 1 id: 58	Second parent 2 id:26
+2018-01-31 16:43:52,134 - crossover - INFO - Child gene has id 63
+2018-01-31 16:43:52,134 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 16:43:52,134 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:43:52,134 - crossover - INFO - Choosing parent 1
+2018-01-31 16:43:52,134 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 16:43:52,134 - crossover - INFO - Choosing parent 1
+2018-01-31 16:43:52,134 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:43:52,135 - crossover - INFO - Choosing parent 2
+2018-01-31 16:43:52,135 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:43:52,135 - crossover - INFO - Choosing parent 1
+2018-01-31 16:43:52,135 - crossover - INFO - Geneset id: 63, age: 0
+2018-01-31 16:43:52,135 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 150]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:57:29,465 - crossover - INFO - breeding parents
+2018-01-31 16:57:29,465 - crossover - INFO - Dominant parent 1 id: 62	Second parent 2 id:12
+2018-01-31 16:57:29,466 - crossover - INFO - Child gene has id 64
+2018-01-31 16:57:29,467 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 16:57:29,467 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:57:29,467 - crossover - INFO - Choosing parent 2
+2018-01-31 16:57:29,467 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:57:29,467 - crossover - INFO - Choosing parent 1
+2018-01-31 16:57:29,467 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:57:29,467 - crossover - INFO - Choosing parent 1
+2018-01-31 16:57:29,467 - crossover - INFO - Geneset id: 64, age: 0
+2018-01-31 16:57:29,468 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 75]
+[2, 128, 0, 2, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:57:29,468 - crossover - INFO - breeding parents
+2018-01-31 16:57:29,468 - crossover - INFO - Dominant parent 1 id: 12	Second parent 2 id:62
+2018-01-31 16:57:29,469 - crossover - INFO - Child gene has id 65
+2018-01-31 16:57:29,470 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 16:57:29,470 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:57:29,470 - crossover - INFO - Choosing parent 2
+2018-01-31 16:57:29,470 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:57:29,470 - crossover - INFO - Choosing parent 2
+2018-01-31 16:57:29,470 - crossover - INFO - Geneset id: 65, age: 0
+2018-01-31 16:57:29,470 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 150]
+[2, 32, 0, 3, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:57:29,471 - crossover - INFO - breeding parents
+2018-01-31 16:57:29,471 - crossover - INFO - Dominant parent 1 id: 56	Second parent 2 id:63
+2018-01-31 16:57:29,472 - crossover - INFO - Child gene has id 66
+2018-01-31 16:57:29,472 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 16:57:29,472 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:57:29,473 - crossover - INFO - Choosing parent 2
+2018-01-31 16:57:29,473 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:57:29,473 - crossover - INFO - Choosing parent 1
+2018-01-31 16:57:29,473 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:57:29,473 - crossover - INFO - Choosing parent 1
+2018-01-31 16:57:29,473 - crossover - INFO - Geneset id: 66, age: 0
+2018-01-31 16:57:29,473 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.25009251927084597, 'relu', 0, 0, 0]
+[1, 256, 0, 0.31157003274004175, 'relu', 0, 0, 0]
+
+
+2018-01-31 16:57:29,474 - crossover - INFO - breeding parents
+2018-01-31 16:57:29,474 - crossover - INFO - Dominant parent 1 id: 63	Second parent 2 id:56
+2018-01-31 16:57:29,475 - crossover - INFO - Child gene has id 67
+2018-01-31 16:57:29,475 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 16:57:29,475 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 16:57:29,475 - crossover - INFO - Choosing parent 2
+2018-01-31 16:57:29,476 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 16:57:29,476 - crossover - INFO - Choosing parent 2
+2018-01-31 16:57:29,476 - crossover - INFO - Choosing parent 2
+2018-01-31 16:57:29,476 - crossover - INFO - Choosing parent 1
+2018-01-31 16:57:29,476 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 16:57:29,476 - crossover - INFO - Choosing parent 1
+2018-01-31 16:57:29,476 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 16:57:29,476 - crossover - INFO - Choosing parent 1
+2018-01-31 16:57:29,477 - crossover - INFO - Geneset id: 67, age: 0
+2018-01-31 16:57:29,477 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 150]
+[2, 32, 0, 2, 'relu', 2, 4, 0]
+[2, 32, 0, 4, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:09:15,690 - crossover - INFO - breeding parents
+2018-01-31 17:09:15,690 - crossover - INFO - Dominant parent 1 id: 65	Second parent 2 id:67
+2018-01-31 17:09:15,692 - crossover - INFO - Child gene has id 68
+2018-01-31 17:09:15,693 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 17:09:15,693 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:09:15,693 - crossover - INFO - Choosing parent 1
+2018-01-31 17:09:15,693 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:09:15,693 - crossover - INFO - Choosing parent 1
+2018-01-31 17:09:15,694 - crossover - INFO - Geneset id: 68, age: 0
+2018-01-31 17:09:15,694 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 150]
+[2, 32, 0, 3, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:09:15,694 - crossover - INFO - breeding parents
+2018-01-31 17:09:15,694 - crossover - INFO - Dominant parent 1 id: 67	Second parent 2 id:65
+2018-01-31 17:09:15,696 - crossover - INFO - Child gene has id 69
+2018-01-31 17:09:15,696 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 17:09:15,697 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:09:15,697 - crossover - INFO - Choosing parent 2
+2018-01-31 17:09:15,697 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:09:15,697 - crossover - INFO - Choosing parent 2
+2018-01-31 17:09:15,697 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:09:15,697 - crossover - INFO - Choosing parent 1
+2018-01-31 17:09:15,697 - crossover - INFO - Geneset id: 69, age: 0
+2018-01-31 17:09:15,698 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 150]
+[2, 32, 0, 3, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+[1, 64, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:09:15,698 - crossover - INFO - breeding parents
+2018-01-31 17:09:15,698 - crossover - INFO - Dominant parent 1 id: 59	Second parent 2 id:66
+2018-01-31 17:09:15,700 - crossover - INFO - Child gene has id 70
+2018-01-31 17:09:15,700 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 17:09:15,700 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:09:15,700 - crossover - INFO - Choosing parent 1
+2018-01-31 17:09:15,700 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:09:15,700 - crossover - INFO - Choosing parent 2
+2018-01-31 17:09:15,700 - crossover - INFO - Geneset id: 70, age: 0
+2018-01-31 17:09:15,701 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 175]
+[2, 64, 0, 3, 'relu', 1, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.25009251927084597, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:09:15,701 - crossover - INFO - breeding parents
+2018-01-31 17:09:15,701 - crossover - INFO - Dominant parent 1 id: 66	Second parent 2 id:59
+2018-01-31 17:09:15,702 - crossover - INFO - Child gene has id 71
+2018-01-31 17:09:15,703 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 17:09:15,703 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:09:15,703 - crossover - INFO - Choosing parent 2
+2018-01-31 17:09:15,703 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:09:15,703 - crossover - INFO - Choosing parent 2
+2018-01-31 17:09:15,703 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:09:15,704 - crossover - INFO - Choosing parent 2
+2018-01-31 17:09:15,704 - crossover - INFO - Choosing parent 2
+2018-01-31 17:09:15,704 - crossover - INFO - Choosing parent 1
+2018-01-31 17:09:15,704 - crossover - INFO - Geneset id: 71, age: 0
+2018-01-31 17:09:15,704 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 64, 0, 3, 'relu', 1, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+[1, 128, 0, 0.25009251927084597, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:22:28,679 - crossover - INFO - breeding parents
+2018-01-31 17:22:28,679 - crossover - INFO - Dominant parent 1 id: 70	Second parent 2 id:69
+2018-01-31 17:22:28,681 - crossover - INFO - Child gene has id 72
+2018-01-31 17:22:28,681 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 17:22:28,681 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:22:28,681 - crossover - INFO - Choosing parent 1
+2018-01-31 17:22:28,681 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:22:28,681 - crossover - INFO - Choosing parent 2
+2018-01-31 17:22:28,681 - crossover - INFO - Geneset id: 72, age: 0
+2018-01-31 17:22:28,681 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 175]
+[2, 64, 0, 3, 'relu', 1, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:22:28,682 - crossover - INFO - breeding parents
+2018-01-31 17:22:28,682 - crossover - INFO - Dominant parent 1 id: 69	Second parent 2 id:70
+2018-01-31 17:22:28,683 - crossover - INFO - Child gene has id 73
+2018-01-31 17:22:28,683 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 17:22:28,683 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:22:28,683 - crossover - INFO - Choosing parent 1
+2018-01-31 17:22:28,683 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:22:28,683 - crossover - INFO - Choosing parent 2
+2018-01-31 17:22:28,684 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:22:28,684 - crossover - INFO - Choosing parent 2
+2018-01-31 17:22:28,684 - crossover - INFO - Choosing parent 1
+2018-01-31 17:22:28,684 - crossover - INFO - Geneset id: 73, age: 0
+2018-01-31 17:22:28,684 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 150]
+[2, 32, 0, 2, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.25009251927084597, 'relu', 0, 0, 0]
+[1, 16, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:22:28,684 - crossover - INFO - breeding parents
+2018-01-31 17:22:28,684 - crossover - INFO - Dominant parent 1 id: 54	Second parent 2 id:55
+2018-01-31 17:22:28,686 - crossover - INFO - Child gene has id 74
+2018-01-31 17:22:28,686 - crossover - INFO - conv layers 1, dense layers: 3
+2018-01-31 17:22:28,686 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:22:28,686 - crossover - INFO - Choosing parent 2
+2018-01-31 17:22:28,686 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:22:28,686 - crossover - INFO - Choosing parent 2
+2018-01-31 17:22:28,686 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:22:28,686 - crossover - INFO - Choosing parent 1
+2018-01-31 17:22:28,687 - crossover - INFO - Layer type: 1	layer num: 3
+2018-01-31 17:22:28,687 - crossover - INFO - Choosing parent 1
+2018-01-31 17:22:28,687 - crossover - INFO - Geneset id: 74, age: 0
+2018-01-31 17:22:28,687 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 128, 0, 4, 'relu', 1, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.36288927486759315, 'relu', 0, 0, 0]
+[1, 256, 0, 0.2816018100006625, 'relu', 0, 0, 0]
+[1, 64, 0, 0.2810761824906715, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:22:28,687 - crossover - INFO - breeding parents
+2018-01-31 17:22:28,687 - crossover - INFO - Dominant parent 1 id: 55	Second parent 2 id:54
+2018-01-31 17:22:28,688 - crossover - INFO - Child gene has id 75
+2018-01-31 17:22:28,688 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 17:22:28,689 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:22:28,689 - crossover - INFO - Choosing parent 2
+2018-01-31 17:22:28,689 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:22:28,689 - crossover - INFO - Choosing parent 2
+2018-01-31 17:22:28,689 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:22:28,689 - crossover - INFO - Choosing parent 1
+2018-01-31 17:22:28,689 - crossover - INFO - Geneset id: 75, age: 0
+2018-01-31 17:22:28,689 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 75]
+[2, 16, 0, 1, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.2816018100006625, 'relu', 0, 0, 0]
+[1, 64, 0, 0.36288927486759315, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:38:05,129 - crossover - INFO - breeding parents
+2018-01-31 17:38:05,129 - crossover - INFO - Dominant parent 1 id: 73	Second parent 2 id:71
+2018-01-31 17:38:05,131 - crossover - INFO - Child gene has id 76
+2018-01-31 17:38:05,131 - crossover - INFO - conv layers 1, dense layers: 3
+2018-01-31 17:38:05,132 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:38:05,132 - crossover - INFO - Choosing parent 2
+2018-01-31 17:38:05,132 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:38:05,132 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,132 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:38:05,133 - crossover - INFO - Choosing parent 2
+2018-01-31 17:38:05,133 - crossover - INFO - Layer type: 1	layer num: 3
+2018-01-31 17:38:05,133 - crossover - INFO - Choosing parent 2
+2018-01-31 17:38:05,133 - crossover - INFO - Geneset id: 76, age: 0
+2018-01-31 17:38:05,133 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 150]
+[2, 256, 0, 5, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.48449841101604807, 'relu', 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+[1, 128, 0, 0.25009251927084597, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:38:05,133 - crossover - INFO - breeding parents
+2018-01-31 17:38:05,133 - crossover - INFO - Dominant parent 1 id: 71	Second parent 2 id:73
+2018-01-31 17:38:05,135 - crossover - INFO - Child gene has id 77
+2018-01-31 17:38:05,136 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 17:38:05,136 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:38:05,136 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,136 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 17:38:05,136 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,136 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:38:05,137 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,137 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:38:05,137 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,137 - crossover - INFO - Geneset id: 77, age: 0
+2018-01-31 17:38:05,137 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 256, 0, 5, 'relu', 2, 2, 0]
+[2, 64, 0, 3, 'relu', 1, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+[1, 128, 0, 0.25009251927084597, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:38:05,137 - crossover - INFO - breeding parents
+2018-01-31 17:38:05,137 - crossover - INFO - Dominant parent 1 id: 39	Second parent 2 id:75
+2018-01-31 17:38:05,139 - crossover - INFO - Child gene has id 78
+2018-01-31 17:38:05,139 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 17:38:05,139 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:38:05,139 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,139 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:38:05,139 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,139 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:38:05,139 - crossover - INFO - Choosing parent 2
+2018-01-31 17:38:05,140 - crossover - INFO - Geneset id: 78, age: 0
+2018-01-31 17:38:05,140 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 150]
+[2, 16, 0, 1, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.26366492239723144, 'relu', 0, 0, 0]
+[1, 256, 0, 0.2816018100006625, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:38:05,140 - crossover - INFO - breeding parents
+2018-01-31 17:38:05,140 - crossover - INFO - Dominant parent 1 id: 75	Second parent 2 id:39
+2018-01-31 17:38:05,141 - crossover - INFO - Child gene has id 79
+2018-01-31 17:38:05,141 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 17:38:05,141 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:38:05,141 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,141 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:38:05,142 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,142 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:38:05,142 - crossover - INFO - Choosing parent 1
+2018-01-31 17:38:05,142 - crossover - INFO - Geneset id: 79, age: 0
+2018-01-31 17:38:05,142 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 75]
+[2, 16, 0, 1, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 256, 0, 0.2816018100006625, 'relu', 0, 0, 0]
+[1, 64, 0, 0.36288927486759315, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:54:13,464 - crossover - INFO - breeding parents
+2018-01-31 17:54:13,464 - crossover - INFO - Dominant parent 1 id: 8	Second parent 2 id:19
+2018-01-31 17:54:13,467 - crossover - INFO - Child gene has id 80
+2018-01-31 17:54:13,467 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 17:54:13,467 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:54:13,467 - crossover - INFO - Choosing parent 1
+2018-01-31 17:54:13,468 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:54:13,468 - crossover - INFO - Choosing parent 1
+2018-01-31 17:54:13,468 - crossover - INFO - Geneset id: 80, age: 0
+2018-01-31 17:54:13,469 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 125]
+[2, 32, 0, 5, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.36485359418255076, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:54:13,469 - crossover - INFO - breeding parents
+2018-01-31 17:54:13,469 - crossover - INFO - Dominant parent 1 id: 19	Second parent 2 id:8
+2018-01-31 17:54:13,471 - crossover - INFO - Child gene has id 81
+2018-01-31 17:54:13,471 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 17:54:13,472 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:54:13,472 - crossover - INFO - Choosing parent 2
+2018-01-31 17:54:13,472 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:54:13,472 - crossover - INFO - Choosing parent 1
+2018-01-31 17:54:13,473 - crossover - INFO - Geneset id: 81, age: 0
+2018-01-31 17:54:13,473 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 50]
+[2, 32, 0, 5, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.2706879180027799, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:54:13,474 - crossover - INFO - breeding parents
+2018-01-31 17:54:13,474 - crossover - INFO - Dominant parent 1 id: 77	Second parent 2 id:74
+2018-01-31 17:54:13,476 - crossover - INFO - Child gene has id 82
+2018-01-31 17:54:13,476 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 17:54:13,477 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:54:13,477 - crossover - INFO - Choosing parent 1
+2018-01-31 17:54:13,477 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 17:54:13,477 - crossover - INFO - Choosing parent 2
+2018-01-31 17:54:13,478 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:54:13,478 - crossover - INFO - Choosing parent 1
+2018-01-31 17:54:13,478 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:54:13,478 - crossover - INFO - Choosing parent 1
+2018-01-31 17:54:13,479 - crossover - INFO - Geneset id: 82, age: 0
+2018-01-31 17:54:13,479 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 256, 0, 5, 'relu', 2, 2, 0]
+[2, 256, 0, 3, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+[1, 128, 0, 0.25009251927084597, 'relu', 0, 0, 0]
+
+
+2018-01-31 17:54:13,479 - crossover - INFO - breeding parents
+2018-01-31 17:54:13,480 - crossover - INFO - Dominant parent 1 id: 74	Second parent 2 id:77
+2018-01-31 17:54:13,482 - crossover - INFO - Child gene has id 83
+2018-01-31 17:54:13,482 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 17:54:13,482 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 17:54:13,483 - crossover - INFO - Choosing parent 1
+2018-01-31 17:54:13,483 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 17:54:13,483 - crossover - INFO - Choosing parent 1
+2018-01-31 17:54:13,484 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 17:54:13,484 - crossover - INFO - Choosing parent 2
+2018-01-31 17:54:13,484 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 17:54:13,484 - crossover - INFO - Choosing parent 2
+2018-01-31 17:54:13,485 - crossover - INFO - Geneset id: 83, age: 0
+2018-01-31 17:54:13,485 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 256, 0, 3, 'relu', 2, 4, 0]
+[2, 128, 0, 4, 'relu', 1, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.4912881403723138, 'relu', 0, 0, 0]
+[1, 128, 0, 0.25009251927084597, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:11:59,561 - crossover - INFO - breeding parents
+2018-01-31 18:11:59,561 - crossover - INFO - Dominant parent 1 id: 80	Second parent 2 id:34
+2018-01-31 18:11:59,563 - crossover - INFO - Child gene has id 84
+2018-01-31 18:11:59,563 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 18:11:59,563 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:11:59,563 - crossover - INFO - Choosing parent 2
+2018-01-31 18:11:59,564 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:11:59,564 - crossover - INFO - Choosing parent 1
+2018-01-31 18:11:59,564 - crossover - INFO - Geneset id: 84, age: 0
+2018-01-31 18:11:59,564 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 125]
+[2, 32, 0, 4, 'relu', 1, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.36485359418255076, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:11:59,564 - crossover - INFO - breeding parents
+2018-01-31 18:11:59,564 - crossover - INFO - Dominant parent 1 id: 34	Second parent 2 id:80
+2018-01-31 18:11:59,566 - crossover - INFO - Child gene has id 85
+2018-01-31 18:11:59,566 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 18:11:59,566 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:11:59,566 - crossover - INFO - Choosing parent 2
+2018-01-31 18:11:59,566 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:11:59,567 - crossover - INFO - Choosing parent 1
+2018-01-31 18:11:59,567 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 18:11:59,567 - crossover - INFO - Choosing parent 2
+2018-01-31 18:11:59,567 - crossover - INFO - Geneset id: 85, age: 0
+2018-01-31 18:11:59,567 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 125]
+[2, 32, 0, 5, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 32, 0, 0.2915227079964148, 'relu', 0, 0, 0]
+[1, 16, 0, 0.36485359418255076, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:11:59,567 - crossover - INFO - breeding parents
+2018-01-31 18:11:59,568 - crossover - INFO - Dominant parent 1 id: 72	Second parent 2 id:83
+2018-01-31 18:11:59,569 - crossover - INFO - Child gene has id 86
+2018-01-31 18:11:59,569 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 18:11:59,569 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:11:59,570 - crossover - INFO - Choosing parent 1
+2018-01-31 18:11:59,570 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:11:59,570 - crossover - INFO - Choosing parent 2
+2018-01-31 18:11:59,570 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 18:11:59,570 - crossover - INFO - Choosing parent 1
+2018-01-31 18:11:59,570 - crossover - INFO - Geneset id: 86, age: 0
+2018-01-31 18:11:59,571 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 50]
+[2, 64, 0, 3, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.3801189413452893, 'relu', 0, 0, 0]
+[1, 128, 0, 0.47908252398545303, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:11:59,571 - crossover - INFO - breeding parents
+2018-01-31 18:11:59,571 - crossover - INFO - Dominant parent 1 id: 83	Second parent 2 id:72
+2018-01-31 18:11:59,573 - crossover - INFO - Child gene has id 87
+2018-01-31 18:11:59,573 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 18:11:59,573 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:11:59,573 - crossover - INFO - Choosing parent 1
+2018-01-31 18:11:59,573 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 18:11:59,573 - crossover - INFO - Choosing parent 1
+2018-01-31 18:11:59,574 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:11:59,574 - crossover - INFO - Choosing parent 2
+2018-01-31 18:11:59,574 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 18:11:59,574 - crossover - INFO - Choosing parent 2
+2018-01-31 18:11:59,574 - crossover - INFO - Geneset id: 87, age: 0
+2018-01-31 18:11:59,575 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 128]
+[2, 256, 0, 3, 'relu', 2, 4, 0]
+[2, 128, 0, 4, 'relu', 1, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.47908252398545303, 'relu', 0, 0, 0]
+[1, 16, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:29:32,512 - crossover - INFO - breeding parents
+2018-01-31 18:29:32,512 - crossover - INFO - Dominant parent 1 id: 61	Second parent 2 id:81
+2018-01-31 18:29:32,514 - crossover - INFO - Child gene has id 88
+2018-01-31 18:29:32,514 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 18:29:32,514 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:29:32,515 - crossover - INFO - Choosing parent 2
+2018-01-31 18:29:32,515 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:29:32,515 - crossover - INFO - Choosing parent 2
+2018-01-31 18:29:32,515 - crossover - INFO - Geneset id: 88, age: 0
+2018-01-31 18:29:32,515 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 50]
+[2, 64, 0, 5, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.2706879180027799, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:29:32,515 - crossover - INFO - breeding parents
+2018-01-31 18:29:32,515 - crossover - INFO - Dominant parent 1 id: 81	Second parent 2 id:61
+2018-01-31 18:29:32,517 - crossover - INFO - Child gene has id 89
+2018-01-31 18:29:32,517 - crossover - INFO - conv layers 2, dense layers: 1
+2018-01-31 18:29:32,517 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:29:32,517 - crossover - INFO - Choosing parent 2
+2018-01-31 18:29:32,518 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 18:29:32,518 - crossover - INFO - Choosing parent 1
+2018-01-31 18:29:32,518 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:29:32,518 - crossover - INFO - Choosing parent 1
+2018-01-31 18:29:32,518 - crossover - INFO - Geneset id: 89, age: 0
+2018-01-31 18:29:32,518 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 50]
+[2, 32, 0, 5, 'relu', 2, 3, 0]
+[2, 64, 0, 5, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.2706879180027799, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:29:32,519 - crossover - INFO - breeding parents
+2018-01-31 18:29:32,519 - crossover - INFO - Dominant parent 1 id: 68	Second parent 2 id:85
+2018-01-31 18:29:32,520 - crossover - INFO - Child gene has id 90
+2018-01-31 18:29:32,521 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 18:29:32,521 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:29:32,521 - crossover - INFO - Choosing parent 2
+2018-01-31 18:29:32,521 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:29:32,521 - crossover - INFO - Choosing parent 1
+2018-01-31 18:29:32,521 - crossover - INFO - Geneset id: 90, age: 0
+2018-01-31 18:29:32,521 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 150]
+[2, 32, 0, 5, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 64, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:29:32,521 - crossover - INFO - breeding parents
+2018-01-31 18:29:32,522 - crossover - INFO - Dominant parent 1 id: 85	Second parent 2 id:68
+2018-01-31 18:29:32,523 - crossover - INFO - Child gene has id 91
+2018-01-31 18:29:32,523 - crossover - INFO - conv layers 1, dense layers: 3
+2018-01-31 18:29:32,523 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:29:32,523 - crossover - INFO - Choosing parent 1
+2018-01-31 18:29:32,523 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:29:32,523 - crossover - INFO - Choosing parent 1
+2018-01-31 18:29:32,523 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 18:29:32,524 - crossover - INFO - Choosing parent 1
+2018-01-31 18:29:32,524 - crossover - INFO - Layer type: 1	layer num: 3
+2018-01-31 18:29:32,524 - crossover - INFO - Choosing parent 2
+2018-01-31 18:29:32,524 - crossover - INFO - Geneset id: 91, age: 0
+2018-01-31 18:29:32,524 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 125]
+[2, 32, 0, 5, 'relu', 2, 4, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.23489851442037257, 'relu', 0, 0, 0]
+[1, 32, 0, 0.2915227079964148, 'relu', 0, 0, 0]
+[1, 64, 0, 0.4208083973466406, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:46:28,629 - crossover - INFO - breeding parents
+2018-01-31 18:46:28,629 - crossover - INFO - Dominant parent 1 id: 89	Second parent 2 id:91
+2018-01-31 18:46:28,631 - crossover - INFO - Child gene has id 92
+2018-01-31 18:46:28,631 - crossover - INFO - conv layers 2, dense layers: 2
+2018-01-31 18:46:28,631 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:46:28,631 - crossover - INFO - Choosing parent 2
+2018-01-31 18:46:28,631 - crossover - INFO - Layer type: 2	layer num: 2
+2018-01-31 18:46:28,632 - crossover - INFO - Choosing parent 2
+2018-01-31 18:46:28,632 - crossover - INFO - Choosing parent 1
+2018-01-31 18:46:28,632 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:46:28,632 - crossover - INFO - Choosing parent 2
+2018-01-31 18:46:28,632 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 18:46:28,632 - crossover - INFO - Choosing parent 1
+2018-01-31 18:46:28,633 - crossover - INFO - Geneset id: 92, age: 0
+2018-01-31 18:46:28,633 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 50]
+[2, 32, 0, 5, 'relu', 2, 4, 0]
+[2, 32, 0, 5, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.23489851442037257, 'relu', 0, 0, 0]
+[1, 128, 0, 0.42634997534797003, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:46:28,633 - crossover - INFO - breeding parents
+2018-01-31 18:46:28,633 - crossover - INFO - Dominant parent 1 id: 91	Second parent 2 id:89
+2018-01-31 18:46:28,635 - crossover - INFO - Child gene has id 93
+2018-01-31 18:46:28,635 - crossover - INFO - conv layers 1, dense layers: 3
+2018-01-31 18:46:28,635 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:46:28,635 - crossover - INFO - Choosing parent 2
+2018-01-31 18:46:28,635 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:46:28,636 - crossover - INFO - Choosing parent 1
+2018-01-31 18:46:28,636 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 18:46:28,636 - crossover - INFO - Choosing parent 2
+2018-01-31 18:46:28,636 - crossover - INFO - Layer type: 1	layer num: 3
+2018-01-31 18:46:28,636 - crossover - INFO - Choosing parent 1
+2018-01-31 18:46:28,636 - crossover - INFO - Geneset id: 93, age: 0
+2018-01-31 18:46:28,636 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 125]
+[2, 32, 0, 5, 'relu', 2, 3, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 128, 0, 0.23489851442037257, 'relu', 0, 0, 0]
+[1, 128, 0, 0.42634997534797003, 'relu', 0, 0, 0]
+[1, 32, 0, 0.2915227079964148, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:46:28,637 - crossover - INFO - breeding parents
+2018-01-31 18:46:28,637 - crossover - INFO - Dominant parent 1 id: 88	Second parent 2 id:2
+2018-01-31 18:46:28,639 - crossover - INFO - Child gene has id 94
+2018-01-31 18:46:28,639 - crossover - INFO - conv layers 1, dense layers: 1
+2018-01-31 18:46:28,639 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:46:28,639 - crossover - INFO - Choosing parent 1
+2018-01-31 18:46:28,639 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:46:28,639 - crossover - INFO - Choosing parent 1
+2018-01-31 18:46:28,640 - crossover - INFO - Geneset id: 94, age: 0
+2018-01-31 18:46:28,640 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 50]
+[2, 64, 0, 5, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.2706879180027799, 'relu', 0, 0, 0]
+
+
+2018-01-31 18:46:28,640 - crossover - INFO - breeding parents
+2018-01-31 18:46:28,640 - crossover - INFO - Dominant parent 1 id: 2	Second parent 2 id:88
+2018-01-31 18:46:28,642 - crossover - INFO - Child gene has id 95
+2018-01-31 18:46:28,642 - crossover - INFO - conv layers 1, dense layers: 2
+2018-01-31 18:46:28,642 - crossover - INFO - Layer type: 2	layer num: 1
+2018-01-31 18:46:28,642 - crossover - INFO - Choosing parent 2
+2018-01-31 18:46:28,642 - crossover - INFO - Layer type: 1	layer num: 1
+2018-01-31 18:46:28,642 - crossover - INFO - Choosing parent 2
+2018-01-31 18:46:28,643 - crossover - INFO - Layer type: 1	layer num: 2
+2018-01-31 18:46:28,643 - crossover - INFO - Choosing parent 1
+2018-01-31 18:46:28,643 - crossover - INFO - Geneset id: 95, age: 0
+2018-01-31 18:46:28,643 - crossover - INFO - ['categorical_crossentropy', 'adam', 15, 100]
+[2, 64, 0, 5, 'relu', 2, 2, 0]
+[3, 0, 0, 0, 0, 0, 0, 0]
+[1, 16, 0, 0.2706879180027799, 'relu', 0, 0, 0]
+[1, 32, 0, 0.4134567609230244, 'relu', 0, 0, 0]
+
+
