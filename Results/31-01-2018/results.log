@@ -1,0 +1,72 @@
+2018-01-31 15:07:02,830 - resultMetrics - INFO - new best chromosome, id = 1, age = 0
+2018-01-31 15:07:02,861 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:07:02,861 - resultMetrics - INFO - Layer (type)                 Output Shape              Param #   
+2018-01-31 15:07:02,861 - resultMetrics - INFO - =================================================================
+2018-01-31 15:07:02,861 - resultMetrics - INFO - conv2d_5 (Conv2D)            (None, 25, 25, 64)        1088      
+2018-01-31 15:07:02,862 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:07:02,862 - resultMetrics - INFO - average_pooling2d_4 (Average (None, 8, 8, 64)          0         
+2018-01-31 15:07:02,862 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:07:02,862 - resultMetrics - INFO - flatten_21 (Flatten)         (None, 4096)              0         
+2018-01-31 15:07:02,862 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:07:02,862 - resultMetrics - INFO - dense_24 (Dense)             (None, 10)                40970     
+2018-01-31 15:07:02,862 - resultMetrics - INFO - =================================================================
+2018-01-31 15:07:02,863 - resultMetrics - INFO - Total params: 42,058
+2018-01-31 15:07:02,863 - resultMetrics - INFO - Trainable params: 42,058
+2018-01-31 15:07:02,863 - resultMetrics - INFO - Non-trainable params: 0
+2018-01-31 15:07:02,863 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:07:02,863 - resultMetrics - INFO - Fitness: 0.982044	Accuracy: 0.986250	Parameters 42058
+
+2018-01-31 15:31:01,683 - resultMetrics - INFO - new best chromosome, id = 11, age = 3
+2018-01-31 15:31:01,713 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:31:01,713 - resultMetrics - INFO - Layer (type)                 Output Shape              Param #   
+2018-01-31 15:31:01,713 - resultMetrics - INFO - =================================================================
+2018-01-31 15:31:01,713 - resultMetrics - INFO - conv2d_52 (Conv2D)           (None, 25, 25, 32)        544       
+2018-01-31 15:31:01,713 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:31:01,714 - resultMetrics - INFO - average_pooling2d_36 (Averag (None, 8, 8, 32)          0         
+2018-01-31 15:31:01,714 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:31:01,714 - resultMetrics - INFO - flatten_82 (Flatten)         (None, 2048)              0         
+2018-01-31 15:31:01,714 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:31:01,714 - resultMetrics - INFO - dense_114 (Dense)            (None, 10)                20490     
+2018-01-31 15:31:01,714 - resultMetrics - INFO - =================================================================
+2018-01-31 15:31:01,714 - resultMetrics - INFO - Total params: 21,034
+2018-01-31 15:31:01,715 - resultMetrics - INFO - Trainable params: 21,034
+2018-01-31 15:31:01,715 - resultMetrics - INFO - Non-trainable params: 0
+2018-01-31 15:31:01,715 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 15:31:01,715 - resultMetrics - INFO - Fitness: 0.982584	Accuracy: 0.984688	Parameters 21034
+
+2018-01-31 17:54:13,395 - resultMetrics - INFO - new best chromosome, id = 8, age = 15
+2018-01-31 17:54:13,460 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 17:54:13,460 - resultMetrics - INFO - Layer (type)                 Output Shape              Param #   
+2018-01-31 17:54:13,460 - resultMetrics - INFO - =================================================================
+2018-01-31 17:54:13,461 - resultMetrics - INFO - conv2d_240 (Conv2D)          (None, 24, 24, 32)        832       
+2018-01-31 17:54:13,461 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 17:54:13,461 - resultMetrics - INFO - average_pooling2d_145 (Avera (None, 6, 6, 32)          0         
+2018-01-31 17:54:13,461 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 17:54:13,462 - resultMetrics - INFO - flatten_323 (Flatten)        (None, 1152)              0         
+2018-01-31 17:54:13,462 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 17:54:13,462 - resultMetrics - INFO - dense_520 (Dense)            (None, 10)                11530     
+2018-01-31 17:54:13,462 - resultMetrics - INFO - =================================================================
+2018-01-31 17:54:13,463 - resultMetrics - INFO - Total params: 12,362
+2018-01-31 17:54:13,463 - resultMetrics - INFO - Trainable params: 12,362
+2018-01-31 17:54:13,463 - resultMetrics - INFO - Non-trainable params: 0
+2018-01-31 17:54:13,464 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 17:54:13,464 - resultMetrics - INFO - Fitness: 0.982826	Accuracy: 0.984063	Parameters 12362
+
+2018-01-31 18:11:59,526 - resultMetrics - INFO - new best chromosome, id = 80, age = 1
+2018-01-31 18:11:59,558 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 18:11:59,558 - resultMetrics - INFO - Layer (type)                 Output Shape              Param #   
+2018-01-31 18:11:59,558 - resultMetrics - INFO - =================================================================
+2018-01-31 18:11:59,558 - resultMetrics - INFO - conv2d_255 (Conv2D)          (None, 24, 24, 32)        832       
+2018-01-31 18:11:59,559 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 18:11:59,559 - resultMetrics - INFO - average_pooling2d_156 (Avera (None, 6, 6, 32)          0         
+2018-01-31 18:11:59,559 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 18:11:59,559 - resultMetrics - INFO - flatten_344 (Flatten)        (None, 1152)              0         
+2018-01-31 18:11:59,559 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 18:11:59,560 - resultMetrics - INFO - dense_565 (Dense)            (None, 10)                11530     
+2018-01-31 18:11:59,560 - resultMetrics - INFO - =================================================================
+2018-01-31 18:11:59,560 - resultMetrics - INFO - Total params: 12,362
+2018-01-31 18:11:59,560 - resultMetrics - INFO - Trainable params: 12,362
+2018-01-31 18:11:59,561 - resultMetrics - INFO - Non-trainable params: 0
+2018-01-31 18:11:59,561 - resultMetrics - INFO - _________________________________________________________________
+2018-01-31 18:11:59,561 - resultMetrics - INFO - Fitness: 0.984285	Accuracy: 0.985521	Parameters 12362
+
