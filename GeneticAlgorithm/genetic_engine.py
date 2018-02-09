@@ -106,7 +106,8 @@ def intermitent_logging(chromosome):
     with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([chromosome.id, chromosome.age, chromosome.accuracy, chromosome.fitness, chromosome.parameters])
+        spamwriter.writerow([chromosome.id, ',', chromosome.age, ',', chromosome.accuracy, ',',
+                             chromosome.fitness, ',', chromosome.parameters])
 
 
 def setup_csvlogger():

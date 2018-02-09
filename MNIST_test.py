@@ -8,7 +8,7 @@ import time
 from GeneticAlgorithm.fitness import assess_chromosome_fitness, evaluate_best_chromosome
 from GeneticAlgorithm.genetic_engine import *
 
-
+import subprocess
 import unittest
 import logging
 from logging import config
@@ -64,6 +64,10 @@ def unpack_testing_data():
             "test_dataset": test_dataset, "test_labels": test_labels}
 
 
+def get_git_hash():
+    return subprocess.check_output(["git", "describe"]).strip()
+
+
 class MNISTTest(unittest.TestCase):
 
     def test_encoding(self):
@@ -71,6 +75,8 @@ class MNISTTest(unittest.TestCase):
         logger = logging.getLogger('testFile')
 
         logger.info("starting test...")
+
+        logger.info(get_git_hash())
 
         start = time.time()
         best = get_best(100, (28, 28, 1), unpack_training_data)
