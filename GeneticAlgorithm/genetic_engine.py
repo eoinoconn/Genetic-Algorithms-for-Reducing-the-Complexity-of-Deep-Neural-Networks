@@ -27,6 +27,8 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
 
     training_data = fn_unpack_training_data()
 
+    trained_chromosomes = {}
+
     generation = 1
     population = create_population(input_shape, logger)
     best_chromosome = population[0]
@@ -67,12 +69,28 @@ def create_population(input_shape, logger):
     return pool
 
 
-def assess_population_fitness(population, training_data, logger):
+def assess_population_fitness(population, training_data, assessed_list, logger):
     for chromosome in population:
-        logger.info("getting fitness of chromosome %d", chromosome.id)
-        chromosome.assess_fitness(training_data)
+        if assessed_list.get(chromosome.mash(), default=False) is not False:
+            chromosome.mash_values
+        else:
+            logger.info("getting fitness of chromosome %d", chromosome.id)
+            chromosome.assess_fitness(training_data)
     population.sort(key=operator.attrgetter('fitness'))
+
+    add_assessed_to_list(population)
+
     return population[-1]
+
+
+def add_assessed_to_list(population, assessed_list):
+    for chromosome in population:
+        if assessed_list.get(chromosome.mash(), default=False) is not False:
+            assessed_list[chromosome.mash()] = chromosome.mash_values()
+
+
+def check_assessed_list(population, list):
+
 
 
 def mutate_population(population, logger):

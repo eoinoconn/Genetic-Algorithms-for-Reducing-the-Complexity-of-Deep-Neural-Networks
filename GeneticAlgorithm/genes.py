@@ -1,4 +1,5 @@
 import logging
+import copy
 
 from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D, concatenate, Input
 from keras.models import Sequential, Model
@@ -173,6 +174,11 @@ class Genes(LoggerMixin, ModelMixin):
 
     def assess_fitness(self, training_data):
         self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self, **training_data)
+
+    def mash(self):
+        mash = copy.deepcopy(self.genes)
+        mash.append(self.hyperparameters)
+        return hash(frozenset(mash))
 
     def __gt__(self, other):
         return self.fitness > other.fitness
