@@ -60,7 +60,7 @@ def delete_to_flatten(chromosome):
 
 def copy_to_child(child, dom_parent, parent_2, layer_type_1, num_layers, child_index_offset, logger, layer_type_2 = None):
     for i in range(0, num_layers):
-        logger.info("Layer type: %d\tlayer num: %d",layer_type, i+1)
+        logger.info("Layer type: %d\tlayer num: %d", layer_type_1, i+1)
         parameters_added = False
         layer = []
         while not parameters_added:

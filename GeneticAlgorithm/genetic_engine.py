@@ -51,6 +51,9 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
         # select best chromosomes
         population.extend(spawn_children(population, input_shape, logger))
 
+        # remove poorest performers
+        population = population[(population.__len__() - POOL_SIZE):]
+
         # iterate the age of every chromosome in the population by 1
         age_population(population)
 
@@ -87,9 +90,11 @@ def mutate_population(population, logger):
 def spawn_children(population, input_shape, logger):
     child_chromosomes = []
     spawned_children = 0
-    while population.__len__() > 1 and spawned_children < MAX_CROSSOVERS:
-        parent_1 = population.pop()
-        parent_2 = population.pop()
+    for i in range(0, MAX_CROSSOVERS, 2):
+        if population.__len__() < 2:
+            break
+        parent_1 = population[-i]
+        parent_2 = population[-(i+1)]
         logger.info("Spawning children from chromosomes %d and %d", parent_1.id, parent_2.id)
         child_chromosomes.append(crossover(parent_1, parent_2, input_shape))
         child_chromosomes.append(crossover(parent_2, parent_1, input_shape))
