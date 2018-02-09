@@ -5,7 +5,7 @@ In this file we will test the encoding and train a basic network using the built
 from __future__ import print_function
 import time
 
-from GeneticAlgorithm.fitness import assess_chromosome_fitness, evaluate_best_chromosome
+from GeneticAlgorithm.fitness import assess_chromosome_fitness
 from GeneticAlgorithm.genetic_engine import *
 
 import subprocess
@@ -83,7 +83,7 @@ class MNISTTest(unittest.TestCase):
         end = time.time()
 
         logger.info("time to best %f", end-start)
-        self.assertTrue(evaluate_best_chromosome(best, **unpack_testing_data()) > 0.99)
+        self.assertTrue(assess_chromosome_fitness(best, evaluate_best=True, **unpack_testing_data(), ) > 0.99)
 
 
 if __name__ == '__main__':
