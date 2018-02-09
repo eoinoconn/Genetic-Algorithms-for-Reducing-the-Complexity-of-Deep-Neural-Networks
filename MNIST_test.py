@@ -65,7 +65,7 @@ def unpack_testing_data():
 
 
 def get_git_hash():
-    return subprocess.check_output(["git", "describe"]).strip()
+    return subprocess.check_output(["git", "describe", "--always"]).strip()
 
 
 class MNISTTest(unittest.TestCase):
