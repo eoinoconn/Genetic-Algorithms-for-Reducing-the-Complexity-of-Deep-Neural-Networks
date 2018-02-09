@@ -4,7 +4,7 @@ import logging
 
 random.seed(1994)
 
-EPOCHS = 20
+EPOCHS = 2
 
 
 def mutate(genes):
@@ -26,8 +26,7 @@ def mutate(genes):
         # add layer
         elif rand == 1:
             logger.info("adding layer")
-            add_layer(genes)
-            mutation_done = True
+            mutation_done = add_layer(genes)
         # change layer parameters
         elif rand == 2:
             logging.info("changing layer parameters")
@@ -283,7 +282,7 @@ def add_layer(genes):
         new_layer_location = random.randrange(flatten_index+1, genes.__len__())
         logger.info("adding layer type dense")
     elif layer_type == 2:   # inception module
-        new_layer = inception_layer()
+        new_layer = convolutional_layer()
         new_layer_location = random.randrange(0, flatten_index + 1)
         logger.info("adding layer type Inception")
     else:   # convolutional layer
@@ -295,6 +294,8 @@ def add_layer(genes):
     if not check_valid_geneset(genes, logger):
         genes.remove_layer(index=new_layer_location)
         logger.info("geneset not valid, removing layer at %d", new_layer_location)
+        return False
+    return True
 
 
 def remove_layer(genes):
