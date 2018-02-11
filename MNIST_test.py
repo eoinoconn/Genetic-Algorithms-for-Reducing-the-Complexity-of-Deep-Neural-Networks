@@ -5,10 +5,10 @@ In this file we will test the encoding and train a basic network using the built
 from __future__ import print_function
 import time
 
-from GeneticAlgorithm.fitness import assess_chromosome_fitness, evaluate_best_chromosome
+from GeneticAlgorithm.fitness import assess_chromosome_fitness
 from GeneticAlgorithm.genetic_engine import *
 
-
+import subprocess
 import unittest
 import logging
 from logging import config
@@ -20,7 +20,7 @@ img_rows = 28
 img_cols = 28
 
 
-def unpack_training_data():
+def unpack_training_data(num_labels):
     (train_dataset, train_labels), (test_dataset, test_labels) = mnist.load_data()
 
     print('train_dataset shape:', train_dataset.shape)
@@ -35,13 +35,13 @@ def unpack_training_data():
     train_dataset = train_dataset.astype('float32')
     train_dataset /= 255
 
-    train_labels = to_categorical(train_labels, NUM_LABELS)
+    train_labels = to_categorical(train_labels, num_labels)
 
     return {"train_dataset": train_dataset, "train_labels": train_labels,
             "valid_dataset": None, "valid_labels": None}
 
 
-def unpack_testing_data():
+def unpack_testing_data(num_labels):
     (train_dataset, train_labels), (test_dataset, test_labels) = mnist.load_data()
 
     if K.image_data_format() == 'channels_first':
@@ -49,19 +49,23 @@ def unpack_testing_data():
         test_dataset = test_dataset.reshape(test_dataset.shape[0], 1, img_rows, img_cols)
     else:
         train_dataset = train_dataset.reshape(train_dataset.shape[0], img_rows, img_cols, 1)
-        test_dataset = test_dataset.reshape(test_dataset.shape[0], img_rows, img_cols), 1
+        test_dataset = test_dataset.reshape(test_dataset.shape[0], img_rows, img_cols, 1)
 
     train_dataset = train_dataset.astype('float32')
     test_dataset = test_dataset.astype('float32')
     train_dataset /= 255
     test_dataset /= 255
 
-    train_labels = to_categorical(train_labels, NUM_LABELS)
-    test_labels = to_categorical(test_labels, NUM_LABELS)
+    train_labels = to_categorical(train_labels, num_labels)
+    test_labels = to_categorical(test_labels, num_labels)
 
     return {"train_dataset": train_dataset, "train_labels": train_labels,
             "valid_dataset": None, "valid_labels": None,
             "test_dataset": test_dataset, "test_labels": test_labels}
+
+
+def get_git_hash():
+    return subprocess.check_output(["git", "describe", "--always"]).strip()
 
 
 class MNISTTest(unittest.TestCase):
@@ -72,12 +76,14 @@ class MNISTTest(unittest.TestCase):
 
         logger.info("starting test...")
 
+        logger.info(get_git_hash())
+
         start = time.time()
-        best = get_best(100, (28, 28, 1), unpack_training_data)
+        best = get_best(3, (28, 28, 1), unpack_training_data(10))
         end = time.time()
 
         logger.info("time to best %f", end-start)
-        self.assertTrue(evaluate_best_chromosome(best, **unpack_testing_data()) > 0.99)
+        self.assertTrue(assess_chromosome_fitness(best, evaluate_best=True, **unpack_testing_data(10))[0] > 0.99)
 
 
 if __name__ == '__main__':

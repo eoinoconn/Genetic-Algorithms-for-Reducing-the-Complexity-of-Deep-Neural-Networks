@@ -6,16 +6,13 @@ from keras.datasets import cifar10, mnist
 import operator
 import logging
 import random
+import configparser
 from keras import backend as K
 import io
 import csv
 import numpy as np
 
-POOL_SIZE = 10
 random.seed(1994)
-
-NUM_LABELS = 10
-MAX_CROSSOVERS = 4
 
 
 def get_best(max_generations, input_shape, fn_unpack_training_data):
@@ -23,9 +20,11 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
     logger = logging.getLogger('geneticEngine')
     logger.info('Starting genetic engine...')
 
+    setup_global_variables()
+
     setup_csvlogger()
 
-    training_data = fn_unpack_training_data()
+    training_data = fn_unpack_training_data
 
     generation = 1
     population = create_population(input_shape, logger)
@@ -51,12 +50,24 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
         # select best chromosomes
         population.extend(spawn_children(population, input_shape, logger))
 
+        # remove poorest performers
+        population = population[(population.__len__() - POOL_SIZE):]
+
         # iterate the age of every chromosome in the population by 1
         age_population(population)
 
         logger.info("End of generation %d \n\n", generation)
         generation += 1
     return best_chromosome
+
+
+def setup_global_variables():
+    config = configparser.ConfigParser()
+    config.read('GeneticAlgorithm/Config/training_parameters.ini')
+
+    global POOL_SIZE, MAX_CROSSOVERS
+    POOL_SIZE = int(config['genetic.engine']['pool_size'])
+    MAX_CROSSOVERS = int(config['genetic.engine']['max_crossover'])
 
 
 def create_population(input_shape, logger):
@@ -87,9 +98,11 @@ def mutate_population(population, logger):
 def spawn_children(population, input_shape, logger):
     child_chromosomes = []
     spawned_children = 0
-    while population.__len__() > 1 and spawned_children < MAX_CROSSOVERS:
-        parent_1 = population.pop()
-        parent_2 = population.pop()
+    for i in range(0, MAX_CROSSOVERS, 2):
+        if population.__len__() < 2:
+            break
+        parent_1 = population[-i]
+        parent_2 = population[-(i+1)]
         logger.info("Spawning children from chromosomes %d and %d", parent_1.id, parent_2.id)
         child_chromosomes.append(crossover(parent_1, parent_2, input_shape))
         child_chromosomes.append(crossover(parent_2, parent_1, input_shape))
@@ -106,7 +119,8 @@ def intermitent_logging(chromosome):
     with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([chromosome.id, chromosome.age, chromosome.accuracy, chromosome.fitness, chromosome.parameters])
+        spamwriter.writerow([chromosome.id, ',', chromosome.age, ',', chromosome.accuracy, ',',
+                             chromosome.fitness, ',', chromosome.parameters])
 
 
 def setup_csvlogger():

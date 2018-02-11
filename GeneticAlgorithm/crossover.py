@@ -27,7 +27,7 @@ def crossover(dom_parent, parent_2, input_shape):
         logger.info("Child gene has id %d", child.id)
         logger.info("conv layers %d, dense layers: %d", child_conv_layers, child_dense_layers)
 
-        copy_to_child(child, copy_dom_parent_1, copy_parent_2, 2, child_conv_layers, 0, logger)
+        copy_to_child(child, copy_dom_parent_1, copy_parent_2, 2, child_conv_layers, 0, logger, layer_type_2=4)
 
         child.add_layer(flatten_layer())
         delete_to_flatten(copy_dom_parent_1)
@@ -58,19 +58,19 @@ def delete_to_flatten(chromosome):
     chromosome.remove_layer(0)
 
 
-def copy_to_child(child, dom_parent, parent_2, layer_type, num_layers, child_index_offset, logger):
+def copy_to_child(child, dom_parent, parent_2, layer_type_1, num_layers, child_index_offset, logger, layer_type_2 = None):
     for i in range(0, num_layers):
-        logger.info("Layer type: %d\tlayer num: %d",layer_type, i+1)
+        logger.info("Layer type: %d\tlayer num: %d", layer_type_1, i+1)
         parameters_added = False
         layer = []
         while not parameters_added:
             rand = random.randrange(1, 3)
             logger.info("Choosing parent %d", rand)
-            if rand == 2 and parent_2.get_layer(0)[0] == layer_type:
+            if rand == 2 and ((parent_2.get_layer(0)[0] == layer_type_1) or (parent_2.get_layer(0)[0] == layer_type_2)):
                 layer = parent_2.get_layer(0)
                 parent_2.remove_layer(0)
                 parameters_added = True
-            elif rand == 1 and dom_parent.get_layer(0)[0] == layer_type:
+            elif rand == 1 and ((dom_parent.get_layer(0)[0] == layer_type_1) or (parent_2.get_layer(0)[0] == layer_type_2)):
                 layer = dom_parent.get_layer(0)
                 dom_parent.remove_layer(0)
                 parameters_added = True
