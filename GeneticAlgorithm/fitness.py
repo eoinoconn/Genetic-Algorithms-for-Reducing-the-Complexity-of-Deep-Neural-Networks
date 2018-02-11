@@ -1,7 +1,7 @@
 import logging
 import configparser
 
-from keras.callbacks import EarlyStopping, History
+from keras.callbacks import EarlyStopping, History, TensorBoard
 from keras.utils import print_summary
 
 
@@ -46,10 +46,18 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
     logger_fitness.info("Model compiled succesfully, beginning training...")
 
-    early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.005, patience=2, verbose=0, mode='auto')
+    callbacks = []
 
-    # TB_callback = TensorBoard(log_dir='./Graph', histogram_freq=0,
-    #                            write_graph=True, write_images=True)
+    if config['early.stopping']['early_stopping'] == 'True':
+        callbacks.append(EarlyStopping(monitor=config['early.stopping']['monitor'],
+                                       min_delta=float(config['early.stopping']['min_delta']),
+                                       patience=int(config['early.stopping']['patience']),
+                                       verbose=int(config['early.stopping']['verbose']),
+                                       mode=config['early.stopping']['mode']))
+
+    if config['training.parameters']['tensorboard'] == 'True':
+        callbacks.append(TensorBoard(log_dir='./Graph', histogram_freq=0,
+                                     write_graph=True, write_images=True))
 
     if config['training.parameters']['overwrite_hyperparameters']:
         if valid_dataset is None:
@@ -57,7 +65,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                              epochs=int(config['training.parameters']['epochs']),
                              batch_size=int(config['training.parameters']['batch_size']),
                              validation_split=float(config['training.parameters']['validation_split']),
-                             callbacks=[early_stopping],
+                             callbacks=callbacks,
                              verbose=int(config['training.parameters']['fit_verbose']))
 
         else:
@@ -65,7 +73,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                              epochs=int(config['training.parameters']['epochs']),
                              batch_size=int(config['training.parameters']['batch_size']),
                              validation_data=(valid_dataset, valid_labels),
-                             callbacks=[early_stopping],
+                             callbacks=callbacks,
                              verbose=int(config['training.parameters']['fit_verbose']))
     else:
         if valid_dataset is None:
@@ -73,7 +81,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                              epochs=hyper_params[2],
                              batch_size=hyper_params[3],
                              validation_split=0.16,
-                             callbacks=[early_stopping],
+                             callbacks=callbacks,
                              verbose=0)
 
         else:
@@ -81,7 +89,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                              epochs=hyper_params[2],
                              batch_size=hyper_params[3],
                              validation_data=(valid_dataset, valid_labels),
-                             callbacks=[early_stopping],
+                             callbacks=callbacks,
                              verbose=0)
 
     logger_fitness.info("Model trained succesfully, beginning evaluation...")
@@ -112,5 +120,3 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
 def cost_function(accuracy, efficiency_balance, parameters):
     return accuracy - (efficiency_balance * parameters)
-
-
