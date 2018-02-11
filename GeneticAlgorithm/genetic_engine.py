@@ -6,16 +6,13 @@ from keras.datasets import cifar10, mnist
 import operator
 import logging
 import random
+import configparser
 from keras import backend as K
 import io
 import csv
 import numpy as np
 
-POOL_SIZE = 10
 random.seed(1994)
-
-NUM_LABELS = 10
-MAX_CROSSOVERS = 4
 
 
 def get_best(max_generations, input_shape, fn_unpack_training_data):
@@ -23,9 +20,11 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
     logger = logging.getLogger('geneticEngine')
     logger.info('Starting genetic engine...')
 
+    setup_global_variables()
+
     setup_csvlogger()
 
-    training_data = fn_unpack_training_data()
+    training_data = fn_unpack_training_data
 
     generation = 1
     population = create_population(input_shape, logger)
@@ -60,6 +59,15 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
         logger.info("End of generation %d \n\n", generation)
         generation += 1
     return best_chromosome
+
+
+def setup_global_variables():
+    config = configparser.ConfigParser()
+    config.read('GeneticAlgorithm/Config/training_parameters.ini')
+
+    global POOL_SIZE, MAX_CROSSOVERS
+    POOL_SIZE = int(config['genetic.engine']['pool_size'])
+    MAX_CROSSOVERS = int(config['genetic.engine']['max_crossover'])
 
 
 def create_population(input_shape, logger):
