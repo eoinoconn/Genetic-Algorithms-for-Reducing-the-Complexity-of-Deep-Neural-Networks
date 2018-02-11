@@ -83,7 +83,7 @@ class MNISTTest(unittest.TestCase):
         end = time.time()
 
         logger.info("time to best %f", end-start)
-        self.assertTrue(assess_chromosome_fitness(best, evaluate_best=True, **unpack_testing_data(10), ) > 0.99)
+        self.assertTrue(assess_chromosome_fitness(best, evaluate_best=True, **unpack_testing_data(10))[0] > 0.99)
 
 
 if __name__ == '__main__':
