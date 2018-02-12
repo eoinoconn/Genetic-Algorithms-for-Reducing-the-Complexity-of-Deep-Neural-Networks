@@ -115,15 +115,40 @@ def change_conv_filter_num(genes, logger):
 
 
 def create_parent(input_shape):
+    config = configparser.ConfigParser()
+    config.read('GeneticAlgorithm/Config/training_parameters.ini')
     logger = logging.getLogger('mutate')
     logger.info("creating parent genes")
-    genes = Genes(input_shape)
-    genes.add_layer(flatten_layer())
-    genes.add_layer(dense_layer())
-    logger.info("parent genes created")
-    logger.info("adding hyperparameters")
-    genes.set_hyperparameters(random_hyperparameters(logger))
-    return genes
+
+    parent = Genes(input_shape)
+
+    if config['initial.generation']['random_initial_generation']:
+        while True:
+            min, max, interval = get_config('initial.generation.conv_incep.layers')
+            num_conv_layers = random.randrange(min, max+1, interval)
+            min, max, interval = get_config('initial.generation.dense.layers')
+            num_dense_layers = random.randrange(min, max + 1, interval)
+
+            for i in range(0, num_conv_layers):
+                parent.add_layer(convolutional_layer())
+
+            parent.add_layer(flatten_layer())
+
+            for i in range(0, num_dense_layers):
+                parent.add_layer(dense_layer())
+
+            if check_valid_geneset(parent, logger):
+                break
+            parent = Genes(input_shape)
+
+    else:
+        parent.add_layer(flatten_layer())
+        parent.add_layer(dense_layer())
+        logger.info("parent genes created")
+        logger.info("adding hyperparameters")
+
+    parent.set_hyperparameters(random_hyperparameters(logger))
+    return parent
 
 
 def random_hyperparameters(logger):
@@ -205,7 +230,6 @@ def change_pooling(genes, logger):
 # it does this by calculating the smallest dimension of the 
 # geneset at the last convolutional layer
 def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
-
     current_dimension = genes.input_shape[0]
     logger.info("checking for valid geneset; conv dimensions %d", current_dimension)
     for layer in genes.iterate_layers():
