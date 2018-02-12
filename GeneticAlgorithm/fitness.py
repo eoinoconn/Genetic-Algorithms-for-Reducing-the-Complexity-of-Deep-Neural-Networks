@@ -92,7 +92,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                              callbacks=callbacks,
                              verbose=0)
 
-    logger_fitness.info("Model trained succesfully, beginning evaluation...")
+    logger_fitness.info("Model trained successfully, beginning evaluation...")
 
     # store num of model parameters
     parameters = model.count_params()
