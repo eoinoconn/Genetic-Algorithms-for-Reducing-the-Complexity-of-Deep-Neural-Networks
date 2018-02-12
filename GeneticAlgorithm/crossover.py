@@ -66,7 +66,7 @@ def copy_to_child(child, dom_parent, parent_2, layer_type_1, num_layers, child_i
         while not parameters_added:
             rand = random.randrange(1, 3)
             logger.info("Choosing parent %d", rand)
-            if rand == 2 and ((parent_2.get_layer(0)[0] == layer_type_1) or (parent_2.get_layer(0)[0] == layer_type_2)):
+            if rand == 2 and ((dom_parent.get_layer(0)[0] == layer_type_1) or (parent_2.get_layer(0)[0] == layer_type_2)):
                 layer = parent_2.get_layer(0)
                 parent_2.remove_layer(0)
                 parameters_added = True
