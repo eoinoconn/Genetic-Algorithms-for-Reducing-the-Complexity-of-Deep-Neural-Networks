@@ -20,27 +20,6 @@ img_rows = 28
 img_cols = 28
 
 
-def unpack_training_data(num_labels):
-    (train_dataset, train_labels), (test_dataset, test_labels) = mnist.load_data()
-
-    print('train_dataset shape:', train_dataset.shape)
-    print(train_dataset.shape[0], 'train samples')
-    print(test_dataset.shape[0], 'test samples')
-
-    if K.image_data_format() == 'channels_first':
-        train_dataset = train_dataset.reshape(train_dataset.shape[0], 1, img_rows, img_cols)
-    else:
-        train_dataset = train_dataset.reshape(train_dataset.shape[0], img_rows, img_cols, 1)
-
-    train_dataset = train_dataset.astype('float32')
-    train_dataset /= 255
-
-    train_labels = to_categorical(train_labels, num_labels)
-
-    return {"train_dataset": train_dataset, "train_labels": train_labels,
-            "valid_dataset": None, "valid_labels": None}
-
-
 def unpack_testing_data(num_labels):
     (train_dataset, train_labels), (test_dataset, test_labels) = mnist.load_data()
 
@@ -79,7 +58,7 @@ class MNISTTest(unittest.TestCase):
         logger.info(get_git_hash())
 
         start = time.time()
-        best = get_best(3, (28, 28, 1), unpack_training_data(10))
+        best = get_best(3, (28, 28, 1), unpack_testing_data(10))
         end = time.time()
 
         logger.info("time to best %f", end-start)

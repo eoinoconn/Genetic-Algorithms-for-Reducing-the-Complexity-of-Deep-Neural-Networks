@@ -43,6 +43,7 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
         # if new best chromosome found, save it
         if best_child > best_chromosome:
             best_chromosome = best_child
+            best_chromosome.assess_fitness(training_data, evaluate_best=True)
             best_chromosome.log_best()
 
         intermitent_logging(best_child)

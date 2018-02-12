@@ -171,8 +171,8 @@ class Genes(LoggerMixin, ModelMixin):
             if self.genes[x][0] == 0:
                 return x
 
-    def assess_fitness(self, training_data):
-        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self, **training_data)
+    def assess_fitness(self, training_data, evaluate_best=False):
+        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self, evaluate_best=evaluate_best, **training_data)
 
     def __gt__(self, other):
         return self.fitness > other.fitness
