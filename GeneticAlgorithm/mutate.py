@@ -3,9 +3,6 @@ import random
 import logging
 import configparser
 
-random.seed(1994)
-
-EPOCHS = 2
 
 
 def mutate(genes):

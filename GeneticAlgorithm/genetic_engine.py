@@ -12,8 +12,6 @@ import io
 import csv
 import numpy as np
 
-random.seed(1994)
-
 
 def get_best(max_generations, input_shape, fn_unpack_training_data):
 

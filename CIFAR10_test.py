@@ -19,8 +19,6 @@ img_rows = 32
 img_cols = 32
 
 
-
-
 def unpack_testing_data(num_labels):
     (train_dataset, train_labels), (test_dataset, test_labels) = cifar10.load_data()
 
@@ -52,11 +50,20 @@ def get_git_hash():
     return subprocess.check_output(["git", "describe", "--always"]).strip()
 
 
+def set_seed(logger):
+    seed = random.randrange(sys.maxsize)
+    rng = random.Random(seed)
+    logger.info("Seed was: %f", seed)
+
+
 class CIFAR10Test(unittest.TestCase):
 
     def test_encoding(self):
         logging.config.fileConfig('GeneticAlgorithm/logs/logging.conf')
         logger = logging.getLogger('testFile')
+
+        logger.info("Setting seed")
+        set_seed(logger)
 
         logger.info("starting test...")
 

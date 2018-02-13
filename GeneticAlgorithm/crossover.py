@@ -5,7 +5,6 @@ import random
 from GeneticAlgorithm.genes import Genes
 from GeneticAlgorithm.mutate import flatten_layer, check_valid_geneset
 
-random.seed(1994)
 
 
 def crossover(dom_parent, parent_2, input_shape):
