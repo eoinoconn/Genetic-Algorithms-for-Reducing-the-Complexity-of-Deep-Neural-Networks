@@ -1,5 +1,6 @@
 import logging
 import configparser
+import csv
 
 from keras.callbacks import EarlyStopping, History, TensorBoard
 from keras.utils import print_summary
@@ -9,7 +10,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                               train_dataset=None, train_labels=None,
                               valid_dataset=None, valid_labels=None,
                               test_dataset=None, test_labels=None,
-                              evaluate_best=False):
+                              evaluate_best=False, log_csv=False):
     genes.log_geneset()
 
     config = configparser.ConfigParser()
@@ -108,6 +109,11 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
             loss_and_metrics = model.evaluate(test_dataset, test_labels,
                                               batch_size=hyper_params[3],
                                               verbose=0)
+        if log_csv:
+            with open('GeneticAlgorithm/logs/validvtest.csv', 'a', newline='') as csvfile:
+                spamwriter = csv.writer(csvfile, delimiter=' ',
+                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                spamwriter.writerow(accuracy, ',', loss_and_metrics[1])
         accuracy = loss_and_metrics[1]
 
     if config['efficient.cost.function'].getboolean('enable_efficiency_function'):
