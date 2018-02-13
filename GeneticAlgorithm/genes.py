@@ -86,7 +86,7 @@ class ModelMixin:
         tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')(tower_2)
         tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(input_layer)
         tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')(tower_3)
-        return concatenate([tower_1, tower_2, tower_3], axis=1)
+        return concatenate([tower_1, tower_2, tower_3], axis=3)
 
 
 class Genes(LoggerMixin, ModelMixin):

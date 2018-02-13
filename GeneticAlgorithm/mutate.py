@@ -122,7 +122,7 @@ def create_parent(input_shape):
 
     parent = Genes(input_shape)
 
-    if config['initial.generation']['random_initial_generation']:
+    if config['initial.generation'].getboolean('random_initial_generation'):
         while True:
             min, max, interval = get_config('initial.generation.conv_incep.layers')
             num_conv_layers = random.randrange(min, max+1, interval)

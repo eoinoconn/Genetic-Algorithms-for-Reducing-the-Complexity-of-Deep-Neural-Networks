@@ -33,7 +33,8 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
     # get hyperparameters
     hyper_params = genes.hyperparameters
 
-    if config['training.parameters']['overwrite_hyperparameters']:
+    if config['training.parameters'].getboolean('overwrite_hyperparameters'):
+        logger_fitness.info("Overwriting hyperparameters")
         efficiency_balance = float(config['training.parameters']['efficiency_balance'])
 
         model.compile(loss=config['training.parameters']['loss_function'],
@@ -48,18 +49,18 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
     callbacks = []
 
-    if config['early.stopping']['early_stopping'] == 'True':
+    if config['early.stopping'].getboolean('early_stopping'):
         callbacks.append(EarlyStopping(monitor=config['early.stopping']['monitor'],
                                        min_delta=float(config['early.stopping']['min_delta']),
                                        patience=int(config['early.stopping']['patience']),
                                        verbose=int(config['early.stopping']['verbose']),
                                        mode=config['early.stopping']['mode']))
 
-    if config['training.parameters']['tensorboard'] == 'True':
+    if config['training.parameters'].getboolean('tensorboard'):
         callbacks.append(TensorBoard(log_dir='./Graph', histogram_freq=0,
                                      write_graph=True, write_images=True))
 
-    if config['training.parameters']['overwrite_hyperparameters']:
+    if config['training.parameters'].getboolean('overwrite_hyperparameters'):
         if valid_dataset is None:
             hist = model.fit(train_dataset, train_labels,
                              epochs=int(config['training.parameters']['epochs']),
@@ -99,7 +100,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
     accuracy = hist.history['val_acc'][-1]
 
     if evaluate_best:
-        if config['training.parameters']['overwrite_hyperparameters']:
+        if config['training.parameters'].getboolean('overwrite_hyperparameters'):
             loss_and_metrics = model.evaluate(test_dataset, test_labels,
                                               batch_size=int(config['training.parameters']['batch_size']),
                                               verbose=int(config['training.parameters']['evaluate_verbose']))
@@ -109,7 +110,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                                               verbose=0)
         accuracy = loss_and_metrics[1]
 
-    if config['efficient.cost.function']['enable_efficiency_function']:
+    if config['efficient.cost.function'].getboolean('enable_efficiency_function'):
         fitness = cost_function(accuracy, efficiency_balance, parameters)
     else:
         logger_fitness.info("Fitness function disabled")
