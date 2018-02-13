@@ -8,7 +8,7 @@ import time
 from GeneticAlgorithm.fitness import assess_chromosome_fitness
 from GeneticAlgorithm.genetic_engine import *
 
-
+import sys
 import subprocess
 import unittest
 import logging
