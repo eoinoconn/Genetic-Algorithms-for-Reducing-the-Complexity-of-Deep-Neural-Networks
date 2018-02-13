@@ -109,7 +109,11 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                                               verbose=0)
         accuracy = loss_and_metrics[1]
 
-    fitness = cost_function(accuracy, efficiency_balance, parameters)
+    if config['efficient.cost.function']['enable_efficiency_function']:
+        fitness = cost_function(accuracy, efficiency_balance, parameters)
+    else:
+        logger_fitness.info("Fitness function disabled")
+        fitness = accuracy
 
     logger_fitness.info("Model evaluated successfully, fitness = %.6f, accuracy = %.6f, parameters = %d",
                         fitness,
