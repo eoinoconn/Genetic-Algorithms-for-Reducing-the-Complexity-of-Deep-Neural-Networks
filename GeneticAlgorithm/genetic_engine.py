@@ -7,6 +7,7 @@ import operator
 import logging
 import random
 import configparser
+import copy
 from keras import backend as K
 import io
 import csv
@@ -41,7 +42,7 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
         # if new best chromosome found, save it
         if best_child > best_chromosome:
             logger.info("New best child, id: %d", best_child.id)
-            best_chromosome = best_child
+            best_chromosome = copy.deepcopy(best_child)
             best_chromosome.assess_fitness(training_data, evaluate_best=True, log_csv=True)
             best_chromosome.log_best()
 
