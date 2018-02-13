@@ -61,7 +61,7 @@ class CIFAR10Test(unittest.TestCase):
         logger.info("starting test...")
 
         start = time.time()
-        best = get_best(100, (32, 32, 3), unpack_testing_data(10))
+        best = get_best(20, (32, 32, 3), unpack_testing_data(10))
         end = time.time()
 
         logger.info("time to best %f", end-start)
