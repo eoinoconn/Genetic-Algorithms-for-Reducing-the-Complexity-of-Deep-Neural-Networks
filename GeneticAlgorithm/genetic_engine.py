@@ -128,4 +128,4 @@ def setup_csvlogger():
     with open('GeneticAlgorithm/logs/trend.csv', 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([0])
+        spamwriter.writerow(['id', ',', 'Age', ',', 'Fitness', ',', 'Accuracy', ',', 'Parameters'])
