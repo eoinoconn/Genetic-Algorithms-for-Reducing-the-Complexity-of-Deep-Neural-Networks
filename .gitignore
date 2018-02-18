@@ -107,4 +107,3 @@ venv.bak/
 **/.idea/
 *.pickle
 
-.vscode/launch.json
