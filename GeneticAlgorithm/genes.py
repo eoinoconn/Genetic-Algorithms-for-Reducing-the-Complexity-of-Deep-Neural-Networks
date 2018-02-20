@@ -147,6 +147,13 @@ class Genes(LoggerMixin, ModelMixin):
                 count += 1
         return count
 
+    def num_incep_layers(self):
+        count = 0
+        for layer in self.iterate_layers():
+            if layer[0] == 4:
+                count += 1
+        return count
+
     def iterate_layers(self):
         for x in range(0, self.__len__()):
             layer = self.get_layer(x)

@@ -118,11 +118,25 @@ def intermitent_logging(chromosome):
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow([chromosome.id, ',', chromosome.age, ',', chromosome.accuracy, ',',
-                             chromosome.fitness, ',', chromosome.parameters])
+                             chromosome.fitness, ',',
+                             chromosome.parameters, ',',
+                             chromosome.__len__(), ',',
+                             chromosome.num_conv_layers(), ',',
+                             chromosome.num_dense_layers(), ',',
+                             chromosome.num_incep_layers(), ',',
+                             ])
 
 
 def setup_csvlogger():
     with open('GeneticAlgorithm/logs/trend.csv', 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(['id', ',', 'Age', ',', 'Fitness', ',', 'Accuracy', ',', 'Parameters'])
+        spamwriter.writerow(['id', ',',
+                             'Age', ',',
+                             'Fitness', ',',
+                             'Accuracy', ',',
+                             'Parameters', ',',
+                             'Num Layers', ',',
+                             'Num Conv Layers', ',',
+                             'Num Dense Layers', ',',
+                             'Num Incep Layers'])
