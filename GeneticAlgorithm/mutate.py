@@ -80,11 +80,15 @@ def change_conv_kernel(genes, logger):
         layer_index = random.randrange(0, genes.__len__())
         layer = genes.get_layer(layer_index)
         if layer[0] == 2:   # check if conv layer
+            old_layer = layer
             layer[3] = random.randrange(min, max+1, interval)
             logger.info("set kernel size to %d", layer[3])
             genes.overwrite_layer(layer, layer_index)
-            break
-
+            if check_valid_geneset(genes, logger):
+                break
+            else:
+                genes.overwrite_layer(old_layer, layer_index)
+            
 
 def change_dense_units(genes, logger):
     min, max, interval = get_config('convolutional.layer.kernel')

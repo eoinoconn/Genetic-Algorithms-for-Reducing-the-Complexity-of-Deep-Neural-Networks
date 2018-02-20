@@ -125,7 +125,7 @@ def intermitent_logging(chromosome):
                              chromosome.num_dense_layers(), ',',
                              chromosome.num_incep_layers(), ',',
                              ])
-
+    
 
 def setup_csvlogger():
     with open('GeneticAlgorithm/logs/trend.csv', 'w', newline='') as csvfile:
