@@ -73,9 +73,9 @@ def setup_global_variables():
 
 def create_population(input_shape, logger):
     pool = []
-    for x in range(POOL_SIZE):
+    for x in range(POOL_SIZE+1):
         pool.append(create_parent(input_shape))
-        logger.info("Added chromosome number %d to population", x+1)
+        logger.info("Added chromosome number %d to population", pool[x].id)
     return pool
 
 
@@ -88,15 +88,14 @@ def assess_population_fitness(population, training_data, logger):
 
 
 def mutate_population(population, logger):
-    for chromosome in population[:(POOL_SIZE-MAX_CROSSOVERS)]:
+    for chromosome in population[:(POOL_SIZE-(MAX_CROSSOVERS*4))]:
         logger.info("mutating chromosome %d", chromosome.id)
         mutate(chromosome)
 
 
 def spawn_children(population, input_shape, logger):
     child_chromosomes = []
-    spawned_children = 0
-    for i in range(0, MAX_CROSSOVERS, 2):
+    for i in range(0, (MAX_CROSSOVERS*2), 2):
         if population.__len__() < 2:
             break
         parent_1 = population[-i]
@@ -104,7 +103,6 @@ def spawn_children(population, input_shape, logger):
         logger.info("Spawning children from chromosomes %d and %d", parent_1.id, parent_2.id)
         child_chromosomes.append(crossover(parent_1, parent_2, input_shape))
         child_chromosomes.append(crossover(parent_2, parent_1, input_shape))
-        spawned_children += 2
     return child_chromosomes
 
 

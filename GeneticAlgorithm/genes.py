@@ -167,6 +167,10 @@ class Genes(LoggerMixin, ModelMixin):
             count += 1
         return -1
 
+    def clear_genes(self):
+        for i in range(0, self.__len__()):
+            self.overwrite_layer([0 for x in range(0, LAYER_DEPTH)], i)
+
     def __str__(self):
         str = self.hyperparameters.__str__() + "\n"
         for layer in self.iterate_layers():

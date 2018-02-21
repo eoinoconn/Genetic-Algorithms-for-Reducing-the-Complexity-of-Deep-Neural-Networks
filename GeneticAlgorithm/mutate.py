@@ -139,7 +139,7 @@ def create_parent(input_shape):
 
             if check_valid_geneset(parent, logger):
                 break
-            parent = Genes(input_shape)
+            parent.clear_genes()
 
     else:
         parent.add_layer(flatten_layer())
