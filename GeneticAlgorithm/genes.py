@@ -87,7 +87,7 @@ class ModelMixin:
         tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')(tower_2)
         tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(input_layer)
         tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')(tower_3)
-        return concatenate([tower_1, tower_2, tower_3], axis=1)
+        return concatenate([tower_1, tower_2, tower_3], axis=3)
 
 
 class Genes(LoggerMixin, ModelMixin):
@@ -148,6 +148,13 @@ class Genes(LoggerMixin, ModelMixin):
                 count += 1
         return count
 
+    def num_incep_layers(self):
+        count = 0
+        for layer in self.iterate_layers():
+            if layer[0] == 4:
+                count += 1
+        return count
+
     def iterate_layers(self):
         for x in range(0, self.__len__()):
             layer = self.get_layer(x)
@@ -161,6 +168,10 @@ class Genes(LoggerMixin, ModelMixin):
             count += 1
         return -1
 
+    def clear_genes(self):
+        for i in range(0, self.__len__()):
+            self.overwrite_layer([0 for x in range(0, LAYER_DEPTH)], i)
+
     def __str__(self):
         str = self.hyperparameters.__str__() + "\n"
         for layer in self.iterate_layers():
@@ -172,8 +183,9 @@ class Genes(LoggerMixin, ModelMixin):
             if self.genes[x][0] == 0:
                 return x
 
-    def assess_fitness(self, training_data):
-        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self, **training_data)
+    def assess_fitness(self, training_data, log_csv=False, evaluate_best=False):
+        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self, evaluate_best=evaluate_best,
+                                                                                 log_csv=log_csv, **training_data)
 
     def mash(self):
         mash = copy.deepcopy(self.genes)
