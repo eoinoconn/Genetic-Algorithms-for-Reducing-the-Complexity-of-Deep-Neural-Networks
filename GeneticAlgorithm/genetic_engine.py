@@ -43,7 +43,7 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
             best_chromosome.assess_fitness(training_data, evaluate_best=True, log_csv=True)
             best_chromosome.log_best()
 
-        intermitent_logging(best_child)
+        intermitent_logging(best_child, generation)
 
         # select best chromosomes
         population.extend(spawn_children(population, input_shape, logger))
@@ -113,11 +113,14 @@ def age_population(population):
         chromosome.increment_age()
 
 
-def intermitent_logging(chromosome):
+def intermitent_logging(chromosome, generation_num):
     with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([chromosome.id, ',', chromosome.age, ',', chromosome.accuracy, ',',
+        spamwriter.writerow([generation_num, ',',
+                             chromosome.id, ',',
+                             chromosome.age, ',',
+                             chromosome.accuracy, ',',
                              chromosome.fitness, ',',
                              chromosome.parameters, ',',
                              chromosome.__len__(), ',',
@@ -131,7 +134,8 @@ def setup_csvlogger():
     with open('GeneticAlgorithm/logs/trend.csv', 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(['id', ',',
+        spamwriter.writerow(['generation', ',',
+                             'id', ',',
                              'Age', ',',
                              'Fitness', ',',
                              'Accuracy', ',',

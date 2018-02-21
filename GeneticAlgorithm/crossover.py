@@ -6,7 +6,6 @@ from GeneticAlgorithm.genes import Genes
 from GeneticAlgorithm.mutate import flatten_layer, check_valid_geneset
 
 
-
 def crossover(dom_parent, parent_2, input_shape):
 
     logger = logging.getLogger('crossover')
