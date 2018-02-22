@@ -36,13 +36,13 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
         logger.info("pool size: %d", population.__len__())
 
         # Assign population fitness
-        best_child = assess_population_fitness(population, training_data, logger)
+        best_child = assess_population_fitness(population, training_data, trained_chromosomes, logger)
 
         # if new best chromosome found, save it
         if best_child > best_chromosome:
             logger.info("New best child, id: %d", best_child.id)
             best_chromosome = copy.deepcopy(best_child)
-            best_chromosome.assess_fitness(training_data, evaluate_best=True, log_csv=True)
+            best_chromosome.assess_fitness(training_data, log_csv=True)
             best_chromosome.log_best()
 
         intermitent_logging(best_child, generation)
@@ -83,26 +83,22 @@ def create_population(input_shape, logger):
 
 def assess_population_fitness(population, training_data, assessed_list, logger):
     for chromosome in population:
-        if assessed_list.get(chromosome.mash(), default=False) is not False:
-            chromosome.mash_values
+        mash_value = chromosome.mash()
+        if mash_value in assessed_list:
+            # chromosome already trained
+            logger.info("chromosome already trained")
+            chromosome.assume_values(assessed_list[mash_value])
         else:
+            # chromosome not trained before
             logger.info("getting fitness of chromosome %d", chromosome.id)
             chromosome.assess_fitness(training_data)
+            add_assessed_to_list(chromosome, assessed_list)
     population.sort(key=operator.attrgetter('fitness'))
-
-    add_assessed_to_list(population)
-
     return population[-1]
 
 
-def add_assessed_to_list(population, assessed_list):
-    for chromosome in population:
-        if assessed_list.get(chromosome.mash(), default=False) is not False:
-            assessed_list[chromosome.mash()] = chromosome.mash_values()
-
-
-def check_assessed_list(population, list):
-
+def add_assessed_to_list(chromosome, assessed_list):
+    assessed_list[chromosome.mash()] = [chromosome.fitness, chromosome.accuracy, chromosome.parameters]
 
 
 def mutate_population(population, logger):
