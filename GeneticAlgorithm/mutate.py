@@ -10,7 +10,7 @@ def mutate(genes):
     while not mutation_done:
         rand = random.randrange(0, 4)
         logger = logging.getLogger('mutate')
-        logger.info("mutating genes, rand = %d", rand)
+        logger.info("mutating chromosome %d, rand = %d", genes.id,  rand)
         logger.info("gene size %d", genes.__len__())
 
         # remove layer
@@ -26,7 +26,7 @@ def mutate(genes):
             mutation_done = add_layer(genes)
         # change layer parameters
         elif rand == 2:
-            logging.info("changing layer parameters")
+            logger.info("changing layer parameters")
             change_parameters(genes, logger)
             mutation_done = True
         # change hyperparameters
@@ -88,7 +88,7 @@ def change_conv_kernel(genes, logger):
                 break
             else:
                 genes.overwrite_layer(old_layer, layer_index)
-            
+
 
 def change_dense_units(genes, logger):
     min, max, interval = get_config('convolutional.layer.kernel')
@@ -139,7 +139,7 @@ def create_parent(input_shape):
 
             if check_valid_geneset(parent, logger):
                 break
-            parent = Genes(input_shape)
+            parent.clear_genes()
 
     else:
         parent.add_layer(flatten_layer())

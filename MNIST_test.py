@@ -5,6 +5,8 @@ In this file we will test the encoding and train a basic network using the built
 from __future__ import print_function
 import time
 
+import sys
+
 from GeneticAlgorithm.fitness import assess_chromosome_fitness
 from GeneticAlgorithm.genetic_engine import *
 
@@ -47,11 +49,20 @@ def get_git_hash():
     return subprocess.check_output(["git", "describe", "--always"]).strip()
 
 
+def set_seed(logger):
+    seed = random.randrange(sys.maxsize)
+    rng = random.Random(seed)
+    logger.info("Seed was: %f", seed)
+
+
 class MNISTTest(unittest.TestCase):
 
     def test_encoding(self):
         logging.config.fileConfig('GeneticAlgorithm/logs/logging.conf')
         logger = logging.getLogger('testFile')
+
+        logger.info("Setting seed")
+        set_seed(logger)
 
         logger.info("starting test...")
 
