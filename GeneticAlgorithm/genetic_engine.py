@@ -15,6 +15,9 @@ import numpy as np
 
 
 def get_best(max_generations, input_shape, fn_unpack_training_data):
+    """ Main Genetic algorithm loop, performing high level operations and calling
+    functions
+    :rtype: chromosome""" 
 
     logger = logging.getLogger('geneticEngine')
     logger.info('Starting genetic engine...')
@@ -65,6 +68,9 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
 
 
 def setup_global_variables():
+    """initialises global variables from configuration file
+    :param POOL_SIZE:
+    """
     config = configparser.ConfigParser()
     config.read('GeneticAlgorithm/Config/training_parameters.ini')
 
