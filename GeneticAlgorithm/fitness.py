@@ -114,6 +114,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                 spamwriter = csv.writer(csvfile, delimiter=' ',
                                         quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 spamwriter.writerow([accuracy, ',', loss_and_metrics[1]])
+        accuracy = loss_and_metrics[1]
 
     if config['efficient.cost.function'].getboolean('enable_efficiency_function'):
         fitness = cost_function(accuracy, efficiency_balance, parameters)
