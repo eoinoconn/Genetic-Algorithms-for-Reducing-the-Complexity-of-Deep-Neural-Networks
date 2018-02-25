@@ -3,6 +3,7 @@ import configparser
 import logging
 import csv
 
+
 def get_config():
     config = configparser.ConfigParser()
     config.read('GeneticAlgorithm/Config/training_parameters.ini')
@@ -17,26 +18,31 @@ def config_min_max_interval(config_name):
     interval = int(config['interval'])
     return minimum, maximum, interval
 
-# This is a function to check if the mutated geneset has
-# valid dimensions after pooling is altered
-# it does this by calculating the smallest dimension of the 
-# geneset at the last convolutional layer
+
 def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
+    """
+    function to check if the mutated geneset has
+    valid dimensions after pooling is altered
+    it does this by calculating the smallest dimension of the 
+    geneset at the last convolutional layer
+    """
+
     current_dimension = genes.input_shape[0]
     logger.info("checking for valid geneset; conv dimensions %d", current_dimension)
     for layer in genes.iterate_layers():
         if layer[0] == 2:
             current_dimension -= (layer[3] - 1)
             if layer[5] > 0:
-                current_dimension = int(current_dimension/layer[6])
+                current_dimension = int(current_dimension / layer[6])
         elif layer[0] == 3:
             break
-    if current_dimension < 1:   
+    if current_dimension < 1:
         logger.info("Invalid geneset, dimensions less than 0, Dimension: %d", current_dimension)
-        return False        # invalid geneset
+        return False  # invalid geneset
     else:
         logger.info("valid geneset found, min dimension: %d", current_dimension)
-        return True         # valid geneset
+        return True  # valid geneset
+
 
 def load_known_architecture(file_name, input_shape):
     chromosome = Genes(input_shape)
@@ -55,6 +61,12 @@ def load_known_architecture(file_name, input_shape):
 
 
 def convert(x):
+    """
+    Converts string to int, float or leaves  it as a string
+    :param x:
+    :return:
+    """
+
     try:
         return int(x)
     except ValueError:
@@ -79,7 +91,7 @@ def intermittent_logging(chromosome, generation_num):
                              chromosome.num_dense_layers(), ',',
                              chromosome.num_incep_layers(), ',',
                              ])
-    
+
 
 def setup_csvlogger():
     with open('GeneticAlgorithm/logs/trend.csv', 'w', newline='') as csvfile:
