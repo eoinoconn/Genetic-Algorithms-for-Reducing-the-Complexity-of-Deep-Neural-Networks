@@ -1,6 +1,7 @@
 from keras.utils import to_categorical
 
 from GeneticAlgorithm.crossover import crossover
+from GeneticAlgorithm.genes import Genes
 from GeneticAlgorithm.mutate import create_parent, mutate
 from keras.datasets import cifar10, mnist
 import operator
@@ -22,7 +23,7 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
     logger = logging.getLogger('geneticEngine')
     logger.info('Starting genetic engine...')
 
-    setup_global_variables()
+    config = setup_global_variables()
 
     setup_csvlogger()
 
@@ -31,7 +32,7 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
     trained_chromosomes = {}
 
     generation = 1
-    population = create_population(input_shape, logger)
+    population = create_population(input_shape, config, logger)
     best_chromosome = population[0]
 
     while generation < max_generations:
@@ -76,20 +77,53 @@ def setup_global_variables():
     global POOL_SIZE, MAX_CROSSOVERS
     POOL_SIZE = int(config['genetic.engine']['pool_size'])
     MAX_CROSSOVERS = int(config['genetic.engine']['max_crossover'])
+    return config
 
 
-def create_population(input_shape, logger):
+def create_population(input_shape, config, logger):
     """ Create the population pool of chromosomes
 
+    :param config:
     :param input_shape:
     :param logger:
     :return:
     """
     pool = []
-    for x in range(POOL_SIZE+1):
-        pool.append(create_parent(input_shape))
-        logger.info("Added chromosome number %d to population", pool[x].id)
+    if config['search.known.architecture'].getboolean('enable'):
+        known_architecture = load_known_architecture(config['search.known.architecture']['file_name'], input_shape)
+        for x in range(POOL_SIZE):
+            pool.append(copy.deepcopy(known_architecture))
+    else:
+        for x in range(POOL_SIZE):
+            pool.append(create_parent(input_shape))
+            logger.info("Added chromosome number %d to population", pool[x].id)
     return pool
+
+
+def load_known_architecture(file_name, input_shape):
+    chromosome = Genes(input_shape)
+    with open(file_name, encoding="utf-8-sig") as f:
+        reader = csv.reader(f)
+        for i, line in enumerate(reader):
+            line = line
+            for j, x in enumerate(line):
+                line[j] = convert(x)
+
+            if i == 0:
+                chromosome.hyperparameters = line
+            else:
+                chromosome.add_layer(line)
+    return chromosome
+
+
+def convert(x):
+    try:
+        return int(x)
+    except ValueError:
+        try:
+            return float(x)
+        except ValueError:
+            return x
 
 
 def assess_population_fitness(population, training_data, assessed_list, logger):
