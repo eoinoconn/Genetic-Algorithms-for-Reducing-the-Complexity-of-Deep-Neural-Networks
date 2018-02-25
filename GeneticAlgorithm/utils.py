@@ -1,5 +1,7 @@
+from GeneticAlgorithm.genes import Genes
 import configparser
 import logging
+import csv
 
 def get_config():
     config = configparser.ConfigParser()
@@ -36,7 +38,7 @@ def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
         logger.info("valid geneset found, min dimension: %d", current_dimension)
         return True         # valid geneset
 
-        def load_known_architecture(file_name, input_shape):
+def load_known_architecture(file_name, input_shape):
     chromosome = Genes(input_shape)
     with open(file_name, encoding="utf-8-sig") as f:
         reader = csv.reader(f)
@@ -60,3 +62,36 @@ def convert(x):
             return float(x)
         except ValueError:
             return x
+
+
+def intermittent_logging(chromosome, generation_num):
+    with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        spamwriter.writerow([generation_num, ',',
+                             chromosome.id, ',',
+                             chromosome.age, ',',
+                             chromosome.accuracy, ',',
+                             chromosome.fitness, ',',
+                             chromosome.parameters, ',',
+                             chromosome.__len__(), ',',
+                             chromosome.num_conv_layers(), ',',
+                             chromosome.num_dense_layers(), ',',
+                             chromosome.num_incep_layers(), ',',
+                             ])
+    
+
+def setup_csvlogger():
+    with open('GeneticAlgorithm/logs/trend.csv', 'w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        spamwriter.writerow(['generation', ',',
+                             'id', ',',
+                             'Age', ',',
+                             'Fitness', ',',
+                             'Accuracy', ',',
+                             'Parameters', ',',
+                             'Num Layers', ',',
+                             'Num Conv Layers', ',',
+                             'Num Dense Layers', ',',
+                             'Num Incep Layers'])
