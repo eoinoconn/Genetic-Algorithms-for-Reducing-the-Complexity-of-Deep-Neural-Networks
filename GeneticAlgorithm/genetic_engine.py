@@ -45,10 +45,10 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
         if best_child > best_chromosome:
             logger.info("New best child, id: %d", best_child.id)
             best_chromosome = copy.deepcopy(best_child)
-            best_chromosome.assess_fitness(training_data, log_csv=True)
+            best_chromosome.assess_fitness_with_test(training_data, log_csv=True)
             best_chromosome.log_best()
 
-        intermitent_logging(best_child, generation)
+        intermittent_logging(best_child, generation)
 
         # select best chromosomes
         population.extend(spawn_children(population, input_shape, logger))
@@ -69,7 +69,8 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
 
 def setup_global_variables():
     """initialises global variables from configuration file
-    :param POOL_SIZE:
+
+
     """
     config = configparser.ConfigParser()
     config.read('GeneticAlgorithm/Config/training_parameters.ini')
@@ -80,6 +81,12 @@ def setup_global_variables():
 
 
 def create_population(input_shape, logger):
+    """ Create the population pool of chromosomes
+
+    :param input_shape:
+    :param logger:
+    :return:
+    """
     pool = []
     for x in range(POOL_SIZE+1):
         pool.append(create_parent(input_shape))
@@ -88,6 +95,14 @@ def create_population(input_shape, logger):
 
 
 def assess_population_fitness(population, training_data, assessed_list, logger):
+    """ Assesses the fitness of each chromosome
+
+    :param population:
+    :param training_data:
+    :param assessed_list:
+    :param logger:
+    :return chromosome:
+    """
     for chromosome in population:
         mash_value = chromosome.mash()
         if mash_value in assessed_list:
@@ -98,12 +113,12 @@ def assess_population_fitness(population, training_data, assessed_list, logger):
             # chromosome not trained before
             logger.info("getting fitness of chromosome %d", chromosome.id)
             chromosome.assess_fitness(training_data)
-            add_assessed_to_list(chromosome, assessed_list)
+            add_assessed_to_dict(chromosome, assessed_list)
     population.sort(key=operator.attrgetter('fitness'))
     return population[-1]
 
 
-def add_assessed_to_list(chromosome, assessed_list):
+def add_assessed_to_dict(chromosome, assessed_list):
     assessed_list[chromosome.mash()] = [chromosome.fitness, chromosome.accuracy, chromosome.parameters]
 
 
@@ -114,6 +129,13 @@ def mutate_population(population, logger):
 
 
 def spawn_children(population, input_shape, logger):
+    """ Perform crossover on parent couples
+
+    :param population:
+    :param input_shape:
+    :param logger:
+    :return:
+    """
     child_chromosomes = []
     for i in range(0, (MAX_CROSSOVERS*2), 2):
         if population.__len__() < 2:
@@ -131,7 +153,7 @@ def age_population(population):
         chromosome.increment_age()
 
 
-def intermitent_logging(chromosome, generation_num):
+def intermittent_logging(chromosome, generation_num):
     with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)

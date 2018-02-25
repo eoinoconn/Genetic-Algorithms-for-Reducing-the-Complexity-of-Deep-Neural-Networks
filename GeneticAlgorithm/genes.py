@@ -18,7 +18,6 @@ class LoggerMixin:
         # component = "{}.{}".format(type(self).__module__, type(self).__name__)
         return logging.getLogger('genes')
 
-
     def log_best(self, fitness, accuracy, parameters, log_file='resultMetrics'):
         self.log_geneset()
         logger = logging.getLogger(log_file)
@@ -100,7 +99,6 @@ class Genes(LoggerMixin, ModelMixin):
         self.age = 0
         Genes.ids += 1
 
-
     def set_hyperparameters(self, new_hyperparameters):
         self.hyperparameters = new_hyperparameters
 
@@ -175,8 +173,8 @@ class Genes(LoggerMixin, ModelMixin):
 
     def assess_fitness_with_test(self, training_data, log_csv=False):
         evaluate_best = True
-        self.log_best(assess_chromosome_fitness(self, evaluate_best=evaluate_best,
-                                                log_csv=log_csv, **training_data))
+        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self, evaluate_best=evaluate_best,
+                                                                                 log_csv=log_csv, **training_data)
 
     def log_geneset(self, log_file='geneset'):
         logger = logging.getLogger(log_file)
