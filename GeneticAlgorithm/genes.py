@@ -1,91 +1,16 @@
 import logging
 import copy
 
-from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D, concatenate, Input
-from keras.models import Sequential, Model
 from keras.utils import print_summary
 
 from GeneticAlgorithm.fitness import assess_chromosome_fitness
+from GeneticAlgorithm.chromosome_model import ChromosomeModel
 
 MAX_LAYERS = 50
 LAYER_DEPTH = 8
-CLASSES = 10
 
 
-class LoggerMixin:
-    @property
-    def logger(self):
-        # component = "{}.{}".format(type(self).__module__, type(self).__name__)
-        return logging.getLogger('genes')
-
-    def log_best(self, fitness, accuracy, parameters, log_file='resultMetrics'):
-        self.log_geneset()
-        logger = logging.getLogger(log_file)
-        logger.info("new best chromosome, id = %d, age = %d", self.id, self.age)
-        print_summary(self.build_model(), print_fn=logger.info)
-        logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", fitness, accuracy, parameters)
-
-
-class ModelMixin:
-
-    def build_model(self):
-        input_layer = Input(shape=self.input_shape)
-        model = input_layer
-        for x in range(self.__len__() + 1):
-            # check if output layer, hidden layer or no layer at all
-            if (self.genes[x][0] != 0) and (self.genes[x + 1][0] == 0):  # Check if output layer
-                model = self.build_layer(model, self.genes[x], output_layer=True)
-            elif self.genes[x][0] != 0:  # else check if not empty layer
-                model = self.build_layer(model, self.genes[x])
-            else:
-                return Model(inputs=input_layer, outputs=model)
-
-    def build_layer(self, model, layer, output_layer=False):
-        if layer[0] == 1:  # Dense Layer
-            if output_layer:  # output layer
-                return Dense(CLASSES, activation='softmax')(model)
-            else:  # hidden layer
-                model = Dense(layer[1], activation='relu')(model)
-                if layer[3] > 0:
-                    model = Dropout(layer[3])(model)
-                return model
-
-        elif layer[0] == 2:  # conv layer
-            # hidden layer
-            model = Conv2D(layer[1], (layer[3], layer[3]), activation='relu')(model)
-            if layer[5] > 0:  # check for pooling layer
-                model = self.pooling_layer(model, layer)
-            return model
-
-        elif layer[0] == 3:  # Flatten layer
-            return Flatten()(model)
-
-        elif layer[0] == 4:
-            return self.inception_module(model)
-
-        else:
-            raise NotImplementedError('Layers not yet implemented')
-
-    def pooling_layer(self, input_layer, layer):
-        if layer[5] == 1:  # max pooling
-            return MaxPooling2D((layer[6], layer[6]))(input_layer)
-        else:
-            return AveragePooling2D((layer[6], layer[6]))(input_layer)
-
-    def model_summary(self):
-        self.build_model().summary()
-
-    def inception_module(self, input_layer):
-        tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_layer)
-        tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')(tower_1)
-        tower_2 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_layer)
-        tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')(tower_2)
-        tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(input_layer)
-        tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')(tower_3)
-        return concatenate([tower_1, tower_2, tower_3], axis=3)
-
-
-class Genes(LoggerMixin, ModelMixin):
+class Genes(object):
     ids = 1
 
     def __init__(self, input_shape):
@@ -180,6 +105,21 @@ class Genes(LoggerMixin, ModelMixin):
         logger = logging.getLogger(log_file)
         logger.info("Geneset id: %d, age: %d", self.id, self.age)
         logger.info(self.__str__() + "\n")
+
+    def log_best(self, log_file='resultMetrics'):
+        self.log_geneset()
+        logger = logging.getLogger(log_file)
+        logger.info("new best chromosome, id = %d, age = %d", self.id, self.age)
+        print_summary(self.build_model(), print_fn=logger.info)
+        logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness, self.accuracy, self.parameters)
+
+    def build_model(self):
+        model = ChromosomeModel(self.genes, 10, self.input_shape, self.__len__())
+        return model.build_model()
+
+    @property
+    def logger(self):
+        return logging.getLogger('genes')
 
     def mash(self):
         mash = copy.deepcopy(self.genes)
