@@ -4,9 +4,14 @@ In this file we will test the encoding and train a basic network using the built
 """
 from __future__ import print_function
 import time
+import random
+import keras.backend as k
 
+from GeneticAlgorithm.genetic_engine import get_best
 from GeneticAlgorithm.fitness import assess_chromosome_fitness
-from GeneticAlgorithm.genetic_engine import *
+from keras.datasets import cifar10
+from keras.utils import to_categorical
+
 
 import sys
 import subprocess
@@ -26,7 +31,7 @@ def unpack_testing_data(num_labels):
     print(train_dataset.shape[0], 'train samples')
     print(test_dataset.shape[0], 'test samples')
 
-    if K.image_data_format() == 'channels_first':
+    if k.image_data_format == 'channels_first':
         train_dataset = train_dataset.reshape(train_dataset.shape[0], 3, img_rows, img_cols)
         test_dataset = test_dataset.reshape(test_dataset.shape[0], 3, img_rows, img_cols)
     else:
@@ -52,7 +57,7 @@ def get_git_hash():
 
 def set_seed(logger):
     seed = random.randrange(sys.maxsize)
-    rng = random.Random(seed)
+    random.Random(seed)
     logger.info("Seed was: %f", seed)
 
 
