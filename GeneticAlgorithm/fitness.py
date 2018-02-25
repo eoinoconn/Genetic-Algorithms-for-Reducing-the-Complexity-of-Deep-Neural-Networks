@@ -11,7 +11,6 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                               valid_dataset=None, valid_labels=None,
                               test_dataset=None, test_labels=None,
                               evaluate_best=False, log_csv=False):
-    genes.log_geneset()
 
     config = configparser.ConfigParser()
     config.read('GeneticAlgorithm/Config/training_parameters.ini')

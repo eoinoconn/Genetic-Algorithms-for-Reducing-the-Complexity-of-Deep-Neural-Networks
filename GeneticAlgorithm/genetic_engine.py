@@ -69,8 +69,6 @@ def get_best(max_generations, input_shape, fn_unpack_training_data):
 
 def setup_global_variables():
     """initialises global variables from configuration file
-
-
     """
     config = configparser.ConfigParser()
     config.read('GeneticAlgorithm/Config/training_parameters.ini')
@@ -104,10 +102,13 @@ def assess_population_fitness(population, training_data, assessed_list, logger):
     :return chromosome:
     """
     for chromosome in population:
+        chromosome.log_geneset()
         mash_value = chromosome.mash()
         if mash_value in assessed_list:
             # chromosome already trained
-            logger.info("chromosome already trained")
+            logger.info("chromosome %d already trained as chromosome %d, age %d", chromosome.id,
+                        assessed_list[mash_value][3],
+                        assessed_list[mash_value][4])
             chromosome.assume_values(assessed_list[mash_value])
         else:
             # chromosome not trained before
@@ -119,7 +120,8 @@ def assess_population_fitness(population, training_data, assessed_list, logger):
 
 
 def add_assessed_to_dict(chromosome, assessed_list):
-    assessed_list[chromosome.mash()] = [chromosome.fitness, chromosome.accuracy, chromosome.parameters]
+    assessed_list[chromosome.mash()] = [chromosome.fitness, chromosome.accuracy,
+                                        chromosome.parameters, chromosome.id, chromosome.age]
 
 
 def mutate_population(population, logger):
