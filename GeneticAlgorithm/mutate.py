@@ -1,7 +1,8 @@
 from GeneticAlgorithm.genes import Genes, LAYER_DEPTH, MAX_LAYERS
+from GeneticAlgorithm.utils import *
 import random
 import logging
-import configparser
+
 
 
 def mutate(genes):
@@ -255,28 +256,6 @@ def change_pooling(genes, logger):
         return False
 
 
-# This is a function to check if the mutated geneset has
-# valid dimensions after pooling is altered
-# it does this by calculating the smallest dimension of the 
-# geneset at the last convolutional layer
-def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
-    current_dimension = genes.input_shape[0]
-    logger.info("checking for valid geneset; conv dimensions %d", current_dimension)
-    for layer in genes.iterate_layers():
-        if layer[0] == 2:
-            current_dimension -= (layer[3] - 1)
-            if layer[5] > 0:
-                current_dimension = int(current_dimension/layer[6])
-        elif layer[0] == 3:
-            break
-    if current_dimension < 1:   # invalid geneset
-        logger.info("Invalid geneset, dimensions less than 0, Dimension: %d", current_dimension)
-        return False
-    else:
-        logger.info("valid geneset found, min dimension: %d", current_dimension)
-        return True         # valid geneset
-
-
 def flatten_layer():
     layer = [0 for x in range(0, LAYER_DEPTH)]
     layer[0] = 3
@@ -386,16 +365,4 @@ def remove_layer(genes):
         break
 
 
-def get_config():
-    config = configparser.ConfigParser()
-    config.read('GeneticAlgorithm/Config/training_parameters.ini')
-    return config
 
-
-def config_min_max_interval(config_name):
-    config = get_config()
-    config = config[config_name]
-    minimum = int(config['minimum'])
-    maximum = int(config['maximum'])
-    interval = int(config['interval'])
-    return minimum, maximum, interval

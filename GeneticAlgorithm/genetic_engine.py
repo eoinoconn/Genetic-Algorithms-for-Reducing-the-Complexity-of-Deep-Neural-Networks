@@ -3,6 +3,7 @@ from keras.utils import to_categorical
 from GeneticAlgorithm.crossover import crossover
 from GeneticAlgorithm.genes import Genes
 from GeneticAlgorithm.mutate import create_parent, mutate
+from GeneticAlgorithm.utils import *
 from keras.datasets import cifar10, mnist
 import operator
 import logging
@@ -98,32 +99,6 @@ def create_population(input_shape, config, logger):
             pool.append(create_parent(input_shape))
             logger.info("Added chromosome number %d to population", pool[x].id)
     return pool
-
-
-def load_known_architecture(file_name, input_shape):
-    chromosome = Genes(input_shape)
-    with open(file_name, encoding="utf-8-sig") as f:
-        reader = csv.reader(f)
-        for i, line in enumerate(reader):
-            line = line
-            for j, x in enumerate(line):
-                line[j] = convert(x)
-
-            if i == 0:
-                chromosome.hyperparameters = line
-            else:
-                chromosome.add_layer(line)
-    return chromosome
-
-
-def convert(x):
-    try:
-        return int(x)
-    except ValueError:
-        try:
-            return float(x)
-        except ValueError:
-            return x
 
 
 def assess_population_fitness(population, training_data, assessed_list, logger):
