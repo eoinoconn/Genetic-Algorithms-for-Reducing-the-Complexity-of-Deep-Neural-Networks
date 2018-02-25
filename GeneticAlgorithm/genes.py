@@ -18,10 +18,6 @@ class LoggerMixin:
         # component = "{}.{}".format(type(self).__module__, type(self).__name__)
         return logging.getLogger('genes')
 
-    def log_geneset(self, log_file='geneset'):
-        logger = logging.getLogger(log_file)
-        logger.info("Geneset id: %d, age: %d", self.id, self.age)
-        logger.info(self.__str__() + "\n")
 
     def log_best(self, fitness, accuracy, parameters, log_file='resultMetrics'):
         self.log_geneset()
@@ -91,7 +87,7 @@ class ModelMixin:
 
 
 class Genes(LoggerMixin, ModelMixin):
-    ids = 0
+    ids = 1
 
     def __init__(self, input_shape):
         self.genes = [[0 for x in range(0, LAYER_DEPTH)] for y in range(0, MAX_LAYERS)]
@@ -104,8 +100,6 @@ class Genes(LoggerMixin, ModelMixin):
         self.age = 0
         Genes.ids += 1
 
-    def increment_age(self):
-        self.age += 1
 
     def set_hyperparameters(self, new_hyperparameters):
         self.hyperparameters = new_hyperparameters
@@ -133,6 +127,9 @@ class Genes(LoggerMixin, ModelMixin):
 
     def get_layer(self, index):
         return self.genes[index]
+
+    def increment_age(self):
+        self.age += 1
 
     def num_dense_layers(self):
         count = 0
@@ -180,6 +177,11 @@ class Genes(LoggerMixin, ModelMixin):
         evaluate_best = True
         self.log_best(assess_chromosome_fitness(self, evaluate_best=evaluate_best,
                                                 log_csv=log_csv, **training_data))
+
+    def log_geneset(self, log_file='geneset'):
+        logger = logging.getLogger(log_file)
+        logger.info("Geneset id: %d, age: %d", self.id, self.age)
+        logger.info(self.__str__() + "\n")
 
     def mash(self):
         mash = copy.deepcopy(self.genes)
