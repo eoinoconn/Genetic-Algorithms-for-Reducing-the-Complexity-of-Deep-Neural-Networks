@@ -122,7 +122,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
         logger_fitness.info("Fitness function disabled")
         fitness = accuracy
 
-    logger_fitness.info("Model evaluated successfully, fitness = %.6f, accuracy = %.6f, parameters = %d",
+    logger_fitness.info("Model evaluated successfully, fitness = %.6f, accuracy = %.6f, parameters = %d\n\n",
                         fitness,
                         accuracy,
                         parameters)
