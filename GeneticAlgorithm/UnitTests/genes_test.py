@@ -1,5 +1,5 @@
 import unittest
-from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH, MAX_LAYERS
+from GeneticAlgorithm.genes import Genes, LAYER_DEPTH, MAX_LAYERS
 
 
 class TestGenes(unittest.TestCase):

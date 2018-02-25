@@ -1,12 +1,12 @@
 import unittest
-from Python.GeneticAlgorithm.mutate import *
-from Python.GeneticAlgorithm.genes import *
+from GeneticAlgorithm.mutate import *
+from GeneticAlgorithm.genes import *
 
 
 class TestMutate(unittest.TestCase):
 
     def setUp(self):
-        self.chromosome = Genes()
+        self.chromosome = Genes((28, 28, 1))
 
     def test_remove_layer(self):
         self.setup_chromosome()

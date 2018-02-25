@@ -1,6 +1,6 @@
 import unittest
-from Python.GeneticAlgorithm.crossover import crossover
-from Python.GeneticAlgorithm.genes import Genes, LAYER_DEPTH
+from GeneticAlgorithm.crossover import crossover
+from GeneticAlgorithm.genes import Genes, LAYER_DEPTH
 
 
 def setup_fake_chromosome(random):
