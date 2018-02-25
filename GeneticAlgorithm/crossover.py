@@ -16,6 +16,7 @@ def crossover(dom_parent, parent_2, input_shape):
 
     while not invalid_chromosome:
         child_conv_layers = dom_parent.num_conv_layers()
+        child_incep_layers = dom_parent.num_incep_layers()
         child_dense_layers = dom_parent.num_dense_layers()
 
         copy_dom_parent_1 = copy.deepcopy(dom_parent)
@@ -23,7 +24,7 @@ def crossover(dom_parent, parent_2, input_shape):
 
         child = Genes(input_shape)
         logger.info("Child gene has id %d", child.id)
-        logger.info("conv layers %d, dense layers: %d", child_conv_layers, child_dense_layers)
+        logger.info("conv layers %d, dense layers: %d", (child_conv_layers + child_incep_layers), child_dense_layers)
 
         copy_to_child(child, copy_dom_parent_1, copy_parent_2, 2, child_conv_layers, 0, logger, layer_type_2=4)
 
