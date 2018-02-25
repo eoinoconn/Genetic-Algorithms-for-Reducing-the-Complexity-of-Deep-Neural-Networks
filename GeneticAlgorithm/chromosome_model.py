@@ -56,7 +56,8 @@ class ChromosomeModel(object):
         else:
             raise NotImplementedError('Layers not yet implemented')
 
-    def activation(self, layer,  model):
+    @staticmethod
+    def activation(layer, model):
         return Activation(layer[4])(model)
 
     @staticmethod
