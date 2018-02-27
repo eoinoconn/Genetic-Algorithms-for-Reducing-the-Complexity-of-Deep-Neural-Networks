@@ -51,7 +51,7 @@ test_dataset = data['test_dataset']
 test_labels = data['test_labels']
 
 config = configparser.ConfigParser()
-config.read_file('GeneticAlgorithm/Config/training_parameters.ini')
+config.read('Config/training_parameters.ini')
 # config.read('GeneticAlgorithm/Config/training_parameters.ini')
 
 # initilise logging objects
@@ -93,7 +93,7 @@ if config['training.parameters'].getboolean('tensorboard'):
                                  write_graph=True, write_images=True))
 
 hist = model.fit(train_dataset, train_labels,
-                 epochs=int(config['training.parameters']['epochs']),
+                 epochs=100,
                  batch_size=int(config['training.parameters']['batch_size']),
                  validation_split=float(config['training.parameters']['validation_split']),
                  callbacks=callbacks,
