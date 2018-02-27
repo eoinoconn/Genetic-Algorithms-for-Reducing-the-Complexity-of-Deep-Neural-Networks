@@ -77,8 +77,8 @@ def change_conv_layer_parameter(genes, logger):
         logger.info("Adding batch normalisation")
         return toggle_batch_normalisation(genes, logger)
     elif rand == 4:     # change dropout layer probability
-        logger.info("Changing dropout")
-        change_dense_layer_dropout(genes, logger)
+        logger.info("Changing Conv dropout")
+        return change_conv_layer_dropout(genes, logger)
 
 
 def toggle_batch_normalisation(genes, logger):
