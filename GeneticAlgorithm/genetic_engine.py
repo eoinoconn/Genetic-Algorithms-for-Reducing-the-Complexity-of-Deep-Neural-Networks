@@ -52,7 +52,7 @@ def get_best(max_generations, input_shape, training_data):
         population.extend(spawn_children(population, input_shape, logger))
 
         # remove poorest performers
-        cleanse_population(population, logger)
+        population = cleanse_population(population, logger)
 
         # mutate pool
         mutate_population(population, logger)
@@ -166,6 +166,7 @@ def cleanse_population(population, logger):
     logger.info("Chromosomes still in population")
     for chromosome in population:
         logger.info("ID %d,  Age %d", chromosome.id, chromosome.age)
+    return population
 
 
 def age_population(population):
