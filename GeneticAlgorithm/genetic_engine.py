@@ -153,8 +153,9 @@ def spawn_children(population, input_shape, logger):
         parent_2 = population[-(i+1)]
         logger.info("Spawning children from chromosomes %d and %d", parent_1.id, parent_2.id)
         child_chromosomes.append(crossover(parent_1, parent_2, input_shape))
+        logger.info("child spawn has id %d", child_chromosomes[-1].id)
         child_chromosomes.append(crossover(parent_2, parent_1, input_shape))
-        logger.info("child spawn has id %d", child_chromosomes.id)
+        logger.info("child spawn has id %d", child_chromosomes[-1].id)
     return child_chromosomes
 
 
