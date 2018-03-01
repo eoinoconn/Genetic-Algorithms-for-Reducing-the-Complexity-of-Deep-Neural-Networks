@@ -52,7 +52,7 @@ def get_best(max_generations, input_shape, training_data):
         population.extend(spawn_children(population, input_shape, logger))
 
         # remove poorest performers
-        population = population[(population.__len__() - POOL_SIZE):]
+        cleanse_population(population, logger)
 
         # mutate pool
         mutate_population(population, logger)
@@ -111,7 +111,9 @@ def assess_population_fitness(population, training_data, assessed_list, logger):
         mash_value = chromosome.mash()
         if mash_value in assessed_list:
             # chromosome already trained
-            logger.info("chromosome %d already trained as chromosome %d, age %d", chromosome.id,
+            logger.info("chromosome %d, age %d, already trained as chromosome %d, age %d",
+                        chromosome.id,
+                        chromosome.age,
                         assessed_list[mash_value][3],
                         assessed_list[mash_value][4])
             chromosome.assume_values(assessed_list[mash_value])
@@ -152,7 +154,17 @@ def spawn_children(population, input_shape, logger):
         logger.info("Spawning children from chromosomes %d and %d", parent_1.id, parent_2.id)
         child_chromosomes.append(crossover(parent_1, parent_2, input_shape))
         child_chromosomes.append(crossover(parent_2, parent_1, input_shape))
+        logger.info("child spawn has id %d", child_chromosomes.id)
     return child_chromosomes
+
+
+def cleanse_population(population, logger):
+    for chromosome in population[:(population.__len__() - POOL_SIZE)]:
+        logger.info("removing chromosome %d age %d", chromosome.id, chromosome.age)
+    population = population[(population.__len__() - POOL_SIZE):]
+    logger.info("Chromosomes still in population")
+    for chromosome in population:
+        logger.info("ID %d,  Age %d", chromosome.id, chromosome.age)
 
 
 def age_population(population):
