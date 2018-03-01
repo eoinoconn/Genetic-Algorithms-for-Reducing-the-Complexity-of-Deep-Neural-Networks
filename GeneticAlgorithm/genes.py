@@ -7,7 +7,7 @@ from GeneticAlgorithm.fitness import assess_chromosome_fitness
 from GeneticAlgorithm.chromosome_model import ChromosomeModel
 
 MAX_LAYERS = 50
-LAYER_DEPTH = 8
+LAYER_DEPTH = 12
 
 
 class Genes(object):
@@ -51,8 +51,21 @@ class Genes(object):
     def get_layer(self, index):
         return self.genes[index]
 
-    def increment_age(self):
-        self.age += 1
+    def get_layer_type(self, index):
+        return self.get_layer(index)[0]
+
+    def save_layer_weights(self, index, weights_and_biases):
+        layer = self.get_layer(index)
+        layer[-1] = weights_and_biases
+        self.overwrite_layer(layer, index)
+
+    def save_batch_layer_weights(self, index, weights_and_biases):
+        layer = self.get_layer(index)
+        layer[-2] = weights_and_biases
+        self.overwrite_layer(layer, index)
+
+    def get_layer_weights(self, index):
+        return self.get_layer(index)[-1]
 
     def num_dense_layers(self):
         count = 0
@@ -79,6 +92,9 @@ class Genes(object):
         for x in range(0, self.__len__()):
             layer = self.get_layer(x)
             yield layer
+
+    def increment_age(self):
+        self.age += 1
 
     def find_flatten(self):
         count = 0
