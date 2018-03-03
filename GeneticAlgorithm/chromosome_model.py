@@ -36,15 +36,16 @@ class ChromosomeModel(object):
                 return model
 
         elif layer[0] == 2:                 # convolutional layer
-            model = Conv2D(layer[1], (layer[3], layer[3]))(model)
+            padding = get_padding(layer[5])
+            model = Conv2D(layer[1], (layer[3], layer[3]), padding=padding)(model)
             if layer[2] == 1:       # Batch normalisation layer
                 model = self.batch_normalisation(model)
             if layer[4] is not None:
                 model = self.activation(layer, model)
-            if layer[5] > 0:        # Pooling layer
+            if layer[6] > 0:        # Pooling layer
                 model = self.pooling_layer(model, layer)
-            if layer[7] > 0:    # Dropout layer
-                model = Dropout(layer[7])(model)
+            if layer[9] > 0:    # Dropout layer
+                model = Dropout(layer[9])(model)
             return model
 
         elif layer[0] == 3:                 # Flatten layer
@@ -56,6 +57,12 @@ class ChromosomeModel(object):
         else:
             raise NotImplementedError('Layers not yet implemented')
 
+    def get_padding(layer):
+        if layer == 0
+            return 'valid'
+        else:
+            return 'same'
+
     @staticmethod
     def activation(layer, model):
         return Activation(layer[4])(model)
@@ -66,10 +73,10 @@ class ChromosomeModel(object):
 
     @staticmethod
     def pooling_layer(input_layer, layer):
-        if layer[5] == 1:  # max pooling
-            return MaxPooling2D((layer[6], layer[6]))(input_layer)
+        if layer[6] == 1:  # max pooling
+            return MaxPooling2D((layer[7], layer[7]), strides=layer[8])(input_layer)
         else:
-            return AveragePooling2D((layer[6], layer[6]))(input_layer)
+            return AveragePooling2D((layer[7], layer[7]), strides=layer[8])(input_layer)
 
     @staticmethod
     def inception_module(input_layer):
