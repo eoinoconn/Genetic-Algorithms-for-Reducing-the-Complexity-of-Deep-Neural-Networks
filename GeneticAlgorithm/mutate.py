@@ -60,7 +60,7 @@ def change_dense_layer_parameter(genes, logger):
 
 
 def change_conv_layer_parameter(genes, logger):
-    rand = random.randrange(0, 5)
+    rand = random.randrange(0, 7)
     if rand == 0:   # change conv layer kernel size
         logger.info("Changing convolutional kernel size")
         change_conv_kernel(genes, logger)
@@ -78,6 +78,38 @@ def change_conv_layer_parameter(genes, logger):
     elif rand == 4:     # change dropout layer probability
         logger.info("Changing Conv dropout")
         return change_conv_layer_dropout(genes, logger)
+    elif rand == 5:     # change padding
+        logger.info("Changing Conv padding")
+        layer_index = get_random_conv_layer(genes)
+        layer = genes.get_layer(layer_index)
+        layer = random_conv_layer_padding(layer)
+        log_str = "padding type is " + layer[5]
+        logger.info(log_str)
+        genes.overwrite_layer(layer, layer_index)
+        return True
+    elif rand == 6:
+        logger.info("Changing pooling stride")
+        layer_index = get_random_conv_layer(genes)
+        layer = genes.get_layer(layer_index)
+        layer = random_pool_stride(layer)
+        logger.info("Pool stride now %d", layer[8])
+        genes.overwrite_layer(layer, layer_index)
+        return True
+
+
+def random_pool_stride(layer):
+    min_value, max_value, interval = config_min_max_interval('convolutional.layer.pool.stride')
+    layer[8] = random.randrange(min_value, max_value + 1, interval)
+    return layer
+
+
+def random_conv_layer_padding(layer):
+    padding_index = random.randrange(0, 2)
+    if padding_index == 0:
+        layer[5] = 'same'
+    else:
+        layer[5] = 'valid'
+    return layer
 
 
 def toggle_batch_normalisation(genes, logger):
@@ -225,10 +257,10 @@ def convolutional_layer():
     min_value, max_value, interval = config_min_max_interval('convolutional.layer.kernel')
     layer[3] = random.randrange(min_value, max_value + 1, interval)                           # Sets slide size
     layer[4] = set_activation()
-    min_value, max_value, interval = config_min_max_interval('pooling.type')
-    layer[5] = random.randrange(min_value, max_value + 1, interval)                           # Pooling type
-    min_value, max_value, interval = config_min_max_interval('pooling.filter')
-    layer[6] = random.randrange(min_value, max_value + 1, interval)                           # Pooling slide size
+    layer = random_pooling_type(layer)
+    layer = random_pooling_size(layer)
+    layer = random_conv_layer_padding(layer)
+    layer = random_pool_stride(layer)
     logger.info("added conv layer")
     return layer
 
@@ -242,10 +274,9 @@ def change_pooling(genes, logger):
     conv_layer_index = get_random_conv_layer(genes)
     layer = genes.get_layer(conv_layer_index)
     temporary_values = [layer[5], layer[6]]
-    min_value, max_value, interval = config_min_max_interval('pooling.type')
-    layer[5] = random.randrange(min_value, max_value + 1, interval)
-    min_value, max_value, interval = config_min_max_interval('pooling.filter')
-    layer[6] = random.randrange(min_value, max_value + 1, interval)
+    layer = random_pooling_type(layer)
+    layer = random_pooling_size(layer)
+    genes.overwrite(layer, conv_layer_index)
     if check_valid_geneset(genes, logger):
         logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
         return True
@@ -254,6 +285,18 @@ def change_pooling(genes, logger):
         layer[6] = temporary_values[1]
         logger.info("no pooling changes have occurred")
         return False
+
+
+def random_pooling_type(layer):
+    min_value, max_value, interval = config_min_max_interval('pooling.type')
+    layer[5] = random.randrange(min_value, max_value + 1, interval)
+    return layer
+
+
+def random_pooling_size(layer):
+    min_value, max_value, interval = config_min_max_interval('pooling.filter')
+    layer[6] = random.randrange(min_value, max_value + 1, interval)
+    return layer
 
 
 def get_random_conv_layer(genes):

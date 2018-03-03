@@ -7,7 +7,7 @@ from GeneticAlgorithm.fitness import assess_chromosome_fitness
 from GeneticAlgorithm.chromosome_model import ChromosomeModel
 
 MAX_LAYERS = 50
-LAYER_DEPTH = 8
+LAYER_DEPTH = 12
 
 
 class Genes(object):

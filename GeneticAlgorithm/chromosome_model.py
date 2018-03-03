@@ -36,8 +36,7 @@ class ChromosomeModel(object):
                 return model
 
         elif layer[0] == 2:                 # convolutional layer
-            padding = get_padding(layer[5])
-            model = Conv2D(layer[1], (layer[3], layer[3]), padding=padding)(model)
+            model = Conv2D(layer[1], (layer[3], layer[3]), padding=layer[5])(model)
             if layer[2] == 1:       # Batch normalisation layer
                 model = self.batch_normalisation(model)
             if layer[4] is not None:
@@ -56,12 +55,6 @@ class ChromosomeModel(object):
 
         else:
             raise NotImplementedError('Layers not yet implemented')
-
-    def get_padding(layer):
-        if layer == 0
-            return 'valid'
-        else:
-            return 'same'
 
     @staticmethod
     def activation(layer, model):
