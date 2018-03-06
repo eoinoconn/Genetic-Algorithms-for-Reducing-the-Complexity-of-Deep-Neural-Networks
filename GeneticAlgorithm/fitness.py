@@ -28,7 +28,9 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
     # log geneset model
     print_summary(model, print_fn=logger_fitness.info)
 
-    logger_fitness.info("Model built successfully, compiling...")
+    logger_fitness.info("Model built successfully, restoring weights...")
+
+    reuse_previous_weights(genes, model, logger_fitness)
 
     # get hyperparameters
     hyper_params = genes.hyperparameters
@@ -93,11 +95,15 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                              callbacks=callbacks,
                              verbose=0)
 
-    logger_fitness.info("Model trained successfully, beginning evaluation...")
+    logger_fitness.info("Model trained successfully,  saving weights...")
 
     # store num of model parameters
     parameters = model.count_params()
     accuracy = hist.history['val_acc'][-1]
+
+    genes = save_model_weights(genes, model, logger_fitness)
+
+    logger_fitness.info("Weights saved, evaluating model...")
 
     if evaluate_best:
         if config['training.parameters'].getboolean('overwrite_hyperparameters'):
@@ -130,3 +136,65 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
 def cost_function(accuracy, efficiency_balance, parameters):
     return accuracy - (efficiency_balance * parameters)
+
+
+def reuse_previous_weights(genes, model, logger):
+    model_buffer = 1
+    for i in range(genes.__len__()):
+        weights_and_biases = genes.get_layer_weights(i)
+        if weights_and_biases != 0:
+            layer = genes.get_layer(i)
+            if layer[0] == 1:
+                model.layers[i+model_buffer].set_weights(layer[-1])
+                model_buffer += 2   # increase buffer for dropout and activation
+            elif layer[0] == 2:
+                model.layers[i + model_buffer].set_weights(layer[-1])
+                if layer[2] > 0:    # batch normalisation
+                    model_buffer += 1
+                    model.layers[i + model_buffer].set_weights(layer[-1])
+                model_buffer += 1   # activation
+                if layer[5] > 0:
+                    model_buffer += 1
+            elif layer[0] == 3:
+                continue
+            elif layer[0] == 4:
+                inception_weights_and_biases = genes.get_layer_weights(i)
+                for weight_and_bias in inception_weights_and_biases:
+                    model.layers[i + model_buffer].set_weights(weight_and_bias)
+                    model_buffer += 1
+                model_buffer += 1   # concatenation layer
+            else:
+                raise NotImplementedError
+
+
+def save_model_weights(genes, model, logger):
+    model_buffer = 1
+    for i in range(genes.__len__()):
+        weights_and_biases = model.layers[i + model_buffer].get_weights()
+        layer = genes.get_layer(i)
+        if layer[0] == 1:
+            layer[-1] = weights_and_biases
+            model_buffer += 2   # dropout and activation
+        elif layer[0] == 2:
+            layer[-1] = weights_and_biases
+            if layer[2] > 0:    # batch normalisation
+                model_buffer += 1
+                layer[-2] = model.layers[i + model_buffer+1].get_weights()
+            model_buffer += 1   # activation
+            if layer[5] > 0:    # pooling
+                model_buffer += 1
+        elif layer[0] == 3:
+            continue
+        elif layer[0] == 4:
+            inception_weights_and_biases = []
+            for j in range(0, 6):
+                if j == 2:
+                    continue
+                inception_weights_and_biases.append(model.layers[i + model_buffer + j].get_weights())
+                model_buffer += 1
+            model_buffer += 1   # concatenation layer
+            layer[-1] = inception_weights_and_biases
+        else:
+            raise NotImplementedError
+        genes.overwrite_layer(layer, i)
+        return genes

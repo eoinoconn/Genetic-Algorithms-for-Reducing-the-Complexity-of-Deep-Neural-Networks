@@ -36,6 +36,64 @@ def mutate(genes):
             mutation_done = True
 
 
+def dense_layer():
+    """
+    return a randomly generated dense layer
+
+    # The first value of the layer array is 1 for a dense layer
+     Other variables:
+       1   layer units
+       2   input layer
+       3   dropout
+       4   activation
+    :return:
+    """
+    logger = logging.getLogger('mutate')
+    layer = [0 for x in range(LAYER_DEPTH)]
+    layer[0] = 1
+    min_value, max_value, interval = config_min_max_interval('dense.layer.units')
+    layer[1] = 2 ** random.randrange(min_value, max_value + 1, interval)     # sets layer units
+    min_value, max_value, interval = config_min_max_interval('dense.layer.dropout')
+    layer[3] = (random.randrange(min_value, max_value + 1, interval)) / 10     # Set dropout probability
+    layer[4] = set_activation()
+    logger.info("added dense layer")
+    return layer
+
+
+def convolutional_layer():
+    """
+    returns a randomly generated convolutional layer
+
+    The first value of the layer array is 2 for a convolutional layer
+    Other variables:
+       1   layer units
+       2   batch normalisation (Default 0 = None)
+       3   kernal size
+       4   activation
+       5   pooling type(Default 0 = None)
+       6   pool size
+       7   Dropout (Default 0 = None)
+       -1  weights & biases
+       -2  weights & biases (batch normalisation)
+    :return:
+    """
+    logger = logging.getLogger('mutate')
+    layer = [0 for x in range(0, LAYER_DEPTH)]
+    layer[0] = 2    # Sets convolutional layer
+    min_value, max_value, interval = config_min_max_interval('convolutional.layer.filter')
+    layer[1] = 2 ** random.randrange(min_value, max_value + 1, interval)                      # sets layer units
+    min_value, max_value, interval = config_min_max_interval('convolutional.layer.kernel')
+    layer[3] = random.randrange(min_value, max_value + 1, interval)                           # Sets slide size
+    layer[4] = set_activation()
+    layer = random_pooling_type(layer)
+    layer = random_pooling_size(layer)
+    layer = random_conv_layer_padding(layer)
+    layer = random_pool_stride(layer)
+    logger.info("added conv layer")
+    return layer
+
+
+
 def change_parameters(genes, logger):
     while True:
         layer_index = random.randrange(0, genes.__len__())
@@ -60,7 +118,7 @@ def change_dense_layer_parameter(genes, logger):
 
 
 def change_conv_layer_parameter(genes, logger):
-    rand = random.randrange(0, 5)
+    rand = random.randrange(0, 7)
     if rand == 0:   # change conv layer kernel size
         logger.info("Changing convolutional kernel size")
         change_conv_kernel(genes, logger)
@@ -78,6 +136,38 @@ def change_conv_layer_parameter(genes, logger):
     elif rand == 4:     # change dropout layer probability
         logger.info("Changing Conv dropout")
         return change_conv_layer_dropout(genes, logger)
+    elif rand == 5:     # change padding
+        logger.info("Changing Conv padding")
+        layer_index = get_random_conv_layer(genes)
+        layer = genes.get_layer(layer_index)
+        layer = random_conv_layer_padding(layer)
+        log_str = "padding type is " + layer[5]
+        logger.info(log_str)
+        genes.overwrite_layer(layer, layer_index)
+        return True
+    elif rand == 6:
+        logger.info("Changing pooling stride")
+        layer_index = get_random_conv_layer(genes)
+        layer = genes.get_layer(layer_index)
+        layer = random_pool_stride(layer)
+        logger.info("Pool stride now %d", layer[8])
+        genes.overwrite_layer(layer, layer_index)
+        return True
+
+
+def random_pool_stride(layer):
+    min_value, max_value, interval = config_min_max_interval('convolutional.layer.pool.stride')
+    layer[8] = random.randrange(min_value, max_value + 1, interval)
+    return layer
+
+
+def random_conv_layer_padding(layer):
+    padding_index = random.randrange(0, 2)
+    if padding_index == 0:
+        layer[5] = 'same'
+    else:
+        layer[5] = 'valid'
+    return layer
 
 
 def toggle_batch_normalisation(genes, logger):
@@ -94,11 +184,12 @@ def toggle_batch_normalisation(genes, logger):
                 layer[2] = 0
             else:
                 layer[2] = 1
-            logger.info("Added batch normalisation to layer %d", layer_index)
             genes.overwrite_layer(layer, layer_index)
             if check_valid_geneset(genes, logger):
+                logger.info("toggling batch normalisation to layer %d", layer_index)
                 return True
             else:
+                logger.info("toggling batch normalisation to layer %d failed", layer_index)
                 genes.overwrite_layer(old_layer, layer_index)
                 return False
 
@@ -110,10 +201,10 @@ def change_conv_kernel(genes, logger):
         layer = genes.get_layer(layer_index)
         if layer[0] == 2:   # check if conv layer
             old_layer = layer
-            logger.info("set kernel size to %d", layer[3])
             layer[3] = random.randrange(min_value, max_value+1, interval)
             genes.overwrite_layer(layer, layer_index)
             if check_valid_geneset(genes, logger):
+                logger.info("set kernel size to %d", layer[3])
                 break
             else:
                 genes.overwrite_layer(old_layer, layer_index)
@@ -205,34 +296,6 @@ def mutate_hyperparameters(genes):
     genes.set_hyperparameters(hyperparameters)
 
 
-# The first value of the layer array is 2 for a convolutional layer
-# Other variables:
-#   1   layer units
-#   2   batch normalisation (Default 0 = None)
-#   3   kernal size
-#   4   activation
-#   5   pooling type(Default 0 = None)
-#   6   pool size
-#   7   Dropout (Default 0 = None)
-#   -1  weights & biases
-#   -2  weights & biases (batch normalisation)
-def convolutional_layer():
-    logger = logging.getLogger('mutate')
-    layer = [0 for x in range(0, LAYER_DEPTH)]
-    layer[0] = 2    # Sets convolutional layer
-    min_value, max_value, interval = config_min_max_interval('convolutional.layer.filter')
-    layer[1] = 2 ** random.randrange(min_value, max_value + 1, interval)                      # sets layer units
-    min_value, max_value, interval = config_min_max_interval('convolutional.layer.kernel')
-    layer[3] = random.randrange(min_value, max_value + 1, interval)                           # Sets slide size
-    layer[4] = set_activation()
-    min_value, max_value, interval = config_min_max_interval('pooling.type')
-    layer[5] = random.randrange(min_value, max_value + 1, interval)                           # Pooling type
-    min_value, max_value, interval = config_min_max_interval('pooling.filter')
-    layer[6] = random.randrange(min_value, max_value + 1, interval)                           # Pooling slide size
-    logger.info("added conv layer")
-    return layer
-
-
 # Adds pooling to genes
 #   0   no pooling (Default)
 #   1   max pooling
@@ -242,10 +305,9 @@ def change_pooling(genes, logger):
     conv_layer_index = get_random_conv_layer(genes)
     layer = genes.get_layer(conv_layer_index)
     temporary_values = [layer[5], layer[6]]
-    min_value, max_value, interval = config_min_max_interval('pooling.type')
-    layer[5] = random.randrange(min_value, max_value + 1, interval)
-    min_value, max_value, interval = config_min_max_interval('pooling.filter')
-    layer[6] = random.randrange(min_value, max_value + 1, interval)
+    layer = random_pooling_type(layer)
+    layer = random_pooling_size(layer)
+    genes.overwrite(layer, conv_layer_index)
     if check_valid_geneset(genes, logger):
         logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
         return True
@@ -254,6 +316,18 @@ def change_pooling(genes, logger):
         layer[6] = temporary_values[1]
         logger.info("no pooling changes have occurred")
         return False
+
+
+def random_pooling_type(layer):
+    min_value, max_value, interval = config_min_max_interval('pooling.type')
+    layer[5] = random.randrange(min_value, max_value + 1, interval)
+    return layer
+
+
+def random_pooling_size(layer):
+    min_value, max_value, interval = config_min_max_interval('pooling.filter')
+    layer[6] = random.randrange(min_value, max_value + 1, interval)
+    return layer
 
 
 def get_random_conv_layer(genes):
@@ -281,25 +355,6 @@ def get_random_dense_layer(genes):
 def flatten_layer():
     layer = [0 for x in range(0, LAYER_DEPTH)]
     layer[0] = 3
-    return layer
-
-
-# The first value of the layer array is 1 for a dense layer
-# Other variables:
-#   1   layer units
-#   2   input layer
-#   3   dropout
-#   4   activation
-def dense_layer():
-    logger = logging.getLogger('mutate')
-    layer = [0 for x in range(LAYER_DEPTH)]
-    layer[0] = 1
-    min_value, max_value, interval = config_min_max_interval('dense.layer.units')
-    layer[1] = 2 ** random.randrange(min_value, max_value + 1, interval)     # sets layer units
-    min_value, max_value, interval = config_min_max_interval('dense.layer.dropout')
-    layer[3] = (random.randrange(min_value, max_value + 1, interval)) / 10     # Set dropout probability
-    layer[4] = set_activation()
-    logger.info("added dense layer")
     return layer
 
 
@@ -380,6 +435,3 @@ def remove_layer(genes):
         genes.remove_layer(layer_remove_index)
         logger.info("removed layer type %d", layer[0])
         break
-
-
-
