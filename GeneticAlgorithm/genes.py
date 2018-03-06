@@ -142,7 +142,7 @@ class Genes(object):
         mash.append(self.hyperparameters)
         sum = 0
         for layer in mash:
-            sum += hash(frozenset(layer))
+            sum += hash(frozenset(layer[:-2]))
         return hash(sum)
 
     def assume_values(self, values):
