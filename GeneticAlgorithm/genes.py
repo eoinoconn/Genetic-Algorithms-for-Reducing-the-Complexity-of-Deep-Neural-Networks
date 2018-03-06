@@ -51,8 +51,21 @@ class Genes(object):
     def get_layer(self, index):
         return self.genes[index]
 
-    def increment_age(self):
-        self.age += 1
+    def get_layer_type(self, index):
+        return self.get_layer(index)[0]
+
+    def save_layer_weights(self, index, weights_and_biases):
+        layer = self.get_layer(index)
+        layer[-1] = weights_and_biases
+        self.overwrite_layer(layer, index)
+
+    def save_batch_layer_weights(self, index, weights_and_biases):
+        layer = self.get_layer(index)
+        layer[-2] = weights_and_biases
+        self.overwrite_layer(layer, index)
+
+    def get_layer_weights(self, index):
+        return self.get_layer(index)[-1]
 
     def num_dense_layers(self):
         count = 0
@@ -79,6 +92,9 @@ class Genes(object):
         for x in range(0, self.__len__()):
             layer = self.get_layer(x)
             yield layer
+
+    def increment_age(self):
+        self.age += 1
 
     def find_flatten(self):
         count = 0
@@ -126,7 +142,7 @@ class Genes(object):
         mash.append(self.hyperparameters)
         sum = 0
         for layer in mash:
-            sum += hash(frozenset(layer))
+            sum += hash(frozenset(layer[:-2]))
         return hash(sum)
 
     def assume_values(self, values):
@@ -137,7 +153,7 @@ class Genes(object):
     def __str__(self):
         str = self.hyperparameters.__str__() + "\n"
         for layer in self.iterate_layers():
-            str += layer.__str__() + "\n"
+            str += layer[:-2].__str__() + "\n"
         return str
 
     def __len__(self):
