@@ -1,7 +1,8 @@
 from GeneticAlgorithm.genes import Genes, LAYER_DEPTH, MAX_LAYERS
-from GeneticAlgorithm.utils import *
+from GeneticAlgorithm.utils import intermittent_logging, config_min_max_interval, get_config, check_valid_geneset
 import random
 import logging
+import configparser
 
 
 def mutate(genes):

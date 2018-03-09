@@ -150,9 +150,9 @@ def reuse_previous_weights(genes, model, logger):
                 model_buffer += 2   # increase buffer for dropout and activation
             elif layer[0] == 2:
                 model.layers[i + model_buffer].set_weights(layer[-1])
-                if layer[2] > 0:    # batch normalisation
+                if layer[10] > 0:    # batch normalisation
                     model_buffer += 1
-                    model.layers[i + model_buffer].set_weights(layer[-1])
+                    model.layers[i + model_buffer].set_weights(layer[-2])
                 model_buffer += 1   # activation
                 if layer[5] > 0:
                     model_buffer += 1
