@@ -121,6 +121,10 @@ def assess_population_fitness(population, training_data, assessed_list, logger):
             # chromosome not trained before
             logger.info("getting fitness of chromosome %d", chromosome.id)
             chromosome.assess_fitness(training_data)
+            logger.info("fitness: %f, Accuracy: %f, Parameters: %d", 
+                        chromosome.fitness,
+                        chromosome.accuracy,
+                        chromosome.parameters)
             add_assessed_to_dict(chromosome, assessed_list)
     population.sort(key=operator.attrgetter('fitness'))
     return population[-1]
