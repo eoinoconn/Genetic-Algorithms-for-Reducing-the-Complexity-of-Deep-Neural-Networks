@@ -36,7 +36,7 @@ class ChromosomeModel(object):
                 return model
 
         elif layer[0] == 2:                 # convolutional layer
-            model = Conv2D(layer[1], layer[3], strides=layer[2], padding=layer[5])(model)
+            model = Conv2D(layer[1], layer[3], strides=layer[2], padding=layer[7])(model)
             if layer[10] == 1:       # Batch normalisation layer
                 model = self.batch_normalisation(model)
             if layer[4] is not None:

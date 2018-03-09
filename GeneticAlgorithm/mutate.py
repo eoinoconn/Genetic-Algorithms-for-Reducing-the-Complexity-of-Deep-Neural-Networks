@@ -181,9 +181,9 @@ def random_pool_stride(layer):
 def random_conv_layer_padding(layer):
     padding_index = random.randrange(0, 2)
     if padding_index == 0:
-        layer[5] = 'same'
+        layer[7] = 'same'
     else:
-        layer[5] = 'valid'
+        layer[7] = 'valid'
     return layer
 
 

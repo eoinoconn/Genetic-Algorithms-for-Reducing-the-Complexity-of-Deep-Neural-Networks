@@ -177,9 +177,9 @@ def save_model_weights(genes, model, logger):
             model_buffer += 2   # dropout and activation
         elif layer[0] == 2:
             layer[-1] = weights_and_biases
-            if layer[2] > 0:    # batch normalisation
+            if layer[10] > 0:    # batch normalisation
                 model_buffer += 1
-                layer[-2] = model.layers[i + model_buffer+1].get_weights()
+                layer[-2] = model.layers[i + model_buffer].get_weights()
             model_buffer += 1   # activation
             if layer[5] > 0:    # pooling
                 model_buffer += 1
