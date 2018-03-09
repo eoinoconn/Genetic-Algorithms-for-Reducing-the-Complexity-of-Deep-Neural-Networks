@@ -114,9 +114,9 @@ else:
 
 accuracy = loss_and_metrics[1]
 
-logger_fitness.info("Model evaluated successfully, fitness = %.6f, accuracy = %.6f, parameters = %d\n\n",
+logger_fitness.info("Model evaluated successfully, accuracy = %.6f, parameters = %d\n\n",
                         accuracy,
                         parameters)
-print("Model evaluated successfully, fitness = %.6f, accuracy = %.6f, parameters = %d\n\n",
+print("Model evaluated successfully, accuracy = %.6f, parameters = %d\n\n",
                         accuracy,
                         parameters)
