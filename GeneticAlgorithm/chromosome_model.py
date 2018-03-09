@@ -36,8 +36,8 @@ class ChromosomeModel(object):
                 return model
 
         elif layer[0] == 2:                 # convolutional layer
-            model = Conv2D(layer[1], (layer[3], layer[3]), padding=layer[5])(model)
-            if layer[2] == 1:       # Batch normalisation layer
+            model = Conv2D(layer[1], layer[3], strides=layer[2], padding=layer[5])(model)
+            if layer[10] == 1:       # Batch normalisation layer
                 model = self.batch_normalisation(model)
             if layer[4] is not None:
                 model = self.activation(layer, model)
@@ -66,10 +66,10 @@ class ChromosomeModel(object):
 
     @staticmethod
     def pooling_layer(input_layer, layer):
-        if layer[6] == 1:  # max pooling
-            return MaxPooling2D((layer[7], layer[7]), strides=layer[8])(input_layer)
+        if layer[5] == 1:  # max pooling
+            return MaxPooling2D((layer[6], layer[6]), strides=layer[8])(input_layer)
         else:
-            return AveragePooling2D((layer[7], layer[7]), strides=layer[8])(input_layer)
+            return AveragePooling2D((layer[6], layer[6]), strides=layer[8])(input_layer)
 
     @staticmethod
     def inception_module(input_layer):

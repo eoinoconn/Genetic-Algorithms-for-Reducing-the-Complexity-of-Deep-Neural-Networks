@@ -67,12 +67,15 @@ def convolutional_layer():
     The first value of the layer array is 2 for a convolutional layer
     Other variables:
        1   layer units
-       2   batch normalisation (Default 0 = None)
+       2   stride
        3   kernal size
        4   activation
        5   pooling type(Default 0 = None)
        6   pool size
-       7   Dropout (Default 0 = None)
+       7   Conv layer padding
+       8   Pool stride
+       9   Dropout (Default 0 = None)
+       10   batch normalisation (Default 0 = None)
        -1  weights & biases
        -2  weights & biases (batch normalisation)
     :return:
@@ -83,7 +86,8 @@ def convolutional_layer():
     min_value, max_value, interval = config_min_max_interval('convolutional.layer.filter')
     layer[1] = 2 ** random.randrange(min_value, max_value + 1, interval)                      # sets layer units
     min_value, max_value, interval = config_min_max_interval('convolutional.layer.kernel')
-    layer[3] = random.randrange(min_value, max_value + 1, interval)                           # Sets slide size
+    layer[3] = random.randrange(min_value, max_value + 1, interval)
+    layer = random_conv_stride(layer)
     layer[4] = set_activation()
     layer = random_pooling_type(layer)
     layer = random_pooling_size(layer)
@@ -92,6 +96,11 @@ def convolutional_layer():
     logger.info("added conv layer")
     return layer
 
+
+def random_conv_stride(layer):
+    min_value, max_value, interval = config_min_max_interval('convolutional.layer.stride')
+    layer[2] = random.randrange(min_value, layer[3] + 1, interval)
+    return layer
 
 
 def change_parameters(genes, logger):
@@ -118,7 +127,7 @@ def change_dense_layer_parameter(genes, logger):
 
 
 def change_conv_layer_parameter(genes, logger):
-    rand = random.randrange(0, 7)
+    rand = random.randrange(0, 8)
     if rand == 0:   # change conv layer kernel size
         logger.info("Changing convolutional kernel size")
         change_conv_kernel(genes, logger)
@@ -153,11 +162,19 @@ def change_conv_layer_parameter(genes, logger):
         logger.info("Pool stride now %d", layer[8])
         genes.overwrite_layer(layer, layer_index)
         return True
+    elif rand == 7:
+        logger.info("Changing conv stride")
+        layer_index = get_random_conv_layer(genes)
+        layer = genes.get_layer(layer_index)
+        layer = random_conv_stride(layer)
+        logger.info("Conv stride now %d", layer[2])
+        genes.overwrite_layer(layer, layer_index)
+        return True
 
 
 def random_pool_stride(layer):
     min_value, max_value, interval = config_min_max_interval('convolutional.layer.pool.stride')
-    layer[8] = random.randrange(min_value, max_value + 1, interval)
+    layer[8] = random.randrange(min_value, layer[6] + 1, interval)
     return layer
 
 
@@ -180,10 +197,10 @@ def toggle_batch_normalisation(genes, logger):
         layer = genes.get_layer(layer_index)
         if layer[0] == 2:   # check if conv layer
             old_layer = layer
-            if layer[2] == 1:
-                layer[2] = 0
+            if layer[10] == 1:
+                layer[10] = 0
             else:
-                layer[2] = 1
+                layer[10] = 1
             genes.overwrite_layer(layer, layer_index)
             if check_valid_geneset(genes, logger):
                 logger.info("toggling batch normalisation to layer %d", layer_index)
