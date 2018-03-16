@@ -198,4 +198,4 @@ def save_model_weights(genes, model, logger):
         else:
             raise NotImplementedError
         genes.overwrite_layer(layer, i)
-        return genes
+    return genes
