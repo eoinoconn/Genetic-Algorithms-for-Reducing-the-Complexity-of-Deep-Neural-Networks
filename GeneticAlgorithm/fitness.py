@@ -139,8 +139,8 @@ def cost_function(accuracy, efficiency_balance, parameters):
 
 
 def reuse_previous_weights(genes, model, logger):
-    for i in range(genes.__len__()):
-        model_buffer = 1
+    model_buffer = 1
+    for i in range(0, genes.__len__()):
         weights_and_biases = genes.get_layer_weights(i)
         if weights_and_biases != 0:
             logger.info("re-using weights for layer %d", i)
@@ -169,8 +169,8 @@ def reuse_previous_weights(genes, model, logger):
 
 
 def save_model_weights(genes, model, logger):
-    for i in range(genes.__len__()):
-        model_buffer = 1
+    model_buffer = 1
+    for i in range(0, genes.__len__()):
         weights_and_biases = model.layers[i + model_buffer].get_weights()
         layer = genes.get_layer(i)
         if layer[0] == 1:
