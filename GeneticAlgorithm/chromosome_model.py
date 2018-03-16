@@ -29,6 +29,8 @@ class ChromosomeModel(object):
                 return Dense(self.classes, activation='softmax')(model)
             else:                       # hidden layer
                 model = Dense(layer[1])(model)
+                if layer[-1] is not 0:
+                    model.layers[-1].set_weights(layer[-1])
                 if layer[4] is not None:
                     model = self.activation(layer, model)
                 if layer[3] > 0:    # Dropout layer
@@ -37,8 +39,12 @@ class ChromosomeModel(object):
 
         elif layer[0] == 2:                 # convolutional layer
             model = Conv2D(layer[1], layer[3], strides=layer[2], padding=layer[7])(model)
+            if layer[-1] is not 0:
+                model.layers[-1].set_weights(layer[-1])
             if layer[10] == 1:       # Batch normalisation layer
                 model = self.batch_normalisation(model)
+                if layer[-2] is not 0:
+                    model.layers[-1].set_weights(layer[-2])
             if layer[4] is not None:
                 model = self.activation(layer, model)
             if layer[6] > 0:        # Pooling layer
@@ -51,7 +57,7 @@ class ChromosomeModel(object):
             return Flatten()(model)
 
         elif layer[0] == 4:                 # Inception layer
-            return self.inception_module(model)
+            return self.inception_module(model, layer)
 
         else:
             raise NotImplementedError('Layers not yet implemented')
@@ -72,7 +78,9 @@ class ChromosomeModel(object):
             return AveragePooling2D((layer[6], layer[6]), strides=layer[8])(input_layer)
 
     @staticmethod
-    def inception_module(input_layer):
+    def inception_module(input_layer, layer):
+        if layer[-1] is not 0:
+            inception_weights_and_biases = layer[-1]
         tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_layer)
         tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')(tower_1)
         tower_2 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_layer)

@@ -30,7 +30,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
     logger_fitness.info("Model built successfully")
 
-    reuse_previous_weights(genes, model, logger_fitness)
+    # reuse_previous_weights(genes, model, logger_fitness)
 
     # get hyperparameters
     hyper_params = genes.hyperparameters
