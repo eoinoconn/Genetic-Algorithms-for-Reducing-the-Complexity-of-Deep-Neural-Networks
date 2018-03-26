@@ -28,9 +28,10 @@ class ChromosomeModel(object):
             if output_layer:            # output layer
                 return Dense(self.classes, activation='softmax')(model)
             else:                       # hidden layer
-                model = Dense(layer[1])(model)
                 if layer[-1] is not 0:
-                    model.layers[-1].set_weights(layer[-1])
+                    model = Dense(layer[1])(model).set_weights(layer[-1])
+                else:
+                    model = Dense(layer[1])(model)
                 if layer[4] is not None:
                     model = self.activation(layer, model)
                 if layer[3] > 0:    # Dropout layer
@@ -38,13 +39,15 @@ class ChromosomeModel(object):
                 return model
 
         elif layer[0] == 2:                 # convolutional layer
-            model = Conv2D(layer[1], layer[3], strides=layer[2], padding=layer[7])(model)
             if layer[-1] is not 0:
-                model.layers[-1].set_weights(layer[-1])
+                model = Conv2D(layer[1], layer[3], strides=layer[2], padding=layer[7])(model).set_weights(layer[-1])
+            else:
+                model = Conv2D(layer[1], layer[3], strides=layer[2], padding=layer[7])(model)
             if layer[10] == 1:       # Batch normalisation layer
-                model = self.batch_normalisation(model)
                 if layer[-2] is not 0:
-                    model.layers[-1].set_weights(layer[-2])
+                    model = self.batch_normalisation(model).set_weights(layer[-2])
+                else:
+                    model = self.batch_normalisation(model)
             if layer[4] is not None:
                 model = self.activation(layer, model)
             if layer[6] > 0:        # Pooling layer
