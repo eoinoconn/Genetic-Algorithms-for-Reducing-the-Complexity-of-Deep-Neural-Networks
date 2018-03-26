@@ -32,10 +32,10 @@ def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
     for layer in genes.iterate_layers():
         if layer[0] == 2:
             if layer[7] == 'same':
-                padding = 1
+                current_dimension = conv_layer_output_size(current_dimension, 0, layer[2], 0)
             else:
                 padding = 0
-            current_dimension=conv_layer_output_size(current_dimension, layer[3], layer[2], padding)
+                current_dimension = conv_layer_output_size(current_dimension, layer[3], layer[2], padding)
             if layer[5] is not 0:
                 current_dimension = pooling_layer_output_size(current_dimension, layer[6], layer[8])
         elif layer[0] == 3:
