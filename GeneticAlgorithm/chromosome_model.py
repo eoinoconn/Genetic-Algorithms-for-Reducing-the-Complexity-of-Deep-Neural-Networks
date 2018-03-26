@@ -38,14 +38,14 @@ class ChromosomeModel(object):
 
         elif layer[0] == 2:                 # convolutional layer
             model = Conv2D(layer[1], layer[3], strides=layer[2], padding=layer[7])(model)
-            logger.info("output dimensions %d", model.shape[1:3])
+            logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
             if layer[10] == 1:       # Batch normalisation layer
                 model = self.batch_normalisation(model)
             if layer[4] is not None:
                 model = self.activation(layer, model)
             if layer[5] > 0:        # Pooling layer
                 model = self.pooling_layer(model, layer)
-                logger.info("output dimensions %d", model.shape[1:3])
+                logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
             if layer[9] > 0:    # Dropout layer
                 model = Dropout(layer[9])(model)
             return model
