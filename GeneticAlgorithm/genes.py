@@ -153,7 +153,11 @@ class Genes(object):
     def __str__(self):
         str = self.hyperparameters.__str__() + "\n"
         for layer in self.iterate_layers():
-            str += layer[:-2].__str__() + "\n"
+            if layer[-1] is not 0:
+                shape1 = layer[-1].shape
+            if layer[-2] is not 0:
+                shape2 = layer[-1].shape
+            str += layer[:-2].__str__() + shape1 + shape2 + "\n"
         return str
 
     def __len__(self):

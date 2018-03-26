@@ -121,19 +121,21 @@ def cost_function(accuracy, efficiency_balance, parameters):
 def reuse_previous_weights(genes, model, logger):
     model_buffer = 1
     for i in range(0, genes.__len__()):
-        logger.info("re-using weights for layer %d", i)
         layer = genes.get_layer(i)
         if layer[0] == 1:
             if layer[-1] is not 0:
                 model.layers[i + model_buffer].set_weights(layer[-1])
+                logger.info("re-using weights for dense layer %d", i)
             model_buffer += 2  # increase buffer for dropout and activation
         elif layer[0] == 2:
             if layer[-1] is not 0:
                 model.layers[i + model_buffer].set_weights(layer[-1])
+                logger.info("re-using weights for conv layer %d", i)
             if layer[10] > 0:  # batch normalisation
                 model_buffer += 1
                 if layer[-2] is not 0:
                     model.layers[i + model_buffer].set_weights(layer[-2])
+                    logger.info("re-using weights for batch normalisation layer %d", i)
             model_buffer += 1  # activation
             if layer[5] > 0:
                 model_buffer += 1
