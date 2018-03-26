@@ -28,7 +28,7 @@ def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
     """
 
     current_dimension = genes.input_shape[0]
-    logger.info("checking for valid geneset for ; conv dimensions %d", current_dimension)
+    logger.info("checking for valid geneset for %d; conv dimensions %d", genes.id, current_dimension)
     for layer in genes.iterate_layers():
         if layer[0] == 2:
             if layer[7] == 'same':
