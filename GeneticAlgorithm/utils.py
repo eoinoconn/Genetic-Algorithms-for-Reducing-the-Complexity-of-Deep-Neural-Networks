@@ -52,11 +52,11 @@ def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
 
 
 def conv_layer_output_size(input_width, kernel_size, stride_size, padding_amount):
-    return (input_width-kernel_size + (2 * padding_amount))/stride_size + 1
+    return int((input_width-kernel_size + (2 * padding_amount))/stride_size)
 
 
 def pooling_layer_output_size(input_width, kernel_size, stride_size):
-    return (input_width - kernel_size)/stride_size + 1
+    return int((input_width - kernel_size)/stride_size + 1)
 
 
 def load_known_architecture(file_name, input_shape):
