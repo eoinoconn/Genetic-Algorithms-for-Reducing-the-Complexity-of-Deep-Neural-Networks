@@ -451,5 +451,5 @@ def remove_layer(genes):
                 (layer[0] == 1 and genes.num_dense_layers() < 2):
             continue
         genes.remove_layer(layer_remove_index)
-        logger.info("removed layer type %d", layer[0])
+        logger.info("removed layer type %d at index %d", layer[0], layer_remove_index)
         break

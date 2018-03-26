@@ -23,7 +23,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
     # build model
     logger_fitness.info("building model")
-    model = genes.build_model()
+    model = genes.build_model(logger_fitness)
 
     # log geneset model
     print_summary(model, print_fn=logger_fitness.info)

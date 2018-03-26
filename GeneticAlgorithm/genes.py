@@ -129,9 +129,9 @@ class Genes(object):
         print_summary(self.build_model(), print_fn=logger.info)
         logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness, self.accuracy, self.parameters)
 
-    def build_model(self):
+    def build_model(self, logger):
         model = ChromosomeModel(self.genes, 10, self.input_shape, self.__len__())
-        return model.build_model()
+        return model.build_model(logger)
 
     @property
     def logger(self):
