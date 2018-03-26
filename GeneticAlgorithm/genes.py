@@ -152,6 +152,8 @@ class Genes(object):
 
     def __str__(self):
         str = self.hyperparameters.__str__() + "\n"
+        shape1 = '0'
+        shape2 = '0'
         for layer in self.iterate_layers():
             if layer[-1] is not 0:
                 shape1 = layer[-1].shape
