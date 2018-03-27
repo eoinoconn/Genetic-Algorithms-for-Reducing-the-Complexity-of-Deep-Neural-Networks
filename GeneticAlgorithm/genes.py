@@ -126,7 +126,7 @@ class Genes(object):
         self.log_geneset()
         logger = logging.getLogger(log_file)
         logger.info("new best chromosome, id = %d, age = %d", self.id, self.age)
-        print_summary(self.build_model(), print_fn=logger.info)
+        print_summary(self.build_model(logger), print_fn=logger.info)
         logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness, self.accuracy, self.parameters)
 
     def build_model(self, logger):
@@ -155,10 +155,6 @@ class Genes(object):
         shape1 = '0'
         shape2 = '0'
         for layer in self.iterate_layers():
-            if layer[-1] is not 0:
-                shape1 = layer[-1].shape
-            if layer[-2] is not 0:
-                shape2 = layer[-1].shape
             str += layer[:-2].__str__() + shape1 + shape2 + "\n"
         return str
 
