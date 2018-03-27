@@ -48,6 +48,11 @@ class Genes(object):
             for i in range(index, genes_length):
                 self.genes[i] = self.genes[i + 1]
 
+    def remove_weights(self, from_index):
+        for i in range(from_index, self.__len__()):
+            self.genes[i][-1] = 0
+            self.genes[i][-2] = 0
+
     def get_layer(self, index):
         return self.genes[index]
 

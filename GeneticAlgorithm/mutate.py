@@ -222,6 +222,7 @@ def change_conv_kernel(genes, logger):
             layer[3] = random.randrange(min_value, max_value+1, interval)
             genes.overwrite_layer(layer, layer_index)
             if check_valid_geneset(genes, logger):
+                genes.remove_weights(layer_index)
                 logger.info("set kernel size to %d", layer[3])
                 break
             else:
@@ -236,6 +237,7 @@ def change_dense_units(genes, logger):
         if layer[0] == 1:   # check if dense layer
             layer[1] = 2 ** random.randrange(min_value, max_value+1, interval)     # sets layer units
             logger.info("set unit num to %d", layer[1])
+            genes.remove_weights(layer_index)
             genes.overwrite_layer(layer, layer_index)
             break
 
@@ -249,6 +251,7 @@ def change_conv_filter_num(genes, logger):
             layer[1] = 2 ** random.randrange(min_value, max_value+1, interval)  # sets layer units
             logger.info("set filters to %d", layer[1])
             genes.overwrite_layer(layer, layer_index)
+            genes.remove_weights(layer_index)
             break
 
 
@@ -320,14 +323,15 @@ def mutate_hyperparameters(genes):
 #   2   avg pooling
 def change_pooling(genes, logger):
     # first we need to pick a convolutional layer
-    conv_layer_index = get_random_conv_layer(genes)
-    layer = genes.get_layer(conv_layer_index)
+    layer_index = get_random_conv_layer(genes)
+    layer = genes.get_layer(layer_index)
     temporary_values = [layer[5], layer[6]]
     layer = random_pooling_type(layer)
     layer = random_pooling_size(layer)
-    genes.overwrite(layer, conv_layer_index)
+    genes.overwrite(layer, layer_index)
     if check_valid_geneset(genes, logger):
-        logger.info("Setting pooling in layer %d to type %d with pool size %d", conv_layer_index, layer[5], layer[6])
+        logger.info("Setting pooling in layer %d to type %d with pool size %d", layer_index, layer[5], layer[6])
+        genes.remove_weights(layer_index)
         return True
     else:
         layer[5] = temporary_values[0]
@@ -431,6 +435,7 @@ def add_layer(genes):
         new_layer_location = random.randrange(0, flatten_index+1)
         logger.info("adding layer type convolutional")
     genes.add_layer(new_layer, new_layer_location)
+    genes.remove_weights(new_layer_location)
     logger.info("added at location %d, genes length is %d", new_layer_location, genes.__len__())
     if not check_valid_geneset(genes, logger):
         genes.remove_layer(index=new_layer_location)
@@ -443,13 +448,14 @@ def remove_layer(genes):
     logger = logging.getLogger('mutate')
     while True:
         # randomly pick layer to remove
-        layer_remove_index = random.randrange(0, genes.__len__())
-        layer = genes.get_layer(layer_remove_index)
+        layer_index = random.randrange(0, genes.__len__())
+        layer = genes.get_layer(layer_index)
         # must not pick flatten layer which acts as border between convolutional and dense layers
         # must not pick dense or conv layer if only 1 is present
         if layer[0] == 3 or \
                 (layer[0] == 1 and genes.num_dense_layers() < 2):
             continue
-        genes.remove_layer(layer_remove_index)
-        logger.info("removed layer type %d at index %d", layer[0], layer_remove_index)
+        genes.remove_layer(layer_index)
+        genes.remove_weights(layer_index)
+        logger.info("removed layer type %d at index %d", layer[0], layer_index)
         break
