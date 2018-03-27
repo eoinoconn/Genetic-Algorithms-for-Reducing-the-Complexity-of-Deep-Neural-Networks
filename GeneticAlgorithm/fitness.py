@@ -120,7 +120,7 @@ def cost_function(accuracy, efficiency_balance, parameters):
 
 def reuse_previous_weights(genes, model, logger):
     model_buffer = 1
-    for i in range(0, genes.__len__()):
+    for i in range(0, genes.__len__() - 1):
         layer = genes.get_layer(i)
         if layer[0] == 1:
             if layer[-1] is not 0:
