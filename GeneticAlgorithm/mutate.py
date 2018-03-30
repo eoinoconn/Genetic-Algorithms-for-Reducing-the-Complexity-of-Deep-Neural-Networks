@@ -154,7 +154,7 @@ def change_conv_layer_parameter(genes, logger):
         genes.overwrite_layer(new_layer, layer_index)
         genes.remove_weights(layer_index)
         if check_valid_geneset(genes, logger):
-            log_str = "padding type is " + new_layer[5]
+            log_str = "padding type is " + new_layer[7]
             logger.info(log_str)
             return True
         else:
