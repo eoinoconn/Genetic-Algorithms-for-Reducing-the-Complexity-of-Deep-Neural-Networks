@@ -30,7 +30,8 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
     logger_fitness.info("Model built successfully")
 
-    reuse_previous_weights(genes, model, logger_fitness)
+    if config['training.weights'].getboolean('reuse_weights'):
+        reuse_previous_weights(genes, model, logger_fitness)
 
     # get hyperparameters
     hyper_params = genes.hyperparameters
@@ -85,7 +86,8 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
     parameters = model.count_params()
     accuracy = hist.history['val_acc'][-1]
 
-    genes = save_model_weights(genes, model, logger_fitness)
+    if config['training.weights'].getboolean('reuse_weights'):
+        genes = save_model_weights(genes, model, logger_fitness)
 
     logger_fitness.info("Weights saved")
 
