@@ -137,15 +137,16 @@ def reuse_previous_weights(genes, model, logger):
                     model.layers[i + model_buffer].set_weights(layer[-2])
                     logger.info("re-using weights for batch normalisation layer %d", i)
             model_buffer += 1  # activation
-            if layer[5] > 0:
+            if layer[5] > 0:    # pooling
+                model_buffer += 1
+            if layer[9] > 0:    # dropout
                 model_buffer += 1
         elif layer[0] == 3:
             continue
         elif layer[0] == 4:
-            continue
             inception_weights_and_biases = genes.get_layer_weights(i)
-            for weight_and_bias in inception_weights_and_biases:
-                model.layers[i + model_buffer].set_weights(weight_and_bias)
+            for j in range(0, 6):
+                # model.layers[i + model_buffer].set_weights(weight_and_bias)
                 model_buffer += 1
             model_buffer += 1  # concatenation layer
         else:
@@ -168,15 +169,17 @@ def save_model_weights(genes, model, logger):
             model_buffer += 1  # activation
             if layer[5] > 0:  # pooling
                 model_buffer += 1
+            if layer[9] > 0:  # dropout
+                model_buffer += 1
         elif layer[0] == 3:
             continue
         elif layer[0] == 4:
             inception_weights_and_biases = []
             for j in range(0, 6):
+                model_buffer += 1
                 if j == 2:
                     continue
-                inception_weights_and_biases.append(model.layers[i + model_buffer + j].get_weights())
-                model_buffer += 1
+                inception_weights_and_biases.append(model.layers[i + model_buffer].get_weights())
             model_buffer += 1  # concatenation layer
             layer[-1] = inception_weights_and_biases
         else:

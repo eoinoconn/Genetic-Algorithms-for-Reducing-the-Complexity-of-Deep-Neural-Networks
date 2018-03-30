@@ -149,28 +149,46 @@ def change_conv_layer_parameter(genes, logger):
     elif rand == 5:     # change padding
         logger.info("Changing Conv padding")
         layer_index = get_random_conv_layer(genes)
-        layer = genes.get_layer(layer_index)
-        layer = random_conv_layer_padding(layer)
-        log_str = "padding type is " + layer[5]
-        logger.info(log_str)
-        genes.overwrite_layer(layer, layer_index)
-        return True
+        old_layer = genes.get_layer(layer_index)
+        new_layer = random_conv_layer_padding(old_layer)
+        genes.overwrite_layer(new_layer, layer_index)
+        if check_valid_geneset(genes, logger):
+            log_str = "padding type is " + new_layer[5]
+            logger.info(log_str)
+            return True
+        else:
+            log_str = "Geneset not valid"
+            genes.overwrite_layer(old_layer, layer_index)
+            logger.info(log_str)
+            return False
+
     elif rand == 6:
         logger.info("Changing pooling stride")
         layer_index = get_random_conv_layer(genes)
-        layer = genes.get_layer(layer_index)
-        layer = random_pool_stride(layer)
-        logger.info("Pool stride now %d", layer[8])
-        genes.overwrite_layer(layer, layer_index)
-        return True
+        old_layer = genes.get_layer(layer_index)
+        new_layer = random_pool_stride(old_layer)
+        genes.overwrite_layer(new_layer, layer_index)
+        if check_valid_geneset(genes, logger):
+            logger.info("Pool stride now %d", new_layer[8])
+            return True
+        else:
+            genes.overwrite_layer(old_layer, layer_index)
+            logger.info("Geneset not valid")
+            return False
+
     elif rand == 7:
         logger.info("Changing conv stride")
         layer_index = get_random_conv_layer(genes)
-        layer = genes.get_layer(layer_index)
-        layer = random_conv_stride(layer)
-        logger.info("Conv stride now %d", layer[2])
-        genes.overwrite_layer(layer, layer_index)
-        return True
+        old_layer = genes.get_layer(layer_index)
+        new_layer = random_conv_stride(old_layer)
+        genes.overwrite_layer(new_layer, layer_index)
+        if check_valid_geneset(genes, logger):
+            logger.info("Conv stride now %d", new_layer[2])
+            return True
+        else:
+            genes.overwrite_layer(old_layer, layer_index)
+            logger.info("Geneset not valid")
+            return False
 
 
 def random_pool_stride(layer):
@@ -328,7 +346,7 @@ def change_pooling(genes, logger):
     temporary_values = [layer[5], layer[6]]
     layer = random_pooling_type(layer)
     layer = random_pooling_size(layer)
-    genes.overwrite(layer, layer_index)
+    genes.overwrite_layer(layer, layer_index)
     if check_valid_geneset(genes, logger):
         logger.info("Setting pooling in layer %d to type %d with pool size %d", layer_index, layer[5], layer[6])
         genes.remove_weights(layer_index)
@@ -400,8 +418,8 @@ def change_conv_layer_dropout(genes, logger=logging.getLogger(__name__)):
     min_value, max_value, interval = config_min_max_interval('conv.layer.dropout')
     layer_index = get_random_conv_layer(genes)
     layer = genes.get_layer(layer_index)
-    layer[7] = (random.randrange(min_value, max_value + 1, interval)) / 10  # Set dropout probability
-    logger.info("set droupout to %f on layer %d", layer[7], layer_index)
+    layer[9] = (random.randrange(min_value, max_value + 1, interval)) / 10  # Set dropout probability
+    logger.info("set droupout to %f on layer %d", layer[9], layer_index)
     genes.overwrite_layer(layer, layer_index)
 
 
@@ -426,10 +444,10 @@ def add_layer(genes):
         new_layer = dense_layer()
         new_layer_location = random.randrange(flatten_index+1, genes.__len__())
         logger.info("adding layer type dense")
-    elif layer_type == 2:   # inception module
-        new_layer = inception_layer()
-        new_layer_location = random.randrange(0, flatten_index + 1)
-        logger.info("adding layer type Inception")
+#    elif layer_type == 2:   # inception module
+#        new_layer = inception_layer()
+#        new_layer_location = random.randrange(0, flatten_index + 1)
+#        logger.info("adding layer type Inception")
     else:   # convolutional layer
         new_layer = convolutional_layer()
         new_layer_location = random.randrange(0, flatten_index+1)
