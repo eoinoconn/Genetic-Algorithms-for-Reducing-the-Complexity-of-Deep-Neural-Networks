@@ -152,6 +152,7 @@ def change_conv_layer_parameter(genes, logger):
         old_layer = genes.get_layer(layer_index)
         new_layer = random_conv_layer_padding(old_layer)
         genes.overwrite_layer(new_layer, layer_index)
+        genes.remove_weights(layer_index)
         if check_valid_geneset(genes, logger):
             log_str = "padding type is " + new_layer[5]
             logger.info(log_str)
@@ -168,6 +169,7 @@ def change_conv_layer_parameter(genes, logger):
         old_layer = genes.get_layer(layer_index)
         new_layer = random_pool_stride(old_layer)
         genes.overwrite_layer(new_layer, layer_index)
+        genes.remove_weights(layer_index)
         if check_valid_geneset(genes, logger):
             logger.info("Pool stride now %d", new_layer[8])
             return True
@@ -182,6 +184,7 @@ def change_conv_layer_parameter(genes, logger):
         old_layer = genes.get_layer(layer_index)
         new_layer = random_conv_stride(old_layer)
         genes.overwrite_layer(new_layer, layer_index)
+        genes.remove_weights(layer_index)
         if check_valid_geneset(genes, logger):
             logger.info("Conv stride now %d", new_layer[2])
             return True
@@ -223,6 +226,7 @@ def toggle_batch_normalisation(genes, logger):
             genes.overwrite_layer(layer, layer_index)
             if check_valid_geneset(genes, logger):
                 logger.info("toggling batch normalisation to layer %d", layer_index)
+                genes.remove_weights(layer_index)
                 return True
             else:
                 logger.info("toggling batch normalisation to layer %d failed", layer_index)
