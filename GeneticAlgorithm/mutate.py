@@ -1,6 +1,7 @@
 from GeneticAlgorithm.genes import Genes, LAYER_DEPTH, MAX_LAYERS
 from GeneticAlgorithm.utils import intermittent_logging, config_min_max_interval, get_config, check_valid_geneset
 import random
+import copy
 import logging
 import configparser
 
@@ -98,7 +99,8 @@ def convolutional_layer():
     return layer
 
 
-def random_conv_stride(layer):
+def random_conv_stride(old_layer):
+    layer = copy.deepcopy(old_layer)
     min_value, max_value, interval = config_min_max_interval('convolutional.layer.stride')
     layer[2] = random.randrange(min_value, layer[3] + 1, interval)
     return layer
@@ -194,13 +196,15 @@ def change_conv_layer_parameter(genes, logger):
             return False
 
 
-def random_pool_stride(layer):
+def random_pool_stride(old_layer):
+    layer = copy.deepcopy(old_layer)
     min_value, max_value, interval = config_min_max_interval('convolutional.layer.pool.stride')
     layer[8] = random.randrange(min_value, layer[6] + 1, interval)
     return layer
 
 
-def random_conv_layer_padding(layer):
+def random_conv_layer_padding(old_layer):
+    layer = copy.deepcopy(old_layer)
     padding_index = random.randrange(0, 2)
     if padding_index == 0:
         layer[7] = 'same'
