@@ -158,6 +158,7 @@ def reuse_previous_weights(genes, model, logger):
 def save_model_weights(genes, model, logger):
     model_buffer = 1
     for i in range(0, genes.__len__()):
+        print(i)
         weights_and_biases = model.layers[i + model_buffer].get_weights()
         layer = genes.get_layer(i)
         if layer[0] == 1:
