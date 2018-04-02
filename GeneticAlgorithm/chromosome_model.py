@@ -43,11 +43,11 @@ class ChromosomeModel(object):
                 model = self.batch_normalisation(model)
             if layer[4] is not None:
                 model = self.activation(layer, model)
+            if layer[9] > 0:    # Dropout layer
+                model = Dropout(layer[9])(model)
             if layer[5] > 0:        # Pooling layer
                 model = self.pooling_layer(model, layer)
                 logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
-                if layer[9] > 0:    # Dropout layer
-                    model = Dropout(layer[9])(model)
             return model
 
         elif layer[0] == 3:                 # Flatten layer
