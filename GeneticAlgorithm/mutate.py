@@ -354,6 +354,8 @@ def change_pooling(genes, logger):
     temporary_values = [layer[5], layer[6]]
     layer = random_pooling_type(layer)
     layer = random_pooling_size(layer)
+    if layer[8] == 0:
+        layer[8] = 1
     genes.overwrite_layer(layer, layer_index)
     if check_valid_geneset(genes, logger):
         logger.info("Setting pooling in layer %d to type %d with pool size %d", layer_index, layer[5], layer[6])
