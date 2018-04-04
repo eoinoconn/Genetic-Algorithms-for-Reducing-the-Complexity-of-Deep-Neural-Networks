@@ -1,6 +1,10 @@
+from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D, \
+    concatenate, Input, BatchNormalization, Activation
+from keras.models import Model
 import configparser
 import logging
 import random
+import csv
 
 
 class Node(object):
@@ -12,6 +16,7 @@ class Node(object):
         self.__encoding = []
         self.__id = Node._id
         self.__active = True
+        self.__logger = logging.getLogger('geneset')
         Node._id += 1
 
     @property
@@ -74,7 +79,7 @@ class Node(object):
 
 class ConvNode(Node):
     """
-    returns a randomly generated convolutional layer
+    Node to simulate convolutional layer
 
     The first value of the layer array is 2 for a convolutional layer
     Other variables:
@@ -87,37 +92,58 @@ class ConvNode(Node):
        6   pooling type(Default 0 = None)
        7   pool size
        8   Pool stride
-       9  batch normalisation (Default 0 = None)
+       9   batch normalisation (Default 0 = None)
     :return:
     """
 
-    def __init__(self, random=False):
+    def __init__(self, random_node=False):
         super().__init__()
         self._vertex_type = "conv"
 
-        if random:
-            self.random_conv_filter_num()
-            self.random_conv_kernel()
-            self.random_conv_stride()
-            self.encoding[3] = 'relu'
-            self.random_conv_layer_padding()
+        self.random_conv_filter_num()
+        self.random_conv_kernel()
+        self.random_conv_stride()
+        self.encoding[3] = 'relu'
+        self.random_conv_layer_padding()
+
+        if random_node:
             self.random_conv_dropout()
             self.random_pooling_type()
             self.random_pooling_size()
             self.random_pool_stride()
             self.toggle_batch_normalisation()
 
+    def build(self, model):
+        model = Conv2D(self.encoding[0], self.encoding[2], strides=self.encoding[1], padding=self.encoding[4])(model)
+        self.__logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
+        if self.encoding[9] == 1:  # Batch normalisation layer
+            model = BatchNormalization()(model)
+        if self.encoding[3] is not None:
+            model = Activation(self.encoding[3])(model)
+        if self.encoding[6] > 0:  # Pooling layer
+            if self.encoding[6] == 1:  # max pooling
+                MaxPooling2D((self.encoding[7], self.encoding[7]), strides=self.encoding[8])(model)
+            else:
+                AveragePooling2D((self.encoding[7], self.encoding[7]), strides=self.encoding[8])(model)
+            self.__logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
+        if self.encoding[5] > 0:  # Dropout layer
+            model = Dropout(self.encoding[8])(model)
+        return model
+
     def random_conv_filter_num(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.filter')
         self.encoding[0] = 2 ** random.randrange(min_value, max_value + 1, interval)  # sets layer units
+        self.__logger.info("set con filters to %d on node %d", self.encoding[0], self.id)
 
     def random_conv_kernel(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.kernel')
         self.encoding[1] = random.randrange(min_value, max_value + 1, interval)
+        self.__logger.info("set kernel size to %d on node %d", self.encoding[1], self.id)
 
     def random_conv_stride(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.stride')
         self.encoding[2] = random.randrange(min_value, self.encoding[2] + 1, interval)
+        self.__logger.info("set conv stride to %d on node %d", self.encoding[2], self.id)
 
     def random_conv_layer_padding(self):
         padding_index = random.randrange(0, 2)
@@ -125,73 +151,98 @@ class ConvNode(Node):
             self.encoding[4] = 'same'
         else:
             self.encoding[4] = 'valid'
+        self.__logger.info("set padding to %s on node %d", self.encoding[4], self.id)
 
     def random_conv_dropout(self):
         min_value, max_value, interval = self.config_min_max_interval('conv.layer.dropout')
         self.encoding[5] = (random.randrange(min_value, max_value + 1, interval)) / 10  # Set dropout probability
-        logger.info("set droupout to %f on node %d", self.encoding[7], self.id)
+        self.__logger.info("set droupout to %f on node %d", self.encoding[7], self.id)
 
+    def random_pooling_type(self):
+        min_value, max_value, interval = self.config_min_max_interval('pooling.type')
+        self.encoding[6] = random.randrange(min_value, max_value + 1, interval)
+        self.__logger.info("set pooling type to %s on node %d", self.encoding[6], self.id)
 
-    def random_pooling_type(layer):
-        min_value, max_value, interval = config_min_max_interval('pooling.type')
-        layer[5] = random.randrange(min_value, max_value + 1, interval)
-        return layer
-
-    def random_pooling_size(layer):
-        min_value, max_value, interval = config_min_max_interval('pooling.filter')
-        layer[6] = random.randrange(min_value, max_value + 1, interval)
-        return layer
+    def random_pooling_size(self):
+        min_value, max_value, interval = self.config_min_max_interval('pooling.filter')
+        self.encoding[7] = random.randrange(min_value, max_value + 1, interval)
+        self.__logger.info("set pooling size to %d on node %d", self.encoding[7], self.id)
 
     def random_pool_stride(self):
-        min_value, max_value, interval = config_min_max_interval('convolutional.layer.pool.stride')
-        layer[8] = random.randrange(min_value, layer[6] + 1, interval)
-        return layer
+        min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.pool.stride')
+        self.encoding[8] = random.randrange(min_value, self.encoding[6] + 1, interval)
+        self.__logger.info("set pool stride to %d on node %d", self.encoding[8], self.id)
 
     def toggle_batch_normalisation(self):
-        config = get_config()
-        if not config['batch.normalisation'].getboolean('enabled'):
-            logger.info("batch normalisation disabled")
-            return False
-        while True:
-            layer_index = random.randrange(0, genes.__len__())
-            layer = genes.get_layer(layer_index)
-            if layer[0] == 2:   # check if conv layer
-                old_layer = layer
-                if layer[10] == 1:
-                    layer[10] = 0
-                else:
-                    layer[10] = 1
-                genes.overwrite_layer(layer, layer_index)
-                if check_valid_geneset(genes, logger):
-                    logger.info("toggling batch normalisation to layer %d", layer_index)
-                    return True
-                else:
-                    logger.info("toggling batch normalisation to layer %d failed", layer_index)
-                    genes.overwrite_layer(old_layer, layer_index)
-                    return False
+        if self.encoding[9] == 1:
+            self.encoding[9] = 0
+        else:
+            self.encoding[9] = 1
+        self.__logger.info("set batch normalisation to %d on node %d", self.encoding[10], self.id)
 
 
 class DenseNode(Node):
+    """
+    Node to simulate dense layer
 
-    def __init__(self):
+    # The first value of the layer array is 1 for a dense layer
+     Other variables:
+       0   layer units
+       1   dropout
+       2   activation
+    :return:
+    """
+
+    def __init__(self, random_node=False):
         super().__init__()
         self._vertex_type = "dense"
 
+        self.random_dense_units()
+        self.encoding[2] = 'relu'
+        if random_node:
+            self.random_dense_dropout()
 
-class Input(Node):
+    def build(self, model, output_layer=False, classes=None):
+        if output_layer:  # output layer
+            return Dense(classes, activation='softmax')(model)
+        else:  # hidden layer
+            model = Dense(self.encoding[0])(model)
+            if self.encoding[4] is not None:
+                model = Activation(self.encoding[2])(model)
+            if self.encoding[3] > 0:  # Dropout layer
+                model = Dropout(self.encoding[1])(model)
+            self.__logger.info("output dimensions %d", model.shape[1])
+            return model
+
+    def random_dense_units(self):
+        min_value, max_value, interval = self.config_min_max_interval('dense.layer.units')
+        self.encoding[0] = (random.randrange(min_value, max_value + 1, interval))     # Set dense units
+        self.__logger.info("set dense units to %d on node %d", self.encoding[0], self.id)
+
+    def random_dense_dropout(self):
+        min_value, max_value, interval = self.config_min_max_interval('dense.layer.dropout')
+        self.encoding[1] = (random.randrange(min_value, max_value + 1, interval)) / 10  # Set dropout probability
+        self.__logger.info("set droupout to %f on node %d", self.encoding[1], self.id)
+
+
+class InputNode(Node):
 
     def __init__(self):
         super().__init__()
         self._vertex_type = "input"
 
+    @staticmethod
+    def build(model):
+        return Flatten()(model)
 
-class Flatten(Node):
+
+class FlattenNode(Node):
     def __init__(self):
         super().__init__()
         self._vertex_type = "flatten"
 
 
-class Output(Node):
+class OutputNode(Node):
 
     def __init__(self):
         super().__init__()
@@ -200,10 +251,18 @@ class Output(Node):
 
 class Chromosome(object):
 
+    _id = 1
+
     def __init__(self):
-        self.hyperparameters = []
+        self.id = Chromosome._id
+        self.hyperparameters = [0 for x in range(0, 25)]
+        self.fitness = None
+        self.accuracy = None
+        self.parameters = None
+        self.age = 0
         self.vertices = {}
         self.nodes = []
+        Chromosome._id += 1
 
         config = configparser.ConfigParser()
         config.read('GeneticAlgorithm/Config/training_parameters.ini')
@@ -227,10 +286,28 @@ class Chromosome(object):
         if vertex in self.vertices[node]:
             self.vertices[node].remove(vertex)
 
+    def logging(self, generation_num):
+        with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
+            spamwriter = csv.writer(csvfile, delimiter=' ',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            spamwriter.writerow([generation_num, ',',
+                                 self.id, ',',
+                                 self.age, ',',
+                                 self.accuracy, ',',
+                                 self.fitness, ',',
+                                 self.parameters, ',',
+                                 len(self), ',',
+                                 # chromosome.num_conv_layers(), ',',
+                                 # chromosome.num_dense_layers(), ',',
+                                 # chromosome.num_incep_layers(), ',',
+                                 ])
+
+    def __len__(self):
+        return len(self.nodes)
+
     def __str__(self):
         string = ""
         for obj in self.nodes:
             string += str(obj)
         string += str(self.vertices)
         return string
-
