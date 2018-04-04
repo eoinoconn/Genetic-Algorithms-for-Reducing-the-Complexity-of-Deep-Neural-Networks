@@ -130,6 +130,27 @@ class ConvNode(Node):
             model = Dropout(self.encoding[8])(model)
         return model
 
+    def mutate(self):
+        rand = random.randrange(0, 9)
+        if rand == 0:
+            self.random_conv_filter_num()
+        elif rand == 1:
+            self.random_conv_kernel()
+        elif rand == 2:
+            self.random_conv_stride()
+        elif rand == 3:
+            self.random_conv_layer_padding()
+        elif rand == 4:
+            self.random_conv_dropout()
+        elif rand == 5:
+            self.random_pooling_type()
+        elif rand == 6:
+            self.random_pooling_size()
+        elif rand == 7:
+            self.random_pool_stride()
+        else:
+            self.toggle_batch_normalisation()
+
     def random_conv_filter_num(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.filter')
         self.encoding[0] = 2 ** random.randrange(min_value, max_value + 1, interval)  # sets layer units
@@ -214,6 +235,13 @@ class DenseNode(Node):
             self.__logger.info("output dimensions %d", model.shape[1])
             return model
 
+    def mutate(self):
+        rand = random.randrange(0, 3)
+        if rand == 0:
+            self.random_dense_units()
+        else:
+            self.random_dense_dropout()
+
     def random_dense_units(self):
         min_value, max_value, interval = self.config_min_max_interval('dense.layer.units')
         self.encoding[0] = (random.randrange(min_value, max_value + 1, interval))     # Set dense units
@@ -285,6 +313,25 @@ class Chromosome(object):
     def remove_vertex(self, node, vertex):
         if vertex in self.vertices[node]:
             self.vertices[node].remove(vertex)
+
+    def mutate(self):
+        rand = random.randrange(0,4)
+        if rand == 0:
+            # add node
+            rand = random.randrange(0,2)
+            if rand == 0:
+                # conv node
+            else:
+                # dense node
+        elif rand == 1:
+            # add edge
+            rand_node_1 = random_conv_node()
+            rand_node_2 = random_conv_node()
+            self.vertices[rand_node_1].append(rand_node_2)
+        elif rand == 2:
+            # mutate hyperparameters
+        else:
+            # mutate node
 
     def logging(self, generation_num):
         with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
