@@ -6,12 +6,16 @@ class TestChromosome(unittest.TestCase):
 
 #    def setUp(self):
 
-    def chromosome_test(self):
+    def setup_chromosome_test(self):
         node = ConvNode()
         chromo = Chromosome()
         chromo.add_node(node)
         chromo.add_vertex(node, node.id)
         print(chromo)
+
+    def build_dense_model_test(self):
+        chromo = Chromosome()
+        print("test 2")
 
 
 if __name__ == '__main__':

@@ -262,15 +262,15 @@ class InputNode(Node):
         super().__init__()
         self._vertex_type = "input"
 
-    @staticmethod
-    def build(model):
-        return Flatten()(model)
-
 
 class FlattenNode(Node):
     def __init__(self):
         super().__init__()
         self._vertex_type = "flatten"
+
+    @staticmethod
+    def build(model):
+        return Flatten()(model)
 
 
 class OutputNode(Node):
@@ -294,6 +294,7 @@ class Chromosome(GeneticObject):
         self.vertices = {}
         self.conv_nodes = []
         self.dense_nodes = []
+        self.shape = (32, 32)
         Chromosome._id += 1
 
         config = configparser.ConfigParser()
@@ -305,6 +306,13 @@ class Chromosome(GeneticObject):
         self.hyperparameters[1] = 'adam'                        # optimizer
         self.random_batch_size()
 
+        # Build minimal structure
+        self.minimal_structure()
+
+    def minimal_structure(self):
+        self.add_node(DenseNode())
+        self.add_node(DenseNode())
+        self.add_node(DenseNode())
 
     def add_node(self, node):
         if isinstance(node, ConvNode):
@@ -325,11 +333,24 @@ class Chromosome(GeneticObject):
         if vertex in self.vertices[node]:
             self.vertices[node].remove(vertex)
 
+    def build(self):
+        input_layer = Input(shape=self.shape)
+        model = self.recurently_build_graph(input_layer, self.conv_nodes, self.vertices)
+        model = self.recurrently_build_list(model, self.dense_nodes)
+        model = Model(inputs=input_layer, outputs=model)
+
+    def recurently_build_list(self, model, dense_nodes, index):
+        model = dense_nodes[index].build(model)
+        if index < len(dense_nodes):
+            return self.recurently_build_list(model, dense_nodes, (index + 1))
+        else:
+            return model
+
     def mutate(self):
-        rand = random.randrange(0,4)
+        rand = random.randrange(0, 4)
         if rand == 0:
             """ Add node"""
-            rand = random.randrange(0,2)
+            rand = random.randrange(0, 2)
             if rand == 0:
                 input_node = self.random_conv_node()
                 output_node = self.random_conv_node()
@@ -361,7 +382,7 @@ class Chromosome(GeneticObject):
     def random_dense_node(self):
         return random.choice(self.dense_nodes)
 
-    def random_batch_size:
+    def random_batch_size(self):
         min_value, max_value, interval = self.config_min_max_interval('chromosome.batchsize')
         self.hyperparameters[2] = random.randrange(min_value, max_value + 1, interval)  # batch size
 
