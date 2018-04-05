@@ -7,7 +7,20 @@ import random
 import csv
 
 
-class Node(object):
+class GeneticObject(object):
+
+    @staticmethod
+    def config_min_max_interval(config_name):
+        config = configparser.ConfigParser()
+        config.read('GeneticAlgorithm/Config/training_parameters.ini')
+        config = config[config_name]
+        minimum = int(config['minimum'])
+        maximum = int(config['maximum'])
+        interval = int(config['interval'])
+        return minimum, maximum, interval
+
+
+class Node(GeneticObject):
 
     _id = 1
 
@@ -57,16 +70,6 @@ class Node(object):
     @encoding.deleter
     def encoding(self):
         del self.__encoding
-
-    @staticmethod
-    def config_min_max_interval(config_name):
-        config = configparser.ConfigParser()
-        config.read('GeneticAlgorithm/Config/training_parameters.ini')
-        config = config[config_name]
-        minimum = int(config['minimum'])
-        maximum = int(config['maximum'])
-        interval = int(config['interval'])
-        return minimum, maximum, interval
 
     def __str__(self):
         enc_string = "Node type {}, Node id {}\n".format(self.vertex_type, self._id)
@@ -277,7 +280,7 @@ class OutputNode(Node):
         self._vertex_type = "output"
 
 
-class Chromosome(object):
+class Chromosome(GeneticObject):
 
     _id = 1
 
@@ -289,7 +292,8 @@ class Chromosome(object):
         self.parameters = None
         self.age = 0
         self.vertices = {}
-        self.nodes = []
+        self.conv_nodes = []
+        self.dense_nodes = []
         Chromosome._id += 1
 
         config = configparser.ConfigParser()
@@ -297,12 +301,19 @@ class Chromosome(object):
         logger = logging.getLogger('Chromosome')
         logger.info("creating parent genes")
 
+        self.hyperparameters[0] = 'categorical_crossentropy'    # loss
+        self.hyperparameters[1] = 'adam'                        # optimizer
+        self.random_batch_size()
+
+
     def add_node(self, node):
-        self.nodes.append(node)
-        if isinstance(node, Node):
+        if isinstance(node, ConvNode):
+            self.conv_nodes.append(node)
             self.vertices[node] = []
+        elif isinstance(node, DenseNode):
+            self.dense_nodes.append(node)
         else:
-            raise TypeError("node should be of type Node")
+            raise TypeError("node should be of type ConvNode or DenseNode")
 
     def add_vertex(self, node, vertex):
         self.vertices[node].append(vertex)
@@ -317,21 +328,42 @@ class Chromosome(object):
     def mutate(self):
         rand = random.randrange(0,4)
         if rand == 0:
-            # add node
+            """ Add node"""
             rand = random.randrange(0,2)
             if rand == 0:
-                # conv node
+                input_node = self.random_conv_node()
+                output_node = self.random_conv_node()
+                new_node = ConvNode(random_node=True)
+                self.add_vertex(input_node, new_node)
+                self.add_node(new_node)
+                self.add_vertex(new_node, output_node)
             else:
-                # dense node
+                self.add_node(DenseNode(random_node=True))
         elif rand == 1:
-            # add edge
-            rand_node_1 = random_conv_node()
-            rand_node_2 = random_conv_node()
+            """Add edge"""
+            rand_node_1 = self.random_conv_node()
+            rand_node_2 = self.random_conv_node()
             self.vertices[rand_node_1].append(rand_node_2)
         elif rand == 2:
-            # mutate hyperparameters
+            """ Mutate hyperparameters"""
+            self.random_batch_size()
         else:
-            # mutate node
+            """Mutate random node"""
+            rand = random.randrange(0,2)
+            if rand == 0:
+                self.random_conv_node().mutate()
+            else:
+                self.random_dense_node().mutate()
+
+    def random_conv_node(self):
+        return random.choice(self.conv_nodes)
+
+    def random_dense_node(self):
+        return random.choice(self.dense_nodes)
+
+    def random_batch_size:
+        min_value, max_value, interval = self.config_min_max_interval('chromosome.batchsize')
+        self.hyperparameters[2] = random.randrange(min_value, max_value + 1, interval)  # batch size
 
     def logging(self, generation_num):
         with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
@@ -350,11 +382,11 @@ class Chromosome(object):
                                  ])
 
     def __len__(self):
-        return len(self.nodes)
+        return len(self.conv_nodes)
 
     def __str__(self):
         string = ""
-        for obj in self.nodes:
+        for obj in self.conv_nodes:
             string += str(obj)
         string += str(self.vertices)
         return string
