@@ -15,6 +15,7 @@ class TestChromosome(unittest.TestCase):
 
     def build_dense_model_test(self):
         chromo = Chromosome()
+        chromo.build().summary()
         print("test 2")
 
 

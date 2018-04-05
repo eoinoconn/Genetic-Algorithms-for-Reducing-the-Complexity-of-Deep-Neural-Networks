@@ -12,7 +12,9 @@ class GeneticObject(object):
     @staticmethod
     def config_min_max_interval(config_name):
         config = configparser.ConfigParser()
-        config.read('GeneticAlgorithm/Config/training_parameters.ini')
+        config.read(
+            "C:/Users/eoino/Documents/GitHub/Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural-Networks"
+            "/GeneticAlgorithm/Config/training_parameters.ini")
         config = config[config_name]
         minimum = int(config['minimum'])
         maximum = int(config['maximum'])
@@ -26,10 +28,10 @@ class Node(GeneticObject):
 
     def __init__(self):
         self.__vertex_type = ""
-        self.__encoding = []
+        self.__encoding = [0 for x in range(0, 12)]
         self.__id = Node._id
         self.__active = True
-        self.__logger = logging.getLogger('geneset')
+        self._logger = logging.getLogger('geneset')
         Node._id += 1
 
     @property
@@ -118,7 +120,7 @@ class ConvNode(Node):
 
     def build(self, model):
         model = Conv2D(self.encoding[0], self.encoding[2], strides=self.encoding[1], padding=self.encoding[4])(model)
-        self.__logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
+        self._logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
         if self.encoding[9] == 1:  # Batch normalisation layer
             model = BatchNormalization()(model)
         if self.encoding[3] is not None:
@@ -128,7 +130,7 @@ class ConvNode(Node):
                 MaxPooling2D((self.encoding[7], self.encoding[7]), strides=self.encoding[8])(model)
             else:
                 AveragePooling2D((self.encoding[7], self.encoding[7]), strides=self.encoding[8])(model)
-            self.__logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
+            self._logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
         if self.encoding[5] > 0:  # Dropout layer
             model = Dropout(self.encoding[8])(model)
         return model
@@ -157,17 +159,17 @@ class ConvNode(Node):
     def random_conv_filter_num(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.filter')
         self.encoding[0] = 2 ** random.randrange(min_value, max_value + 1, interval)  # sets layer units
-        self.__logger.info("set con filters to %d on node %d", self.encoding[0], self.id)
+        self._logger.info("set con filters to %d on node %d", self.encoding[0], self.id)
 
     def random_conv_kernel(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.kernel')
         self.encoding[1] = random.randrange(min_value, max_value + 1, interval)
-        self.__logger.info("set kernel size to %d on node %d", self.encoding[1], self.id)
+        self._logger.info("set kernel size to %d on node %d", self.encoding[1], self.id)
 
     def random_conv_stride(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.stride')
-        self.encoding[2] = random.randrange(min_value, self.encoding[2] + 1, interval)
-        self.__logger.info("set conv stride to %d on node %d", self.encoding[2], self.id)
+        self.encoding[2] = random.randrange(min_value, self.encoding[1] + 1, interval)
+        self._logger.info("set conv stride to %d on node %d", self.encoding[2], self.id)
 
     def random_conv_layer_padding(self):
         padding_index = random.randrange(0, 2)
@@ -175,34 +177,34 @@ class ConvNode(Node):
             self.encoding[4] = 'same'
         else:
             self.encoding[4] = 'valid'
-        self.__logger.info("set padding to %s on node %d", self.encoding[4], self.id)
+        self._logger.info("set padding to %s on node %d", self.encoding[4], self.id)
 
     def random_conv_dropout(self):
         min_value, max_value, interval = self.config_min_max_interval('conv.layer.dropout')
         self.encoding[5] = (random.randrange(min_value, max_value + 1, interval)) / 10  # Set dropout probability
-        self.__logger.info("set droupout to %f on node %d", self.encoding[7], self.id)
+        self._logger.info("set droupout to %f on node %d", self.encoding[7], self.id)
 
     def random_pooling_type(self):
         min_value, max_value, interval = self.config_min_max_interval('pooling.type')
         self.encoding[6] = random.randrange(min_value, max_value + 1, interval)
-        self.__logger.info("set pooling type to %s on node %d", self.encoding[6], self.id)
+        self._logger.info("set pooling type to %s on node %d", self.encoding[6], self.id)
 
     def random_pooling_size(self):
         min_value, max_value, interval = self.config_min_max_interval('pooling.filter')
         self.encoding[7] = random.randrange(min_value, max_value + 1, interval)
-        self.__logger.info("set pooling size to %d on node %d", self.encoding[7], self.id)
+        self._logger.info("set pooling size to %d on node %d", self.encoding[7], self.id)
 
     def random_pool_stride(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.pool.stride')
         self.encoding[8] = random.randrange(min_value, self.encoding[6] + 1, interval)
-        self.__logger.info("set pool stride to %d on node %d", self.encoding[8], self.id)
+        self._logger.info("set pool stride to %d on node %d", self.encoding[8], self.id)
 
     def toggle_batch_normalisation(self):
         if self.encoding[9] == 1:
             self.encoding[9] = 0
         else:
             self.encoding[9] = 1
-        self.__logger.info("set batch normalisation to %d on node %d", self.encoding[10], self.id)
+        self._logger.info("set batch normalisation to %d on node %d", self.encoding[10], self.id)
 
 
 class DenseNode(Node):
@@ -235,7 +237,7 @@ class DenseNode(Node):
                 model = Activation(self.encoding[2])(model)
             if self.encoding[3] > 0:  # Dropout layer
                 model = Dropout(self.encoding[1])(model)
-            self.__logger.info("output dimensions %d", model.shape[1])
+            self._logger.info("output dimensions %d", model.shape[1])
             return model
 
     def mutate(self):
@@ -247,13 +249,13 @@ class DenseNode(Node):
 
     def random_dense_units(self):
         min_value, max_value, interval = self.config_min_max_interval('dense.layer.units')
-        self.encoding[0] = (random.randrange(min_value, max_value + 1, interval))     # Set dense units
-        self.__logger.info("set dense units to %d on node %d", self.encoding[0], self.id)
+        self.encoding[0] = 2 ** (random.randrange(min_value, max_value + 1, interval))     # Set dense units
+        self._logger.info("set dense units to %d on node %d", self.encoding[0], self.id)
 
     def random_dense_dropout(self):
         min_value, max_value, interval = self.config_min_max_interval('dense.layer.dropout')
         self.encoding[1] = (random.randrange(min_value, max_value + 1, interval)) / 10  # Set dropout probability
-        self.__logger.info("set droupout to %f on node %d", self.encoding[1], self.id)
+        self._logger.info("set droupout to %f on node %d", self.encoding[1], self.id)
 
 
 class InputNode(Node):
@@ -294,7 +296,7 @@ class Chromosome(GeneticObject):
         self.vertices = {}
         self.conv_nodes = []
         self.dense_nodes = []
-        self.shape = (32, 32)
+        self.shape = (32, 32, 3)
         Chromosome._id += 1
 
         config = configparser.ConfigParser()
@@ -310,8 +312,6 @@ class Chromosome(GeneticObject):
         self.minimal_structure()
 
     def minimal_structure(self):
-        self.add_node(DenseNode())
-        self.add_node(DenseNode())
         self.add_node(DenseNode())
 
     def add_node(self, node):
@@ -335,16 +335,22 @@ class Chromosome(GeneticObject):
 
     def build(self):
         input_layer = Input(shape=self.shape)
-        model = self.recurently_build_graph(input_layer, self.conv_nodes, self.vertices)
-        model = self.recurrently_build_list(model, self.dense_nodes)
-        model = Model(inputs=input_layer, outputs=model)
+        model = input_layer
+        if len(self.conv_nodes) > 0:
+            model = self.recurrently_build_graph(model, self.conv_nodes, self.vertices)
+        model = Flatten()(model)
+        model = self.recurrently_build_list(model, self.dense_nodes, 0)
+        return Model(inputs=input_layer, outputs=model)
 
-    def recurently_build_list(self, model, dense_nodes, index):
-        model = dense_nodes[index].build(model)
-        if index < len(dense_nodes):
-            return self.recurently_build_list(model, dense_nodes, (index + 1))
+    def recurrently_build_graph(self, model, conv_nodes, vertices):
+        
+
+    def recurrently_build_list(self, model, dense_nodes, index):
+        if index < (len(dense_nodes) - 1):
+            model = dense_nodes[index].build(model)
+            return self.recurrently_build_list(model, dense_nodes, (index + 1))
         else:
-            return model
+            return dense_nodes[index].build(model, output_layer=True, classes=10)
 
     def mutate(self):
         rand = random.randrange(0, 4)
