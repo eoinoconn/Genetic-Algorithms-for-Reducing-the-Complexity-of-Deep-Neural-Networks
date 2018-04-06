@@ -1,5 +1,5 @@
 from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D, \
-    concatenate, Input, BatchNormalization, Activation
+    concatenate, Input, BatchNormalization, Activation, Concatenate
 from keras.models import Model
 import configparser
 import logging
@@ -30,7 +30,7 @@ class Node(GeneticObject):
         self.__vertex_type = ""
         self.__encoding = [0 for x in range(0, 12)]
         self.__id = Node._id
-        self.__active = True
+        self.active = True
         self._logger = logging.getLogger('geneset')
         Node._id += 1
 
@@ -104,6 +104,7 @@ class ConvNode(Node):
     def __init__(self, random_node=False):
         super().__init__()
         self._vertex_type = "conv"
+        self.tensor = None
 
         self.random_conv_filter_num()
         self.random_conv_kernel()
@@ -118,9 +119,8 @@ class ConvNode(Node):
             self.random_pool_stride()
             self.toggle_batch_normalisation()
 
-    def build(self, model):
-        model = Conv2D(self.encoding[0], self.encoding[2], strides=self.encoding[1], padding=self.encoding[4])(model)
-        self._logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
+    def build(self):
+        model = Conv2D(self.encoding[0], self.encoding[2], strides=self.encoding[1], padding=self.encoding[4])
         if self.encoding[9] == 1:  # Batch normalisation layer
             model = BatchNormalization()(model)
         if self.encoding[3] is not None:
@@ -130,10 +130,9 @@ class ConvNode(Node):
                 MaxPooling2D((self.encoding[7], self.encoding[7]), strides=self.encoding[8])(model)
             else:
                 AveragePooling2D((self.encoding[7], self.encoding[7]), strides=self.encoding[8])(model)
-            self._logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
         if self.encoding[5] > 0:  # Dropout layer
             model = Dropout(self.encoding[8])(model)
-        return model
+        self.tensor = model
 
     def mutate(self):
         rand = random.randrange(0, 9)
@@ -258,28 +257,38 @@ class DenseNode(Node):
         self._logger.info("set droupout to %f on node %d", self.encoding[1], self.id)
 
 
-class InputNode(Node):
+class ConvInputNode(Node):
 
-    def __init__(self):
+    def __init__(self, shape):
         super().__init__()
         self._vertex_type = "input"
+        self.shape = shape
+        self.tensor = None
+
+    def build(self):
+        self.tensor = Input(self.shape)
+        return self.tensor
 
 
-class FlattenNode(Node):
-    def __init__(self):
-        super().__init__()
-        self._vertex_type = "flatten"
+# class FlattenNode(Node):
+#    def __init__(self):
+#        super().__init__()
+#        self._vertex_type = "flatten"
+#
+#    @staticmethod
+#    def build(model):
+#        return Flatten()(model)
 
-    @staticmethod
-    def build(model):
-        return Flatten()(model)
 
-
-class OutputNode(Node):
+class ConvOutputNode(Node):
 
     def __init__(self):
         super().__init__()
         self._vertex_type = "output"
+        self.tensor = None
+
+    def build(self):
+        self.tensor = Flatten()
 
 
 class Chromosome(GeneticObject):
@@ -292,6 +301,8 @@ class Chromosome(GeneticObject):
         self.fitness = None
         self.accuracy = None
         self.parameters = None
+        self.input_conv_id = 0
+        self.output_conv_id = 0
         self.age = 0
         self.vertices = {}
         self.conv_nodes = []
@@ -312,38 +323,66 @@ class Chromosome(GeneticObject):
         self.minimal_structure()
 
     def minimal_structure(self):
+        self.add_node(ConvOutputNode())
+        self.output_conv_id = self.conv_nodes[0].id
         self.add_node(DenseNode())
+        self.input_conv_id = self.conv_nodes[2].id
+        self.add_node(ConvInputNode(self.shape))
 
     def add_node(self, node):
         if isinstance(node, ConvNode):
             self.conv_nodes.append(node)
-            self.vertices[node] = []
+            self.vertices[node.id] = []
         elif isinstance(node, DenseNode):
             self.dense_nodes.append(node)
         else:
             raise TypeError("node should be of type ConvNode or DenseNode")
 
-    def add_vertex(self, node, vertex):
-        self.vertices[node].append(vertex)
+    # add id of the node that inputs to node
+    def add_vertex(self, node, input_node_id):
+        self.vertices[node.id].append(input_node_id)
 
-    def remove_node(self, node):
-        self.vertices[node][0].actve = False
+    def remove_node(self, node_to_remove):
+        if isinstance(node_to_remove, Node):
+            node_to_remove = node_to_remove.id
+        for node in self.conv_nodes:
+            if node.id == node_to_remove:
+                node.active = False
+                return
+        for node in self.dense_nodes:
+            if node.id == node_to_remove:
+                node.active = False
+                return
 
-    def remove_vertex(self, node, vertex):
-        if vertex in self.vertices[node]:
-            self.vertices[node].remove(vertex)
+    def remove_vertex(self, node, input_node_id):
+        if isinstance(input_node_id, Node):
+            input_node_id = input_node_id.id
+        if isinstance(node, Node):
+            node = node.id
+        self.vertices[node].remove(input_node_id)
 
     def build(self):
-        input_layer = Input(shape=self.shape)
-        model = input_layer
-        if len(self.conv_nodes) > 0:
-            model = self.recurrently_build_graph(model, self.conv_nodes, self.vertices)
-        model = Flatten()(model)
-        model = self.recurrently_build_list(model, self.dense_nodes, 0)
+        self.build_conv_tensors()
+        self.assemble_graph()
+        model = self.recurrently_build_list(self.conv_nodes[self.output_conv_id].tensor, self.dense_nodes, 0)
+        input_layer = self.conv_nodes[self.input_conv_id].tensor
         return Model(inputs=input_layer, outputs=model)
 
-    def recurrently_build_graph(self, model, conv_nodes, vertices):
-        
+    def build_conv_tensors(self):
+        for node in self.conv_nodes:
+                node.build()
+
+    def assemble_graph(self):
+        # for each node starting from output node, we add to the model
+        for node in self.conv_nodes:
+            tensor = node.tensor
+            id_of_input_nodes = self.vertices[node.id]
+            tensors_to_concatenate = []
+            for id in id_of_input_nodes:
+                tensors_to_concatenate.append(self.conv_nodes[id].tensor)
+            if len(tensors_to_concatenate) > 0:
+                tensor = tensor(Concatenate(tensors_to_concatenate))
+                node.tensor = tensor
 
     def recurrently_build_list(self, model, dense_nodes, index):
         if index < (len(dense_nodes) - 1):
@@ -392,7 +431,7 @@ class Chromosome(GeneticObject):
         min_value, max_value, interval = self.config_min_max_interval('chromosome.batchsize')
         self.hyperparameters[2] = random.randrange(min_value, max_value + 1, interval)  # batch size
 
-    def logging(self, generation_num):
+    def log(self, generation_num):
         with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=' ',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
