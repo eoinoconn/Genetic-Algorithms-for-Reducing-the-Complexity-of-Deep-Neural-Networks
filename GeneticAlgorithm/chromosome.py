@@ -29,18 +29,18 @@ class Node(GeneticObject):
     def __init__(self):
         self.__vertex_type = ""
         self.__encoding = [0 for x in range(0, 12)]
-        self.__id = Node._id
+        self._id = Node._id
         self.active = True
         self._logger = logging.getLogger('geneset')
         Node._id += 1
 
     @property
     def id(self):
-        return self.__id
+        return self._id
 
     @id.setter
     def id(self, new_id):
-        self.__id = new_id
+        self._id = new_id
 
     @property
     def active(self):
@@ -311,7 +311,8 @@ class Chromosome(GeneticObject):
         Chromosome._id += 1
 
         config = configparser.ConfigParser()
-        config.read('GeneticAlgorithm/Config/training_parameters.ini')
+        config.read('C:/Users/eoino/Documents/GitHub/Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural'
+                    '-Networks/GeneticAlgorithm/Config/training_parameters.ini')
         logger = logging.getLogger('Chromosome')
         logger.info("creating parent genes")
 
@@ -320,17 +321,25 @@ class Chromosome(GeneticObject):
         self.random_batch_size()
 
         # Build minimal structure
+        if config['initial.generation'].getboolean('random_initial_generation'):
+            self.random_initial_generation()
+        else:
+            self.minimal_structure()
+
+    def random_initial_generation(self):
         self.minimal_structure()
 
     def minimal_structure(self):
         self.add_node(ConvOutputNode())
         self.output_conv_id = self.conv_nodes[0].id
-        self.add_node(DenseNode())
-        self.input_conv_id = self.conv_nodes[2].id
         self.add_node(ConvInputNode(self.shape))
+        self.input_conv_id = self.conv_nodes[1].id
+        self.add_vertex(self.output_conv_id, self.input_conv_id)
+        self.add_node(DenseNode())
+
 
     def add_node(self, node):
-        if isinstance(node, ConvNode):
+        if isinstance(node, (ConvNode, ConvOutputNode, ConvInputNode)):
             self.conv_nodes.append(node)
             self.vertices[node.id] = []
         elif isinstance(node, DenseNode):
@@ -340,7 +349,9 @@ class Chromosome(GeneticObject):
 
     # add id of the node that inputs to node
     def add_vertex(self, node, input_node_id):
-        self.vertices[node.id].append(input_node_id)
+        if isinstance(node, Node):
+            node = node.id
+        self.vertices[node].append(input_node_id)
 
     def remove_node(self, node_to_remove):
         if isinstance(node_to_remove, Node):
@@ -364,8 +375,8 @@ class Chromosome(GeneticObject):
     def build(self):
         self.build_conv_tensors()
         self.assemble_graph()
-        model = self.recurrently_build_list(self.conv_nodes[self.output_conv_id].tensor, self.dense_nodes, 0)
-        input_layer = self.conv_nodes[self.input_conv_id].tensor
+        model = self.recurrently_build_list(self.conv_by_id(self.output_conv_id).tensor, self.dense_nodes, 0)
+        input_layer = self.conv_by_id(self.input_conv_id).tensor
         return Model(inputs=input_layer, outputs=model)
 
     def build_conv_tensors(self):
@@ -379,17 +390,22 @@ class Chromosome(GeneticObject):
             id_of_input_nodes = self.vertices[node.id]
             tensors_to_concatenate = []
             for id in id_of_input_nodes:
-                tensors_to_concatenate.append(self.conv_nodes[id].tensor)
-            if len(tensors_to_concatenate) > 0:
+                tensors_to_concatenate.append(self.conv_by_id(id).tensor)
+            if len(tensors_to_concatenate) > 1:
                 tensor = tensor(Concatenate(tensors_to_concatenate))
+                node.tensor = tensor
+            if len(tensors_to_concatenate) == 1:
+                tensor = tensor(tensors_to_concatenate)
                 node.tensor = tensor
 
     def recurrently_build_list(self, model, dense_nodes, index):
         if index < (len(dense_nodes) - 1):
             model = dense_nodes[index].build(model)
             return self.recurrently_build_list(model, dense_nodes, (index + 1))
-        else:
+        elif index == (len(dense_nodes) - 1):
             return dense_nodes[index].build(model, output_layer=True, classes=10)
+        else:
+            return model
 
     def mutate(self):
         rand = random.randrange(0, 4)
@@ -397,12 +413,7 @@ class Chromosome(GeneticObject):
             """ Add node"""
             rand = random.randrange(0, 2)
             if rand == 0:
-                input_node = self.random_conv_node()
-                output_node = self.random_conv_node()
-                new_node = ConvNode(random_node=True)
-                self.add_vertex(input_node, new_node)
-                self.add_node(new_node)
-                self.add_vertex(new_node, output_node)
+                self.add_random_conv_node()
             else:
                 self.add_node(DenseNode(random_node=True))
         elif rand == 1:
@@ -420,6 +431,17 @@ class Chromosome(GeneticObject):
                 self.random_conv_node().mutate()
             else:
                 self.random_dense_node().mutate()
+
+    def add_random_conv_node(self):
+        while True:
+            input_node_id = self.random_conv_node().id
+            output_node_id = self.random_conv_node().id
+            if not self.creates_cycle(self.vertices, [input_node_id, output_node_id]):
+                new_node = ConvNode(random_node=True)
+                self.add_node(new_node)
+                self.add_vertex(new_node, input_node_id)
+                self.add_vertex(output_node_id, new_node)
+                break
 
     def random_conv_node(self):
         return random.choice(self.conv_nodes)
@@ -446,6 +468,39 @@ class Chromosome(GeneticObject):
                                  # chromosome.num_dense_layers(), ',',
                                  # chromosome.num_incep_layers(), ',',
                                  ])
+
+    def conv_nodes_iterator(self):
+        for node in self.conv_nodes:
+            yield node
+
+    def conv_by_id(self, id):
+        for node in self.conv_nodes_iterator():
+            if node.id == id:
+                return node
+
+    @staticmethod
+    def creates_cycle(connections, test):
+        """
+        Returns true if the addition of the 'test' connection would create a cycle,
+        assuming that no cycle already exists in the graph represented by 'connections'.
+        """
+        i, o = test
+        if i == o:
+            return True
+
+        visited = [o]
+        while True:
+            num_added = 0
+            for a, b in connections.items():
+                if a in visited and b not in visited:
+                    if b == i:
+                        return True
+
+                    visited.append(b)
+                    num_added += 1
+
+            if num_added == 0:
+                return False
 
     def __len__(self):
         return len(self.conv_nodes)

@@ -18,6 +18,10 @@ class TestChromosome(unittest.TestCase):
         chromo.build().summary()
         print("test 2")
 
+    def build_conv_model_test(self):
+        chromo = Chromosome()
+        chromo.add_random_conv_node()
+        chromo.build().summary()
 
 if __name__ == '__main__':
 
