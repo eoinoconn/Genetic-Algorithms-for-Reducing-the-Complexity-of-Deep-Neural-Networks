@@ -1,7 +1,7 @@
 from keras.utils import to_categorical
 
 from GeneticAlgorithm.crossover import crossover
-from GeneticAlgorithm.mutate import create_parent, mutate
+from GeneticAlgorithm.chromosome import Chromosome
 from GeneticAlgorithm.utils import *
 from keras.datasets import cifar10, mnist
 import operator
@@ -92,8 +92,7 @@ def create_population(input_shape, config, logger):
             pool.append(copy.deepcopy(known_architecture))
     else:
         for x in range(POOL_SIZE):
-            pool.append(create_parent(input_shape))
-            logger.info("Added chromosome number %d to population", pool[x].id)
+            pool.append(Chromosome(input_shape))
     return pool
 
 
@@ -138,7 +137,7 @@ def add_assessed_to_dict(chromosome, assessed_list):
 def mutate_population(population, logger):
     for chromosome in population[:(POOL_SIZE-(MAX_CROSSOVERS*4))]:
         logger.info("mutating chromosome %d", chromosome.id)
-        mutate(chromosome)
+        chromosome.mutate()
 
 
 def spawn_children(population, input_shape, logger):
