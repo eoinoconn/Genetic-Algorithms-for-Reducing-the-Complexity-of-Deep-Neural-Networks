@@ -161,6 +161,16 @@ class ConvNode(Node):
         else:
             self.toggle_batch_normalisation()
 
+    def compute_output_dimensions(self, input_dimensions):
+            width, height = input_dimensions
+            if width != heigth:
+                raise ValueError("width and height are not the same")
+            if self.encoding[4] == "same"
+                output_of_conv = width/self.encoding[1]
+            else:
+                ouput_of_conv = int((width - self.encoding[2]) / self.encoding[1])
+            self.output_dimension = int((output_conv - kernel_size) / stride_size + 1)
+
     def random_conv_filter_num(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.filter')
         self.encoding[0] = 2 ** random.randrange(min_value, max_value + 1, interval)  # sets layer units
@@ -269,6 +279,7 @@ class ConvInputNode(Node):
         super().__init__()
         self._vertex_type = "input"
         self.shape = shape
+        self.output_dimension = (shape[0], shape[1])
 
     def build(self):
         self.model = Input(self.shape)
@@ -381,28 +392,48 @@ class Chromosome(GeneticObject):
         input_layer = self.conv_by_id(self.input_conv_id).model
         return Model(inputs=input_layer, outputs=model)
 
+    """Each conv node needs to know its input and output dimensions. But this should only be calculated when building. 
+    Can only be calculated when building. Both should be stored as instance variables. Both should be swiped upon 
+    completion of the build, along with the tensors """
+
     def recurrently_build_graph(self, id):
-            node = self.conv_by_id(id)
-            input_node_ids = self.vertices[id]
-            tensors_to_concatenate = []
-            for input_id in input_node_ids:
-                if not self.conv_by_id(input_id).is_built():
-                    return
-                tensors_to_concatenate.append(self.conv_by_id(input_id).model)
-            if len(tensors_to_concatenate) > 1:
-                node.build(Concatenate(axis=3)(tensors_to_concatenate))
-            elif len(tensors_to_concatenate) == 1:
-                node.build(tensors_to_concatenate[0])
+        node = self.conv_by_id(id)
+        input_node_ids = self.vertices[id]
+        smallest_dimension = find_smallest_dimension(input_node_ids)
+        tensors_to_concatenate = []
+        for input_id in input_node_ids:
+            input_node = self.conv_by_id(input_id)
+            if not input_node.is_built():
+                return
+            tensors_to_concatenate.append(self.downsample_to(input_id.model, smallest_dimension, input_id.output_dimension))
+        if len(tensors_to_concatenate) > 1:
+            node.build(Concatenate(axis=3)(tensors_to_concatenate))
+        elif len(tensors_to_concatenate) == 1:
+            node.build(tensors_to_concatenate[0])
+        else:
+            node.build()
+        node.compute_output_dimension(smallest_dimension)
+        for output_id in self.conv_node_outputs(id):
+            self.recurrently_build_graph(output_id)
+
+    def downsample_to(self, tensor, downsample_to, input_at):
+        stride = 1
+        reduce_dimensions_by =  input_at - downsample_to
+        while true:
+            if downsample_to < int(input_at/(stride + 1)):     # could be a problem area
+                stride += 1
             else:
-                node.build()
-            for output_id in self.conv_node_outputs(id):
-                self.recurrently_build_graph(output_id)
-
-    def concatenate_tensors(self, node, tensors_to_concatenate):
-        smallest_output = tensors_to_concatenate[0].
-        for tensors in tensors_to_concatenate:
+                kernel = (int(input_at/(stride + 1)) - downsample_to)
+                break
+        return MaxPooling2D(kernel, strides=stride)(tensor)
 
 
+    def find_smallest_dimension(self, input_node_ids):
+        current_smallest = 1000
+        for id in input_node_ids:
+            if self.conv_by_id(id).output_dimension < current_smallest:
+                current_smallest = self.conv_by_id(id).output_dimension
+        return current_smallest
 
 
     # def build_conv_tensors(self):
