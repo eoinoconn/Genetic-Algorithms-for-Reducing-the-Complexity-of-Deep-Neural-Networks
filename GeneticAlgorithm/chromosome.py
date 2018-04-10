@@ -2,6 +2,7 @@ from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AverageP
     concatenate, Input, BatchNormalization, Activation, Concatenate
 from keras.models import Model
 from GeneticAlgorithm.node import *
+from pathlib import Path
 from GeneticAlgorithm.fitness import assess_chromosome_fitness
 import configparser
 import logging
@@ -28,9 +29,11 @@ class Chromosome(GeneticObject):
         self.shape = input_shape
         Chromosome._id += 1
 
+        data_folder = str(Path().home())
         config = configparser.ConfigParser()
-        config.read('C:/Users/eoino/Documents/GitHub/Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural'
-                    '-Networks/GeneticAlgorithm/Config/training_parameters.ini')
+        config.read(
+            data_folder + "/Documents/GitHub/Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural"
+            "-Networks/GeneticAlgorithm/Config/training_parameters.ini")
         logger = logging.getLogger('Chromosome')
         logger.info("creating parent genes")
 
@@ -103,22 +106,28 @@ class Chromosome(GeneticObject):
         node = self.conv_by_id(id)
         input_node_ids = self.vertices[id]
         if len(input_node_ids) > 0:
+            if not self.check_inputs_built(input_node_ids):
+                return
             smallest_dimension = self.find_smallest_dimension(input_node_ids)
             tensors_to_concatenate = []
             for input_id in input_node_ids:
                 input_node = self.conv_by_id(input_id)
-                if not input_node.is_built():
-                    return
                 tensors_to_concatenate.append(self.downsample_to(input_node.model, smallest_dimension, input_node.output_dimension))
             if len(tensors_to_concatenate) > 1:
                 node.build(Concatenate(axis=3)(tensors_to_concatenate))
             elif len(tensors_to_concatenate) == 1:
                 node.build(tensors_to_concatenate[0])
-            node.compute_output_dimension(smallest_dimension)
         else:
             node.build()
         for output_id in self.conv_node_outputs(id):
             self.recurrently_build_graph(output_id)
+
+    def check_inputs_built(self, input_node_ids):
+        for input_id in input_node_ids:
+            input_node = self.conv_by_id(input_id)
+            if not input_node.is_built():
+                return False
+        return True
 
     def downsample_to(self, tensor, downsample_to, input_at):
         stride = 1
@@ -131,8 +140,8 @@ class Chromosome(GeneticObject):
         return MaxPooling2D(kernel, strides=stride)(tensor)
 
     def find_smallest_dimension(self, input_node_ids):
-        if len(input_node_ids) == 0:
-            return
+        if len(input_node_ids) == 1:
+            return input_node_ids[0]
         current_smallest = 1000
         for id in input_node_ids:
             if self.conv_by_id(id).output_dimension < current_smallest:
@@ -216,9 +225,6 @@ class Chromosome(GeneticObject):
                                  self.fitness, ',',
                                  self.parameters, ',',
                                  len(self), ',',
-                                 # chromosome.num_conv_layers(), ',',
-                                 # chromosome.num_dense_layers(), ',',
-                                 # chromosome.num_incep_layers(), ',',
                                  ])
 
     def conv_nodes_iterator(self):

@@ -1,20 +1,27 @@
 from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D, \
     concatenate, Input, BatchNormalization, Activation, Concatenate
 from keras.models import Model
-from GeneticAlgorithm.node import *
 import configparser
+from pathlib import Path
 import logging
 import random
 import csv
+
+
+class DimensionException(Exception):
+    pass
+
 
 class GeneticObject(object):
 
     @staticmethod
     def config_min_max_interval(config_name):
+
+        data_folder = str(Path().home())
         config = configparser.ConfigParser()
         config.read(
-            "C:/Users/eoino/Documents/GitHub/Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural-Networks"
-            "/GeneticAlgorithm/Config/training_parameters.ini")
+            data_folder + "/Documents/GitHub/Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural"
+            "-Networks/GeneticAlgorithm/Config/training_parameters.ini")
         config = config[config_name]
         minimum = int(config['minimum'])
         maximum = int(config['maximum'])
@@ -42,6 +49,10 @@ class Node(GeneticObject):
     @id.setter
     def id(self, new_id):
         self._id = new_id
+
+    @property
+    def output_dimension(self):
+        return self.model.get_shape()[1]
 
     @property
     def active(self):
@@ -111,7 +122,6 @@ class ConvNode(Node):
     def __init__(self, random_node=False):
         super().__init__()
         self._vertex_type = "conv"
-        self.output_dimension = None
         self.random_conv_filter_num()
         self.random_conv_kernel()
         self.random_conv_stride()
@@ -126,6 +136,8 @@ class ConvNode(Node):
             self.toggle_batch_normalisation()
 
     def build(self, model):
+        if self.compute_output_dimension((model.get_shape()[1], model.get_shape()[2])) < 1:
+            raise DimensionException("Error with dimensions")
         model = Conv2D(self.encoding[0], self.encoding[2], strides=self.encoding[1], padding=self.encoding[4])(model)
         if self.encoding[9] == 1:  # Batch normalisation layer
             model = BatchNormalization()(model)
@@ -139,6 +151,16 @@ class ConvNode(Node):
         if self.encoding[5] > 0:  # Dropout layer
             model = Dropout(self.encoding[8])(model)
         self.model = model
+
+    def compute_output_dimension(self, input_dimensions):
+            width, heigth = input_dimensions
+            if width != heigth:
+                raise ValueError("width and height are not the same")
+            if self.encoding[4] == "same":
+                output_of_conv = int(width)/self.encoding[1]
+            else:
+                output_of_conv = int(int(width - self.encoding[2]) / int(self.encoding[1]))
+            return int((output_of_conv - self.encoding[7]) / self.encoding[8] + 1)
 
     def mutate(self):
         rand = random.randrange(0, 9)
@@ -161,15 +183,6 @@ class ConvNode(Node):
         else:
             self.toggle_batch_normalisation()
 
-    def compute_output_dimensions(self, input_dimensions):
-            width, heigth = input_dimensions
-            if width != heigth:
-                raise ValueError("width and height are not the same")
-            if self.encoding[4] == "same":
-                output_of_conv = width/self.encoding[1]
-            else:
-                output_of_conv = int((width - self.encoding[2]) / self.encoding[1])
-            self.output_dimension = int((output_of_conv - self.encoding[7]) / self.encoding[8] + 1)
 
     def random_conv_filter_num(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.filter')
@@ -279,21 +292,14 @@ class ConvInputNode(Node):
         super().__init__()
         self._vertex_type = "input"
         self.shape = shape
-        self.output_dimension = shape[0]
 
     def build(self):
         self.model = Input(self.shape)
         return self.model
 
-
-# class FlattenNode(Node):
-#    def __init__(self):
-#        super().__init__()
-#        self._vertex_type = "flatten"
-#
-#    @staticmethod
-#    def build(model):
-#        return Flatten()(model)
+    @property
+    def output_dimension(self):
+        return self.shape[1]
 
 
 class ConvOutputNode(Node):
@@ -301,11 +307,11 @@ class ConvOutputNode(Node):
     def __init__(self):
         super().__init__()
         self._vertex_type = "output"
-        self.output_dimensions = None
 
     def build(self, model):
         self.model = Flatten()(model)
 
-    def compute_output_dimension(self, input_dimensions):
-        self.output_dimensions = input_dimensions * input_dimensions
+    @property
+    def output_dimension(self):
+        return self.model.get_shape()[1]
 
