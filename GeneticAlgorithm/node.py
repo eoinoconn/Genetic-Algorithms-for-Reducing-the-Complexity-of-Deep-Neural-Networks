@@ -100,7 +100,7 @@ class Node(GeneticObject):
             return True
 
     def __str__(self):
-        enc_string = "Node type {}, Node id {}\n".format(self.vertex_type, self._id)
+        enc_string = "Node type {}, Node id {}\n".format(str(self.__vertex_type), self._id)
         enc_string += str(self.encoding)
         return enc_string
 
@@ -135,6 +135,8 @@ class ConvNode(Node):
         self.random_conv_stride()
         self.encoding[3] = 'relu'
         self.random_conv_layer_padding()
+        self.last_mutate_index = None
+        self.pre_mutate_value = None
 
         if random_node:
             self.random_conv_dropout()
@@ -213,11 +215,15 @@ class ConvNode(Node):
         self._logger.info("set con filters to %d on node %d", self.encoding[0], self.id)
 
     def random_conv_kernel(self):
+        self.last_mutate_index = 1
+        self.pre_mutate_value = self.encoding[1]
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.kernel')
         self.encoding[1] = random.randrange(min_value, max_value + 1, interval)
         self._logger.info("set kernel size to %d on node %d", self.encoding[1], self.id)
 
     def random_conv_stride(self):
+        self.last_mutate_index = 2
+        self.pre_mutate_value = self.encoding[2]
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.stride')
         self.encoding[2] = random.randrange(min_value, self.encoding[1] + 1, interval)
         self._logger.info("set conv stride to %d on node %d", self.encoding[2], self.id)
@@ -237,26 +243,37 @@ class ConvNode(Node):
         self._logger.info("set droupout to %f on node %d", self.encoding[7], self.id)
 
     def random_pooling_type(self):
+        self.last_mutate_index = 7
+        self.pre_mutate_value = self.encoding[7]
         min_value, max_value, interval = self.config_min_max_interval('pooling.type')
         self.encoding[6] = random.randrange(min_value, max_value + 1, interval)
         self._logger.info("set pooling type to %s on node %d", self.encoding[6], self.id)
 
     def random_pooling_size(self):
+        self.last_mutate_index = 7
+        self.pre_mutate_value = self.encoding[7]
         min_value, max_value, interval = self.config_min_max_interval('pooling.filter')
         self.encoding[7] = random.randrange(min_value, max_value + 1, interval)
         self._logger.info("set pooling size to %d on node %d", self.encoding[7], self.id)
 
     def random_pool_stride(self):
+        self.last_mutate_index = 8
+        self.pre_mutate_value = self.encoding[8]
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.pool.stride')
         self.encoding[8] = random.randrange(min_value, self.encoding[6] + 1, interval)
         self._logger.info("set pool stride to %d on node %d", self.encoding[8], self.id)
 
     def toggle_batch_normalisation(self):
+        self.last_mutate_index = 9
+        self.pre_mutate_value = self.encoding[9]
         if self.encoding[9] == 1:
             self.encoding[9] = 0
         else:
             self.encoding[9] = 1
         self._logger.info("set batch normalisation to %d on node %d", self.encoding[10], self.id)
+
+    def undo_last_mutate(self):
+        self.encoding[self.last_mutate_index] = self.pre_mutate_value
 
 
 class DenseNode(Node):

@@ -45,6 +45,15 @@ class TestChromosome(unittest.TestCase):
         print("failed conv models = " + str(counter))
         assert True
 
+    def very_complex_conv_model_test(self):
+        counter = 0
+        for i in range(10):
+            print(i)
+            if self.build_very_complex_conv_model():
+                counter += 1
+        print("failed conv models = " + str(counter))
+        assert True
+
     def real_model_test(self):
         counter = 0
         for i in range(10):
@@ -75,21 +84,63 @@ class TestChromosome(unittest.TestCase):
             return True
 
     @staticmethod
+    def build_very_complex_conv_model():
+        try:
+            chromo = Chromosome((32, 32, 3))
+            for i in range(25):
+                chromo.add_random_conv_node()
+            chromo.build().summary()
+        except CantAddNode:
+            del chromo
+            return True
+
+    @staticmethod
     def build_real_model():
         try:
             chromo = Chromosome((32, 32, 3))
             for i in range(5):
                 chromo.add_random_conv_node()
+                chromo.add_random_vertex()
             for i in range(5):
                 chromo.add_random_dense_node()
             chromo.build().summary()
         except CantAddNode:
             return True
 
-    #def mutate_test(self):
-    #    chromo = Chromosome((32, 32, 3))
-    #    for i in range(30):
-    #        chromo.mutate()
+    @staticmethod
+    def graph_test():
+        while True:
+            try:
+                chromo = Chromosome((32, 32, 3))
+                for i in range(5):
+                    chromo.add_random_conv_node()
+                    chromo.add_random_vertex()
+                for i in range(5):
+                    chromo.add_random_dense_node()
+                chromo.build().summary()
+                chromo.draw_graph()
+            except CantAddNode:
+                continue
+            break
+
+    @staticmethod
+    def mutate_test():
+        count = 0
+        chromo = Chromosome((32, 32, 3))
+        for i in range(200):
+            chromo.mutate()
+            count += 1
+        print(count)
+
+    @staticmethod
+    def mutate_and_build_test():
+        count = 0
+        chromo = Chromosome((32, 32, 3))
+        for i in range(30):
+            chromo.mutate()
+            chromo.build()
+            count += 1
+        print(count)
 
 if __name__ == '__main__':
 
