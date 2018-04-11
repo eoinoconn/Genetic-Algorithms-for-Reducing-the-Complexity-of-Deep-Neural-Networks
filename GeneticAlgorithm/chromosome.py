@@ -76,10 +76,7 @@ class Chromosome(GeneticObject):
     def add_vertex(self, node, input_node_id):
         if isinstance(node, Node):
             node = node.id
-        print("Testing add vertex" + str(node) + " " + str(input_node_id))
-        print(self.vertices)
         self.vertices[node].append(input_node_id)
-        print(self.vertices)
 
     def remove_node(self, node_to_remove):
         if isinstance(node_to_remove, Node):
@@ -90,7 +87,6 @@ class Chromosome(GeneticObject):
                 for node_id in self.conv_node_outputs(node_to_remove):
                     self.remove_vertex(node_id, node_to_remove)
                 self.vertices.pop(node_to_remove)
-                #self.conv_nodes.remove(node)
                 return
         for idx, val in enumerate(self.dense_nodes):
             if val.id == node_to_remove:
@@ -102,17 +98,11 @@ class Chromosome(GeneticObject):
             input_node_id = input_node_id.id
         if isinstance(node, Node):
             node = node.id
-        print("Checking remove vertices, %d, %d", node, input_node_id)
-        print(self.vertices)
         self.vertices[node].remove(input_node_id)
-        print(self.vertices)
 
     def build(self):
         self._logger.info(str(self))
         self.recurrently_build_graph(self.input_conv_id)
-        if self.conv_by_id(self.output_conv_id).model is None:
-            print(self.vertices)
-            print("okay")
         model = self.recurrently_build_list(self.conv_by_id(self.output_conv_id).model, self.dense_nodes, 0)
         input_layer = self.conv_by_id(self.input_conv_id).model
         self.destroy_models()
@@ -195,9 +185,8 @@ class Chromosome(GeneticObject):
         self._logger.info("Smallest dimension is %d", current_smallest)
         return current_smallest
 
-    def evaluate(self):
-        raise NotImplementedError
-        # assess_chromosome_fitness()
+    def evaluate(self, training_data):
+        assess_chromosome_fitness(self.build(), self.hyperparameters, training_data)
 
     def recurrently_build_list(self, model, dense_nodes, index):
         if index < (len(dense_nodes) - 1):
@@ -281,16 +270,22 @@ class Chromosome(GeneticObject):
         self.add_node(DenseNode(random_node=True))
 
     def add_random_vertex(self):
-        while True:
+        for i in range(50):
             input_node = self.random_conv_node()
             output_node = self.random_conv_node()
             if (output_node.id == self.input_conv_id) or (input_node.id == self.output_conv_id) or not (output_node.active or input_node.active) :
                 continue
             self.add_vertex(output_node.id, input_node.id)
-            if not self.creates_cycle():
-                break
-            self.remove_vertex(output_node.id, input_node.id)
-        return True
+            if self.creates_cycle():
+                self.remove_vertex(output_node.id, input_node.id)
+                continue
+            try:
+                self.build()
+                return True
+            except DimensionException:
+                self.remove_vertex(output_node.id, input_node.id)
+                continue
+        return False
 
     def add_random_conv_node(self):
         input_node_id, output_node_id = self.find_random_vertex()
@@ -301,8 +296,6 @@ class Chromosome(GeneticObject):
         self.add_vertex(new_node_id, input_node_id)
         self.add_vertex(output_node_id, new_node_id)
         self._logger.info("Attempting to add conv node with id %d", new_node_id)
-        print("attempting to add conv node")
-        print(self.vertices)
         for i in range(100):
             try:
                 self.build()
@@ -311,8 +304,6 @@ class Chromosome(GeneticObject):
                 continue
             if not self.creates_cycle():
                 return
-        print("add conv node failed, reoving " + str(new_node_id))
-        print(self.vertices)
         self.remove_vertex(new_node_id, input_node_id)
         self.remove_vertex(output_node_id, new_node_id)
         self.add_vertex(output_node_id, input_node_id)
@@ -327,36 +318,6 @@ class Chromosome(GeneticObject):
             break
         random_input_id = random.choice(self.vertices[random_output_id])
         return random_input_id, random_output_id
-
-    # def add_random_conv_node(self):
-    #     new_node = ConvNode(random_node=True)
-    #     self.add_node(new_node)
-    #     new_node_id = new_node.id
-    #     # loop to find suitable vertex
-    #     while True:
-    #         input_node_id = self.random_conv_node().id
-    #         output_node_id = self.random_conv_node().id
-    #         if (output_node_id == self.input_conv_id) or (input_node_id == self.output_conv_id):
-    #             continue
-    #         self.add_vertex(new_node, input_node_id)
-    #         self.add_vertex(output_node_id, new_node.id)
-    #         if not self.creates_cycle():
-    #             break
-    #         self.remove_vertex(new_node_id, input_node_id)
-    #         self.remove_vertex(output_node_id, new_node_id)
-    #     # loop to find suitable dimensions for vertex
-    #     for i in range(100):
-    #         try:
-    #             self.build()
-    #         except DimensionException:
-    #             self.conv_by_id(new_node_id).reshuffle_dimensions()
-    #             continue
-    #         return
-    #     self.remove_vertex(new_node_id, input_node_id)
-    #     self.remove_vertex(output_node_id, new_node_id)
-    #     self.remove_node(new_node_id)
-    #     self._logger.info("Failed to add conv node")
-    #     raise CantAddNode
 
     def random_conv_node(self):
         while True:

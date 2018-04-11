@@ -127,7 +127,8 @@ class TestChromosome(unittest.TestCase):
     def mutate_test():
         count = 0
         chromo = Chromosome((32, 32, 3))
-        for i in range(200):
+        for i in range(50):
+            print("Mutate no " + str(i))
             chromo.mutate()
             count += 1
         print(count)
@@ -137,10 +138,38 @@ class TestChromosome(unittest.TestCase):
         count = 0
         chromo = Chromosome((32, 32, 3))
         for i in range(30):
+            print("Mutate and build no "+ str(i))
             chromo.mutate()
             chromo.build()
             count += 1
         print(count)
+
+
+def unpack_testing_data(num_labels):
+    (train_dataset, train_labels), (test_dataset, test_labels) = cifar10.load_data()
+
+    print('train_dataset shape:', train_dataset.shape)
+    print(train_dataset.shape[0], 'train samples')
+    print(test_dataset.shape[0], 'test samples')
+
+    if k.image_data_format == 'channels_first':
+        train_dataset = train_dataset.reshape(train_dataset.shape[0], 3, img_rows, img_cols)
+        test_dataset = test_dataset.reshape(test_dataset.shape[0], 3, img_rows, img_cols)
+    else:
+        train_dataset = train_dataset.reshape(train_dataset.shape[0], img_rows, img_cols, 3)
+        test_dataset = test_dataset.reshape(test_dataset.shape[0], img_rows, img_cols, 3)
+
+    train_labels = to_categorical(train_labels, num_labels)
+    test_labels = to_categorical(test_labels, num_labels)
+
+    train_dataset = train_dataset.astype('float32')
+    test_dataset = test_dataset.astype('float32')
+    train_dataset /= 255
+    test_dataset /= 255
+
+    return {"train_dataset": train_dataset, "train_labels": train_labels,
+            "valid_dataset": None, "valid_labels": None,
+            "test_dataset": test_dataset, "test_labels": test_labels}
 
 if __name__ == '__main__':
 

@@ -26,7 +26,7 @@ def get_best(max_generations, input_shape, training_data):
 
     setup_csvlogger()
 
-    trained_chromosomes = {}
+    # trained_chromosomes = {}
 
     generation = 1
     population = create_population(input_shape, config, logger)
@@ -87,9 +87,7 @@ def create_population(input_shape, config, logger):
     """
     pool = []
     if config['search.known.architecture'].getboolean('enable'):
-        known_architecture = load_known_architecture(config['search.known.architecture']['file_name'], input_shape)
-        for x in range(POOL_SIZE):
-            pool.append(copy.deepcopy(known_architecture))
+        raise NotImplementedError
     else:
         for x in range(POOL_SIZE):
             pool.append(Chromosome(input_shape))
@@ -107,31 +105,14 @@ def assess_population_fitness(population, training_data, assessed_list, logger):
     """
     for chromosome in population:
         chromosome.log_geneset()
-        mash_value = chromosome.mash()
-        if mash_value in assessed_list:
-            # chromosome already trained
-            logger.info("chromosome %d, age %d, already trained as chromosome %d, age %d",
-                        chromosome.id,
-                        chromosome.age,
-                        assessed_list[mash_value][3],
-                        assessed_list[mash_value][4])
-            chromosome.assume_values(assessed_list[mash_value])
-        else:
-            # chromosome not trained before
-            logger.info("getting fitness of chromosome %d", chromosome.id)
-            chromosome.assess_fitness(training_data)
-            logger.info("fitness: %f, Accuracy: %f, Parameters: %d", 
-                        chromosome.fitness,
-                        chromosome.accuracy,
-                        chromosome.parameters)
-            add_assessed_to_dict(chromosome, assessed_list)
+        logger.info("getting fitness of chromosome %d", chromosome.id)
+        chromosome.assess(training_data)
+        logger.info("fitness: %f, Accuracy: %f, Parameters: %d",
+                    chromosome.fitness,
+                    chromosome.accuracy,
+                    chromosome.parameters)
     population.sort(key=operator.attrgetter('fitness'))
     return population[-1]
-
-
-def add_assessed_to_dict(chromosome, assessed_list):
-    assessed_list[chromosome.mash()] = [chromosome.fitness, chromosome.accuracy,
-                                        chromosome.parameters, chromosome.id, chromosome.age]
 
 
 def mutate_population(population, logger):
