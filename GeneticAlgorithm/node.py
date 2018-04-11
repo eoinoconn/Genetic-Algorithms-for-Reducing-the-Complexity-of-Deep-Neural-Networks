@@ -12,6 +12,10 @@ class DimensionException(Exception):
     pass
 
 
+class CantAddNode(Exception):
+    pass
+
+
 class GeneticObject(object):
 
     @staticmethod
@@ -52,7 +56,7 @@ class Node(GeneticObject):
 
     @property
     def output_dimension(self):
-        return self.model.get_shape()[1]
+        return int(self.model.get_shape()[1])
 
     @property
     def active(self):
@@ -84,6 +88,10 @@ class Node(GeneticObject):
     @encoding.deleter
     def encoding(self):
         del self.__encoding
+
+    def delete_model(self):
+        del self.model
+        self.model = None
 
     def is_built(self):
         if self.model is None:
@@ -137,7 +145,8 @@ class ConvNode(Node):
 
     def build(self, model):
         if self.compute_output_dimension((model.get_shape()[1], model.get_shape()[2])) < 1:
-            raise DimensionException("Error with dimensions")
+            self._logger.info("Dimensions are {}" + str(self.compute_output_dimension((model.get_shape()[1], model.get_shape()[2]))))
+            raise DimensionException("Error with dimensions; model shape {}", model.get_shape())
         model = Conv2D(self.encoding[0], self.encoding[2], strides=self.encoding[1], padding=self.encoding[4])(model)
         if self.encoding[9] == 1:  # Batch normalisation layer
             model = BatchNormalization()(model)
@@ -150,9 +159,12 @@ class ConvNode(Node):
                 AveragePooling2D((self.encoding[7], self.encoding[7]), strides=self.encoding[8])(model)
         if self.encoding[5] > 0:  # Dropout layer
             model = Dropout(self.encoding[8])(model)
+        self._logger.info("Dimensions after build of node %d are {}", self.id)
+        self._logger.info(model.get_shape())
         self.model = model
 
     def compute_output_dimension(self, input_dimensions):
+            """Computes expected conv node output based on encoding"""
             width, heigth = input_dimensions
             if width != heigth:
                 raise ValueError("width and height are not the same")
@@ -160,7 +172,15 @@ class ConvNode(Node):
                 output_of_conv = int(width)/self.encoding[1]
             else:
                 output_of_conv = int(int(width - self.encoding[2]) / int(self.encoding[1]))
-            return int((output_of_conv - self.encoding[7]) / self.encoding[8] + 1)
+            self._logger.info("output dimensions of convolutional layer for node {0} is {1}".format(str(self.id), str(
+                output_of_conv)))
+            if self.encoding[6] > 0:
+                output_dimension = int((output_of_conv - self.encoding[7]) / self.encoding[8] + 1)
+            else:
+                output_dimension = output_of_conv
+            self._logger.info("output dimensions of pooling layer for node {0} is {1}".format(str(self.id), str(
+                output_dimension)))
+            return output_dimension
 
     def mutate(self):
         rand = random.randrange(0, 9)
@@ -183,6 +203,9 @@ class ConvNode(Node):
         else:
             self.toggle_batch_normalisation()
 
+    def reshuffle_dimensions(self):
+        self.random_conv_kernel()
+        self.random_conv_stride()
 
     def random_conv_filter_num(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.filter')
@@ -200,11 +223,12 @@ class ConvNode(Node):
         self._logger.info("set conv stride to %d on node %d", self.encoding[2], self.id)
 
     def random_conv_layer_padding(self):
-        padding_index = random.randrange(0, 2)
-        if padding_index == 0:
-            self.encoding[4] = 'same'
-        else:
-            self.encoding[4] = 'valid'
+        # padding_index = random.randrange(0, 2)
+        # if padding_index == 0:
+        #     self.encoding[4] = 'same'
+        # else:
+        #     self.encoding[4] = 'valid'
+        self.encoding[4] = 'same'
         self._logger.info("set padding to %s on node %d", self.encoding[4], self.id)
 
     def random_conv_dropout(self):

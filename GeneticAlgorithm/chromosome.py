@@ -1,6 +1,8 @@
 from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D, \
     concatenate, Input, BatchNormalization, Activation, Concatenate
+from keras.backend import clear_session
 from keras.models import Model
+from tensorflow import reset_default_graph
 from GeneticAlgorithm.node import *
 from pathlib import Path
 from GeneticAlgorithm.fitness import assess_chromosome_fitness
@@ -20,6 +22,7 @@ class Chromosome(GeneticObject):
         self.fitness = None
         self.accuracy = None
         self.parameters = None
+        self._logger = None
         self.input_conv_id = 0
         self.output_conv_id = 0
         self.age = 0
@@ -34,8 +37,8 @@ class Chromosome(GeneticObject):
         config.read(
             data_folder + "/Documents/GitHub/Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural"
             "-Networks/GeneticAlgorithm/Config/training_parameters.ini")
-        logger = logging.getLogger('Chromosome')
-        logger.info("creating parent genes")
+        self._logger = logging.getLogger('Chromosome')
+        self._logger.info("creating parent genes")
 
         self.hyperparameters[0] = 'categorical_crossentropy'    # loss
         self.hyperparameters[1] = 'adam'                        # optimizer
@@ -93,14 +96,22 @@ class Chromosome(GeneticObject):
         self.vertices[node].remove(input_node_id)
 
     def build(self):
+        self._logger.info(str(self))
         self.recurrently_build_graph(self.input_conv_id)
         model = self.recurrently_build_list(self.conv_by_id(self.output_conv_id).model, self.dense_nodes, 0)
         input_layer = self.conv_by_id(self.input_conv_id).model
+        self.destroy_models()
         return Model(inputs=input_layer, outputs=model)
 
     """Each conv node needs to know its input and output dimensions. But this should only be calculated when building. 
     Can only be calculated when building. Both should be stored as instance variables. Both should be swiped upon 
     completion of the build, along with the tensors """
+
+    def destroy_models(self):
+        for node in self.conv_nodes_iterator():
+            node.delete_model()
+        reset_default_graph()  # for being sure
+        clear_session()  # removing session, it will instance another
 
     def recurrently_build_graph(self, id):
         node = self.conv_by_id(id)
@@ -114,7 +125,7 @@ class Chromosome(GeneticObject):
                 input_node = self.conv_by_id(input_id)
                 tensors_to_concatenate.append(self.downsample_to(input_node.model, smallest_dimension, input_node.output_dimension))
             if len(tensors_to_concatenate) > 1:
-                node.build(Concatenate(axis=3)(tensors_to_concatenate))
+                node.build(Concatenate(axis=-1)(tensors_to_concatenate))
             elif len(tensors_to_concatenate) == 1:
                 node.build(tensors_to_concatenate[0])
         else:
@@ -130,22 +141,34 @@ class Chromosome(GeneticObject):
         return True
 
     def downsample_to(self, tensor, downsample_to, input_at):
+        self._logger.info("Downsampling for node %d from input at %d to %d", self.id, input_at, downsample_to)
         stride = 1
+        if downsample_to == input_at:
+            return tensor
+        kernel = 1
         while True:
-            if downsample_to < int(input_at/(stride + 1)):     # could be a problem area
+            if int((input_at - kernel) / (stride + 1) + 1) == downsample_to:  # could be a problem area
+                stride += 1
+                break
+            elif int((input_at - kernel) / (stride + 1) + 1) > downsample_to:  # could be a problem area
                 stride += 1
             else:
-                kernel = (int(input_at/(stride + 1)) - downsample_to)
+                kernel = -stride * (downsample_to - 1) + input_at
                 break
-        return MaxPooling2D(kernel, strides=stride)(tensor)
+        tensor = MaxPooling2D(kernel, strides=stride)(tensor)
+        self._logger.info("Output of downsampling: " + str(tensor.get_shape()))
+        return tensor
 
     def find_smallest_dimension(self, input_node_ids):
+        """Find smallest output dimensions in the given list of nodes"""
+        self._logger.info("Finding smallest dimension for node %d, with inputs" + str(input_node_ids))
         if len(input_node_ids) == 1:
-            return input_node_ids[0]
+            return self.conv_by_id(input_node_ids[0]).output_dimension
         current_smallest = 1000
         for id in input_node_ids:
             if self.conv_by_id(id).output_dimension < current_smallest:
                 current_smallest = self.conv_by_id(id).output_dimension
+        self._logger.info("Smallest dimension is %d", current_smallest)
         return current_smallest
 
     def evaluate(self):
@@ -162,40 +185,60 @@ class Chromosome(GeneticObject):
             return model
 
     def mutate(self):
-        rand = random.randrange(0, 4)
-        if rand == 0:
-            """ Add node"""
-            rand = random.randrange(0, 2)
+        while True:
+            rand = random.randrange(0, 4)
             if rand == 0:
-                self.add_random_conv_node()
+                """ Add node"""
+                rand = random.randrange(0, 2)
+                if rand == 0:
+                    try:
+                        self.add_random_conv_node()
+                    except CantAddNode:
+                        continue
+                    break
+                else:
+                    self.add_random_dense_node()
+            elif rand == 1:
+                """Add edge"""
+                self.add_random_vertex()
+                break
+            elif rand == 2:
+                """ Mutate hyperparameters"""
+                self.random_batch_size()
+                break
             else:
-                self.add_node(DenseNode(random_node=True))
-        elif rand == 1:
-            """Add edge"""
-            rand_node_1 = self.random_conv_node()
-            rand_node_2 = self.random_conv_node()
-            self.vertices[rand_node_1].append(rand_node_2)
-        elif rand == 2:
-            """ Mutate hyperparameters"""
-            self.random_batch_size()
-        else:
-            """Mutate random node"""
-            rand = random.randrange(0,2)
-            if rand == 0:
-                self.random_conv_node().mutate()
-            else:
-                self.random_dense_node().mutate()
+                """Mutate random node"""
+                rand = random.randrange(0, 2)
+                if rand == 0:
+                    self.random_conv_node().mutate()
+                else:
+                    self.random_dense_node().mutate()
+                break
+
+    def add_random_dense_node(self):
+        self.add_node(DenseNode(random_node=True))
+
+    def add_random_vertex(self):
+        while True:
+            input_node_id = self.random_conv_node().id
+            output_node_id = self.random_conv_node().id
+            if (output_node_id == self.input_conv_id) or (input_node_id == self.output_conv_id):
+                continue
+            self.add_vertex(output_node_id, input_node_id)
+            if not self.creates_cycle():
+                break
+            self.remove_vertex(output_node_id, input_node_id)
+        return True
 
     def add_random_conv_node(self):
         new_node = ConvNode(random_node=True)
         self.add_node(new_node)
         new_node_id = new_node.id
+        # loop to find suitable vertex
         while True:
             input_node_id = self.random_conv_node().id
-            if input_node_id == self.output_conv_id:
-                continue
             output_node_id = self.random_conv_node().id
-            if output_node_id == self.input_conv_id:
+            if (output_node_id == self.input_conv_id) or (input_node_id == self.output_conv_id):
                 continue
             self.add_vertex(new_node, input_node_id)
             self.add_vertex(output_node_id, new_node.id)
@@ -203,6 +246,18 @@ class Chromosome(GeneticObject):
                 break
             self.remove_vertex(new_node_id, input_node_id)
             self.remove_vertex(output_node_id, new_node_id)
+        # loop to find suitable dimensions for vertex
+        for i in range(100):
+            try:
+                self.build()
+            except DimensionException:
+                self.conv_by_id(new_node_id).reshuffle_dimensions()
+                continue
+            return
+        self.remove_vertex(new_node_id, input_node_id)
+        self.remove_vertex(output_node_id, new_node_id)
+        self.remove_node(new_node_id)
+        raise CantAddNode
 
     def random_conv_node(self):
         return random.choice(self.conv_nodes)
