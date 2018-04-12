@@ -85,6 +85,7 @@ def create_population(input_shape, config, logger):
     """
     pool = []
     if config['search.known.architecture'].getboolean('enable'):
+        logger.info("Loading known architecture")
         for x in range(POOL_SIZE):
             pool.append(copy.deepcopy(load_known_architecture(config['search.known.architecture']['file_name'], input_shape)))
     else:
