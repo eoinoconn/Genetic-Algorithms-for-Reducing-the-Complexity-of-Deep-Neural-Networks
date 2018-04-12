@@ -186,6 +186,7 @@ class Chromosome(GeneticObject):
         return current_smallest
 
     def evaluate(self, training_data):
+        self._logger.info("Evaluating fitness of chromosome %d, age %d", self.id, self.age)
         assess_chromosome_fitness(self.build(), self.hyperparameters, training_data)
 
     def recurrently_build_list(self, model, dense_nodes, index):
@@ -378,6 +379,8 @@ class Chromosome(GeneticObject):
         iterables of neighbouring vertices. For example:
 
         """
+        
+        self.
         visited = set()
         path = [object()]
         path_set = set(path)
