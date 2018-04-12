@@ -274,7 +274,9 @@ class Chromosome(GeneticObject):
         for i in range(50):
             input_node = self.random_conv_node()
             output_node = self.random_conv_node()
-            if (output_node.id == self.input_conv_id) or (input_node.id == self.output_conv_id) or not (output_node.active or input_node.active) :
+            if (output_node.id == self.input_conv_id) or (input_node.id == self.output_conv_id) or not \
+                    (output_node.active or input_node.active) or \
+                    (input_node == self.input_conv_id and output_node == self.output_conv_id):
                 continue
             self.add_vertex(output_node.id, input_node.id)
             if self.creates_cycle():

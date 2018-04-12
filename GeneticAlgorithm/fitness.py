@@ -55,8 +55,8 @@ def assess_chromosome_fitness(model, hyper_params,
     if valid_dataset is None:
         hist = model.fit(train_dataset, train_labels,
                          epochs=epochs,
-                         # batch_size=batch_size,
-                         steps_per_epoch = train_dataset.shape[0] // batch_size,
+                         batch_size=batch_size,
+                         # steps_per_epoch = train_dataset.shape[0] // batch_size,
                          validation_split=validation_split,
                          callbacks=callbacks,
                          verbose=verbose)
@@ -64,8 +64,8 @@ def assess_chromosome_fitness(model, hyper_params,
     else:
         hist = model.fit(train_dataset, train_labels,
                          epochs=epochs,
-                         steps_per_epoch=32,
-                         # batch_size=batch_size,
+                         #steps_per_epoch=32,
+                         batch_size=batch_size,
                          validation_data=(valid_dataset, valid_labels),
                          callbacks=callbacks,
                          verbose=verbose)
