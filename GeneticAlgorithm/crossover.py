@@ -41,6 +41,7 @@ def crossover(dom_parent, parent_2, input_shape):
             logger.info("geneset invalid")
 
         child.set_hyperparameters(copy_dom_parent_1.hyperparameters)
+        child.remove_weights(0)
         child.log_geneset(log_file='crossover')
 
     return child

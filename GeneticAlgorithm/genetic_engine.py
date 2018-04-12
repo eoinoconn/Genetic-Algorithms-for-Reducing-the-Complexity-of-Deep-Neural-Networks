@@ -37,7 +37,7 @@ def get_best(max_generations, input_shape, training_data):
         logger.info("pool size: %d", population.__len__())
 
         # Assign population fitness
-        best_child = assess_population_fitness(population, training_data, trained_chromosomes, logger)
+        best_child = assess_population_fitness(population, training_data, trained_chromosomes, generation, logger)
 
         # if new best chromosome found, save it
         if best_child > best_chromosome:
@@ -45,8 +45,6 @@ def get_best(max_generations, input_shape, training_data):
             best_chromosome = copy.deepcopy(best_child)
             best_chromosome.assess_fitness_with_test(training_data, log_csv=True)
             best_chromosome.log_best()
-
-        intermittent_logging(best_child, generation)
 
         # select best chromosomes
         population.extend(spawn_children(population, input_shape, logger))
@@ -87,9 +85,8 @@ def create_population(input_shape, config, logger):
     """
     pool = []
     if config['search.known.architecture'].getboolean('enable'):
-        known_architecture = load_known_architecture(config['search.known.architecture']['file_name'], input_shape)
         for x in range(POOL_SIZE):
-            pool.append(copy.deepcopy(known_architecture))
+            pool.append(copy.deepcopy(load_known_architecture(config['search.known.architecture']['file_name'], input_shape)))
     else:
         for x in range(POOL_SIZE):
             pool.append(create_parent(input_shape))
@@ -97,7 +94,7 @@ def create_population(input_shape, config, logger):
     return pool
 
 
-def assess_population_fitness(population, training_data, assessed_list, logger):
+def assess_population_fitness(population, training_data, assessed_list, generation_num, logger):
     """ Assesses the fitness of each chromosome
 
     :param population:
@@ -126,6 +123,7 @@ def assess_population_fitness(population, training_data, assessed_list, logger):
                         chromosome.accuracy,
                         chromosome.parameters)
             add_assessed_to_dict(chromosome, assessed_list)
+        intermittent_logging(chromosome, generation_num)
     population.sort(key=operator.attrgetter('fitness'))
     return population[-1]
 

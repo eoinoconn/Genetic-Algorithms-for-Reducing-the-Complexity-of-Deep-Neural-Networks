@@ -28,16 +28,19 @@ def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
     """
 
     current_dimension = genes.input_shape[0]
-    logger.info("checking for valid geneset; conv dimensions %d", current_dimension)
+    logger.info("checking for valid geneset for %d; conv dimensions %d", genes.id, current_dimension)
     for layer in genes.iterate_layers():
         if layer[0] == 2:
             if layer[7] == 'same':
-                padding = 1
+                current_dimension = conv_layer_output_size(current_dimension, 0, layer[2], 0)
+                logger.info("Check valid geneset: dimension %d", current_dimension)
             else:
                 padding = 0
-            current_dimension=conv_layer_output_size(current_dimension, layer[3], layer[2], padding)
+                current_dimension = conv_layer_output_size(current_dimension, layer[3], layer[2], padding)
+                logger.info("Check valid geneset: dimension %d", current_dimension)
             if layer[5] is not 0:
                 current_dimension = pooling_layer_output_size(current_dimension, layer[6], layer[8])
+                logger.info("Check valid geneset: dimension %d", current_dimension)
         elif layer[0] == 3:
             break
     if current_dimension < 1:
@@ -49,11 +52,11 @@ def check_valid_geneset(genes, logger=logging.getLogger(__name__)):
 
 
 def conv_layer_output_size(input_width, kernel_size, stride_size, padding_amount):
-    return (input_width-kernel_size + (2 * padding_amount))/stride_size + 1
+    return int((input_width-kernel_size + (2 * padding_amount))/stride_size)
 
 
 def pooling_layer_output_size(input_width, kernel_size, stride_size):
-    return (input_width - kernel_size)/stride_size + 1
+    return int((input_width - kernel_size)/stride_size + 1)
 
 
 def load_known_architecture(file_name, input_shape):

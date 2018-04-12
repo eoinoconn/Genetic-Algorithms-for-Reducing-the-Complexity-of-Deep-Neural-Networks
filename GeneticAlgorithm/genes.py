@@ -48,6 +48,11 @@ class Genes(object):
             for i in range(index, genes_length):
                 self.genes[i] = self.genes[i + 1]
 
+    def remove_weights(self, from_index):
+        for i in range(from_index, self.__len__()):
+            self.genes[i][-1] = 0
+            self.genes[i][-2] = 0
+
     def get_layer(self, index):
         return self.genes[index]
 
@@ -126,12 +131,12 @@ class Genes(object):
         self.log_geneset()
         logger = logging.getLogger(log_file)
         logger.info("new best chromosome, id = %d, age = %d", self.id, self.age)
-        print_summary(self.build_model(), print_fn=logger.info)
+        print_summary(self.build_model(logger), print_fn=logger.info)
         logger.info("Fitness: %.6f\tAccuracy: %.6f\tParameters %d\n", self.fitness, self.accuracy, self.parameters)
 
-    def build_model(self):
+    def build_model(self, logger):
         model = ChromosomeModel(self.genes, 10, self.input_shape, self.__len__())
-        return model.build_model()
+        return model.build_model(logger)
 
     @property
     def logger(self):
@@ -152,8 +157,10 @@ class Genes(object):
 
     def __str__(self):
         str = self.hyperparameters.__str__() + "\n"
+        shape1 = '0'
+        shape2 = '0'
         for layer in self.iterate_layers():
-            str += layer[:-2].__str__() + "\n"
+            str += layer[:-2].__str__() + shape1 + shape2 + "\n"
         return str
 
     def __len__(self):
