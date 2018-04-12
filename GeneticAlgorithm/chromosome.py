@@ -105,7 +105,6 @@ class Chromosome(GeneticObject):
         self.recurrently_build_graph(self.input_conv_id)
         model = self.recurrently_build_list(self.conv_by_id(self.output_conv_id).model, self.dense_nodes, 0)
         input_layer = self.conv_by_id(self.input_conv_id).model
-        self.destroy_models()
         return Model(inputs=input_layer, outputs=model)
 
     """Each conv node needs to know its input and output dimensions. But this should only be calculated when building. 
@@ -187,7 +186,8 @@ class Chromosome(GeneticObject):
 
     def evaluate(self, training_data):
         self._logger.info("Evaluating fitness of chromosome %d, age %d", self.id, self.age)
-        assess_chromosome_fitness(self.build(), self.hyperparameters, training_data)
+        assess_chromosome_fitness(self.build(), self.hyperparameters, **training_data)
+        self.destroy_models()
 
     def recurrently_build_list(self, model, dense_nodes, index):
         if index < (len(dense_nodes) - 1):
@@ -380,7 +380,7 @@ class Chromosome(GeneticObject):
 
         """
         
-        self.
+        self._logger.info("Checking for created cycle")
         visited = set()
         path = [object()]
         path_set = set(path)
@@ -436,8 +436,14 @@ class Chromosome(GeneticObject):
         # show graph
         plt.show()
 
-    def __len__(self):
+    def num_conv_nodes(self):
         return len(self.conv_nodes)
+
+    def num_dense_nodes(self):
+        return len(self.dense_nodes)
+
+    def __len__(self):
+        return len(self.conv_nodes) + len(self.dense_nodes)
 
     def __str__(self):
         string = ""
