@@ -1,8 +1,10 @@
 import logging
 import configparser
 import csv
+import random
 
 from keras.callbacks import EarlyStopping, History, TensorBoard
+from keras.optimizers import adam
 from keras.utils import print_summary
 
 
@@ -42,12 +44,14 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
         epochs = int(config['training.parameters']['epochs'])
         batch_size = int(config['training.parameters']['batch_size'])
         loss = config['training.parameters']['loss_function']
-        optimizer = config['training.parameters']['optimizer']
+        learning_rate = config['training.parameters']['learning_rate']
+        optimizer = adam(lr=learning_rate)
     else:
         epochs = hyper_params[2]
         batch_size = hyper_params[3]
         loss = hyper_params[0],
-        optimizer = hyper_params[1]
+        learning_rate = hyper_params[4]
+        optimizer = adam(lr=learning_rate)
 
     if eval_epochs is not None:
         epochs = eval_epochs
@@ -55,7 +59,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
     validation_split = float(config['training.parameters']['validation_split'])
     verbose = int(config['training.parameters']['fit_verbose'])
 
-    model.compile(loss=loss,
+    model.compile(loss='categorical_crossentropy',
                   optimizer=optimizer,
                   metrics=['accuracy'])
 

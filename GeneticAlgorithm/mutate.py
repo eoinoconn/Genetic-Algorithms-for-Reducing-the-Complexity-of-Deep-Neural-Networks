@@ -319,13 +319,15 @@ def create_parent(input_shape):
 
 
 def random_hyperparameters(logger):
-    hyperparameters = [0 for x in range(0, 4)]
+    hyperparameters = [0 for x in range(0, 5)]
     hyperparameters[0] = 'categorical_crossentropy'    # loss
     hyperparameters[1] = 'adam'                         # optimizer
     min_value, max_value, interval = config_min_max_interval('chromosome.epochs')
     hyperparameters[2] = random.randrange(min_value, max_value+1, interval)     # epochs
     min_value, max_value, interval = config_min_max_interval('chromosome.batchsize')
     hyperparameters[3] = random.randrange(min_value, max_value+1, interval)        # batch size
+    min_value, max_value, interval = config_min_max_interval('chromosome.learning_rate')
+    hyperparameters[4] = random.randrange(min_value, max_value + 1, interval)
     logger.info("Set hyperparameters, loss %s, optimizer %s, epochs %d, batch size %d", hyperparameters[0],
                 hyperparameters[1], hyperparameters[2], hyperparameters[3])
     return hyperparameters
@@ -335,8 +337,8 @@ def mutate_hyperparameters(genes):
     hyper_index = random.randrange(0, 2)
     hyperparameters = genes.hyperparameters
     if hyper_index == 0:
-        min_value, max_value, interval = config_min_max_interval('chromosome.epochs')
-        hyperparameters[2] = random.randrange(min_value, max_value + 1, interval)   # epochs
+        min_value, max_value, interval = config_min_max_interval('chromosome.learning_rate')
+        hyperparameters[4] = random.randrange(min_value, max_value + 1, interval)/1000   # epochs
     else:
         min_value, max_value, interval = config_min_max_interval('chromosome.batchsize')
         hyperparameters[3] = random.randrange(min_value, max_value + 1, interval)  # batch size
