@@ -79,7 +79,7 @@ class CIFAR10Test(unittest.TestCase):
         end = time.time()
 
         logger.info("time to best %f", end-start)
-        fitness, accuracy, parameters = assess_chromosome_fitness(best, evaluate_best=True, eval_epochs=100, **unpack_testing_data(10))[0] > 0.78)
+        fitness, accuracy, parameters = assess_chromosome_fitness(best, evaluate_best=True, eval_epochs=100, **unpack_testing_data(10))
         logger.info("Results of algorithm\n" + \
                     "Chromosome id %d, age %d\n" + \
                     "Fitness %f, Accuracy %f, Parameters %d", best.id, best.age, fitness, accuracy, parameters)

@@ -40,10 +40,7 @@ class ChromosomeModel(object):
             model = Conv2D(layer[1], layer[3], strides=layer[2], padding=layer[7])(model)
             logger.info("output dimensions (%d, %d)", model.shape[1], model.shape[2])
             if layer[10] == 1:       # Batch normalisation layer
-                if layer[-2] is not 0:
-                    model = self.batch_normalisation(model).set_weights(layer[-2])
-                else:
-                    model = self.batch_normalisation(model)
+                model = self.batch_normalisation(model)
             if layer[4] is not None:
                 model = self.activation(layer, model)
             if layer[9] > 0:    # Dropout layer
