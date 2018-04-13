@@ -327,7 +327,7 @@ def random_hyperparameters(logger):
     min_value, max_value, interval = config_min_max_interval('chromosome.batchsize')
     hyperparameters[3] = random.randrange(min_value, max_value+1, interval)        # batch size
     min_value, max_value, interval = config_min_max_interval('chromosome.learning_rate')
-    hyperparameters[4] = random.randrange(min_value, max_value + 1, interval)
+    hyperparameters[4] = random.randrange(min_value, max_value + 1, interval)/1000
     logger.info("Set hyperparameters, loss %s, optimizer %s, epochs %d, batch size %d", hyperparameters[0],
                 hyperparameters[1], hyperparameters[2], hyperparameters[3])
     return hyperparameters
