@@ -8,7 +8,7 @@ from keras.optimizers import adam
 from keras.utils import print_summary
 
 
-def assess_chromosome_fitness(genes, efficiency_balance=0.000001,
+def assess_chromosome_fitness(genes, efficiency_balance=0.00000001,
                               train_dataset=None, train_labels=None,
                               valid_dataset=None, valid_labels=None,
                               test_dataset=None, test_labels=None,
