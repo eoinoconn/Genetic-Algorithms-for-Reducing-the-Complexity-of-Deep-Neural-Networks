@@ -8,7 +8,7 @@ from keras.optimizers import adam
 from keras.utils import print_summary
 
 
-def assess_chromosome_fitness(genes, efficiency_balance=0.000000001,
+def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
                               train_dataset=None, train_labels=None,
                               valid_dataset=None, valid_labels=None,
                               test_dataset=None, test_labels=None,
@@ -63,7 +63,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.000000001,
                   optimizer=optimizer,
                   metrics=['accuracy'])
 
-    logger_fitness.info("Model compiled succesfully, beginning training...")
+    logger_fitness.info("Model compiled succesfully, learning rate %f, beginning training...", learning_rate)
 
     # get callbacks
     callbacks = get_callbacks(config)
