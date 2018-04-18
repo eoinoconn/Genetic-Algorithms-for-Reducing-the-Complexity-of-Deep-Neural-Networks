@@ -47,7 +47,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.000000001,
         learning_rate = config['training.parameters']['learning_rate']
         optimizer = adam(lr=learning_rate)
     else:
-        epochs = hyper_params[2]
+        epochs = 15
         batch_size = hyper_params[3]
         loss = hyper_params[0],
         learning_rate = hyper_params[4]
