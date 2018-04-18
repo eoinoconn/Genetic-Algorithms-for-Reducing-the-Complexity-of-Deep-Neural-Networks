@@ -70,7 +70,7 @@ def assess_chromosome_fitness(genes, efficiency_balance=0.0000001,
 
     if valid_dataset is None:
         hist = model.fit(train_dataset, train_labels,
-                         epochs=epochs,
+                         epochs=50,
                          batch_size=batch_size,
                          validation_split=validation_split,
                          callbacks=callbacks,
