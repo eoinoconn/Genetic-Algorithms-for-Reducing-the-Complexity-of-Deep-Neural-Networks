@@ -456,10 +456,10 @@ def add_layer(genes):
         new_layer = dense_layer()
         new_layer_location = random.randrange(flatten_index+1, genes.__len__())
         logger.info("adding layer type dense")
-    # elif layer_type == 2:   # inception module
-    #     new_layer = inception_layer()
-    #     new_layer_location = random.randrange(0, flatten_index + 1)
-    #     logger.info("adding layer type Inception")
+    elif layer_type == 2:   # inception module
+        new_layer = inception_layer()
+        new_layer_location = random.randrange(0, flatten_index + 1)
+        logger.info("adding layer type Inception")
     else:   # convolutional layer
         new_layer = convolutional_layer()
         new_layer_location = random.randrange(0, flatten_index+1)
