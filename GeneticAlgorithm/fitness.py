@@ -150,11 +150,7 @@ def reuse_previous_weights(genes, model, logger):
         elif layer[0] == 3:
             continue
         elif layer[0] == 4:
-            inception_weights_and_biases = genes.get_layer_weights(i)
-            for j in range(0, 6):
-                # model.layers[i + model_buffer].set_weights(weight_and_bias)
-                model_buffer += 1
-            model_buffer += 1  # concatenation layer
+            continue
         else:
             raise NotImplementedError
 
@@ -178,6 +174,8 @@ def save_model_weights(genes, model, logger):
             if layer[9] > 0:  # dropout
                 model_buffer += 1
         elif layer[0] == 3:
+            continue
+        elif layer[0] == 4:
             continue
         else:
             raise NotImplementedError

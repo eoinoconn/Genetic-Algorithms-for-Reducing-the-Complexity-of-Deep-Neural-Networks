@@ -75,7 +75,7 @@ class CIFAR10Test(unittest.TestCase):
         logger.info(get_git_hash())
 
         start = time.time()
-        best = get_best(30, (32, 32, 3), unpack_testing_data(10))
+        best = get_best(20, (32, 32, 3), unpack_testing_data(10))
         end = time.time()
 
         logger.info("time to best %f", end-start)
