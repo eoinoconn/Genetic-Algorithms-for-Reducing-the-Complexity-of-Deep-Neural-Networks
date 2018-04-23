@@ -199,7 +199,11 @@ def change_conv_layer_parameter(genes, logger):
 def random_pool_stride(old_layer):
     layer = copy.deepcopy(old_layer)
     min_value, max_value, interval = config_min_max_interval('convolutional.layer.pool.stride')
-    layer[8] = random.randrange(min_value, layer[6] + 1, interval)
+    if layer[6] == 0:
+        i = 1
+    else:
+        i = 0
+    layer[8] = random.randrange(min_value, layer[6] + 1 + i, interval)
     return layer
 
 
