@@ -2,7 +2,7 @@ from keras.utils import to_categorical
 from GeneticAlgorithm.crossover import crossover
 from GeneticAlgorithm.mutate import create_parent, mutate
 from GeneticAlgorithm.utils import *
-from keras.datasets import cifar10, mnist, fashion_mnist
+from keras.datasets import cifar10, cifar100, mnist, fashion_mnist
 import operator
 import logging
 import random
