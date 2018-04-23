@@ -9,7 +9,7 @@ import keras.backend as k
 
 from GeneticAlgorithm.genetic_engine import get_best
 from GeneticAlgorithm.fitness import assess_chromosome_fitness
-from keras.datasets import cifar10
+from keras.datasets import cifar100
 from keras.utils import to_categorical
 
 
