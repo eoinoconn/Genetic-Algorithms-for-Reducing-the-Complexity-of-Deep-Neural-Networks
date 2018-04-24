@@ -1,0 +1,70 @@
+import unittest
+import logging
+from GeneticAlgorithm.chromosome import *
+import keras as k
+from keras.utils import to_categorical
+from keras.backend import image_data_format
+from keras.datasets import cifar10
+
+
+class TestChromosome(unittest.TestCase):
+
+    def mutate_model_test(self):
+        logger = logging.getLogger('geneticEngine')
+        for i in range(1, 400):
+            logger.info("Chromosome num: %d", i)
+            while True:
+                logger.info("creating chromosome")
+                chromo = Chromosome((28, 28, 1))
+                try:
+                    for i in random.randrange(10):
+                        logger.info("adding conv_node")
+                        chromo.add_random_conv_node()
+                    for i in random.randrange(5):
+                        logger.info("adding random vertex")
+                        chromo.add_random_vertex()
+                    for i in random.randrange(5):
+                        logger.info("adding dense node")
+                        chromo.add_random_dense_node()
+                    chromo.build().summary()
+                    break
+                except CantAddNode:
+                    del chromo
+                    logger.info("Failed to assemble chromosome")
+                    continue
+            chromo.evaluate(self.unpack_data(10))
+
+    @staticmethod
+    def unpack_data(num_labels):
+        (train_dataset, train_labels), (test_dataset, test_labels) = cifar10.load_data()
+
+        print('train_dataset shape:', train_dataset.shape)
+        print(train_dataset.shape[0], 'train samples')
+        print(test_dataset.shape[0], 'test samples')
+
+        img_rows = 28
+        img_cols = 28
+
+        if image_data_format == 'channels_first':
+            train_dataset = train_dataset.reshape(train_dataset.shape[0], 1, img_rows, img_cols)
+            test_dataset = test_dataset.reshape(test_dataset.shape[0], 1, img_rows, img_cols)
+        else:
+            train_dataset = train_dataset.reshape(train_dataset.shape[0], img_rows, img_cols, 1)
+            test_dataset = test_dataset.reshape(test_dataset.shape[0], img_rows, img_cols, 1)
+
+        train_labels = to_categorical(train_labels, num_labels)
+        test_labels = to_categorical(test_labels, num_labels)
+
+        train_dataset = train_dataset.astype('float32')
+        test_dataset = test_dataset.astype('float32')
+        train_dataset /= 255
+        test_dataset /= 255
+
+        return {"train_dataset": train_dataset, "train_labels": train_labels,
+                "valid_dataset": None, "valid_labels": None,
+                "test_dataset": test_dataset, "test_labels": test_labels}
+
+
+if __name__ == '__main__':
+
+    unittest.main()
