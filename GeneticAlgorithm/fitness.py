@@ -14,7 +14,7 @@ def assess_chromosome_fitness(model, hyper_params,
                               evaluate_best=False, log_csv=False,
                               eval_epochs=None):
     config = configparser.ConfigParser()
-    config.read('../GeneticAlgorithm/Config/training_parameters.ini')
+    config.read('./GeneticAlgorithm/Config/training_parameters.ini')
 
     # initilise logging objects
     logger_fitness = logging.getLogger('fitness')
