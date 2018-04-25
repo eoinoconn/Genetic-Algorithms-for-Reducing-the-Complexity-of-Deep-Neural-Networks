@@ -8,6 +8,7 @@ from keras.datasets import cifar10
 
 
 def mutate_model_test():
+    setup_csvlogger()
     for i in range(1, 400):
         print("Chromosome num: %d", i)
         while True:
@@ -33,6 +34,7 @@ def mutate_model_test():
         print(str(chromo))
         chromo.evaluate(unpack_data(10))
         print("{} {} {}".format(chromo.fitness, chromo.accuracy, chromo.parameters))
+        intermittent_logging(chromo, i)
         print("\n\n")
 
 
