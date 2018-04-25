@@ -10,30 +10,32 @@ from keras.datasets import cifar10
 class TestChromosome(unittest.TestCase):
 
     def mutate_model_test(self):
-        logger = logging.getLogger('geneticEngine')
+        self.setup_csvlogger()
         for i in range(1, 400):
-            logger.info("Chromosome num: %d", i)
+            print("Chromosome num: %d", i)
             while True:
-                logger.info("creating chromosome")
+                print("creating chromosome")
                 chromo = Chromosome((32, 32, 3))
                 try:
                     for i in range(random.randrange(10)):
-                        logger.info("adding conv_node")
+                        print("adding conv_node")
                         chromo.add_random_conv_node()
                     for i in range(random.randrange(5)):
-                        logger.info("adding random vertex")
+                        print("adding random vertex")
                         chromo.add_random_vertex()
                     for i in range(random.randrange(5)):
-                        logger.info("adding dense node")
+                        print("adding dense node")
                         chromo.add_random_dense_node()
                     chromo.build().summary()
                     break
                 except CantAddNode:
                     del chromo
-                    logger.info("Failed to assemble chromosome")
+                    print("Failed to assemble chromosome")
                     continue
-            logger.info(str(chromo))
+            print("Topology:\n")
+            print(str(chromo))
             chromo.evaluate(self.unpack_data(10))
+            print("{} {} {}".format(chromo.fitness, chromo.accuracy, chromo.parameters))
 
     @staticmethod
     def unpack_data(num_labels):
@@ -64,6 +66,38 @@ class TestChromosome(unittest.TestCase):
         return {"train_dataset": train_dataset, "train_labels": train_labels,
                 "valid_dataset": None, "valid_labels": None,
                 "test_dataset": test_dataset, "test_labels": test_labels}
+
+    @staticmethod
+    def intermittent_logging(chromosome, generation_num):
+        with open('trend_graph.csv', 'a', newline='') as csvfile:
+            spamwriter = csv.writer(csvfile, delimiter=' ',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            spamwriter.writerow([generation_num, ',',
+                                 chromosome.id, ',',
+                                 chromosome.age, ',',
+                                 chromosome.accuracy, ',',
+                                 chromosome.fitness, ',',
+                                 chromosome.parameters, ',',
+                                 len(chromosome), ',',
+                                 chromosome.num_conv_nodes(), ',',
+                                 chromosome.num_dense_nodes(), ',',
+                                 ])
+
+    @staticmethod
+    def setup_csvlogger():
+        with open('trend_graph.csv', 'w', newline='') as csvfile:
+            spamwriter = csv.writer(csvfile, delimiter=' ',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            spamwriter.writerow(['generation', ',',
+                                 'id', ',',
+                                 'Age', ',',
+                                 'Fitness', ',',
+                                 'Accuracy', ',',
+                                 'Parameters', ',',
+                                 'Num Layers', ',',
+                                 'Num Conv Layers', ',',
+                                 'Num Dense Layers', ',',
+                                 ])
 
 
 if __name__ == '__main__':

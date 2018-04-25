@@ -186,7 +186,7 @@ class Chromosome(GeneticObject):
 
     def evaluate(self, training_data):
         self._logger.info("Evaluating fitness of chromosome %d, age %d", self.id, self.age)
-        assess_chromosome_fitness(self.build(), self.hyperparameters, **training_data)
+        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self.build(), self.hyperparameters, **training_data)
         self.destroy_models()
 
     def recurrently_build_list(self, model, dense_nodes, index):
