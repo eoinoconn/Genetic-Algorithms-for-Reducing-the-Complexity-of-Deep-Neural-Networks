@@ -45,17 +45,7 @@ def get_best(max_generations, input_shape, training_data):
             best_chromosome.assess_fitness_with_test(training_data, log_csv=True)
             best_chromosome.log_best()
 
-        # select best chromosomes
-        population.extend(spawn_children(population, input_shape, logger))
-
-        # remove poorest performers
-        population = cleanse_population(population, logger)
-
-        # mutate pool
-        mutate_population(population, logger)
-
-        # iterate the age of every chromosome in the population by 1
-        age_population(population)
+        population = create_population(input_shape, config, logger)
 
         logger.info("End of generation %d \n\n", generation)
         generation += 1
