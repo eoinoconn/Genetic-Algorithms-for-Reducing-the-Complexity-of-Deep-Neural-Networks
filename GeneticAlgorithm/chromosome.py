@@ -6,8 +6,8 @@ from tensorflow import reset_default_graph
 from GeneticAlgorithm.node import *
 from pathlib import Path
 from GeneticAlgorithm.fitness import assess_chromosome_fitness
-import networkx as nx
-import matplotlib.pyplot as plt
+# import networkx as nx
+# import matplotlib.pyplot as plt
 import configparser
 import logging
 import random

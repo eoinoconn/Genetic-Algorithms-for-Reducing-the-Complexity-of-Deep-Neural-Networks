@@ -15,15 +15,15 @@ class TestChromosome(unittest.TestCase):
             logger.info("Chromosome num: %d", i)
             while True:
                 logger.info("creating chromosome")
-                chromo = Chromosome((28, 28, 1))
+                chromo = Chromosome((32, 32, 3))
                 try:
-                    for i in random.randrange(10):
+                    for i in range(random.randrange(10)):
                         logger.info("adding conv_node")
                         chromo.add_random_conv_node()
-                    for i in random.randrange(5):
+                    for i in range(random.randrange(5)):
                         logger.info("adding random vertex")
                         chromo.add_random_vertex()
-                    for i in random.randrange(5):
+                    for i in range(random.randrange(5)):
                         logger.info("adding dense node")
                         chromo.add_random_dense_node()
                     chromo.build().summary()
@@ -32,6 +32,7 @@ class TestChromosome(unittest.TestCase):
                     del chromo
                     logger.info("Failed to assemble chromosome")
                     continue
+            logger.info(str(chromo))
             chromo.evaluate(self.unpack_data(10))
 
     @staticmethod
@@ -42,15 +43,15 @@ class TestChromosome(unittest.TestCase):
         print(train_dataset.shape[0], 'train samples')
         print(test_dataset.shape[0], 'test samples')
 
-        img_rows = 28
-        img_cols = 28
+        img_rows = 32
+        img_cols = 32
 
         if image_data_format == 'channels_first':
-            train_dataset = train_dataset.reshape(train_dataset.shape[0], 1, img_rows, img_cols)
-            test_dataset = test_dataset.reshape(test_dataset.shape[0], 1, img_rows, img_cols)
+            train_dataset = train_dataset.reshape(train_dataset.shape[0], 3, img_rows, img_cols)
+            test_dataset = test_dataset.reshape(test_dataset.shape[0], 3, img_rows, img_cols)
         else:
-            train_dataset = train_dataset.reshape(train_dataset.shape[0], img_rows, img_cols, 1)
-            test_dataset = test_dataset.reshape(test_dataset.shape[0], img_rows, img_cols, 1)
+            train_dataset = train_dataset.reshape(train_dataset.shape[0], img_rows, img_cols, 3)
+            test_dataset = test_dataset.reshape(test_dataset.shape[0], img_rows, img_cols, 3)
 
         train_labels = to_categorical(train_labels, num_labels)
         test_labels = to_categorical(test_labels, num_labels)
