@@ -23,9 +23,7 @@ class GeneticObject(object):
 
         data_folder = str(Path().home())
         config = configparser.ConfigParser()
-        config.read(
-            data_folder + "/Documents/GitHub/Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural"
-            "-Networks/GeneticAlgorithm/Config/training_parameters.ini")
+        config.read("GeneticAlgorithm/Config/training_parameters.ini")
         config = config[config_name]
         minimum = int(config['minimum'])
         maximum = int(config['maximum'])

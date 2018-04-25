@@ -36,9 +36,7 @@ class Chromosome(GeneticObject):
 
         data_folder = str(Path().home())
         config = configparser.ConfigParser()
-        config.read(
-            data_folder + "/Documents/GitHub/Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural"
-            "-Networks/GeneticAlgorithm/Config/training_parameters.ini")
+        config.read("GeneticAlgorithm/Config/training_parameters.ini")
         self._logger = logging.getLogger('Chromosome')
         self._logger.info("creating parent genes")
 
