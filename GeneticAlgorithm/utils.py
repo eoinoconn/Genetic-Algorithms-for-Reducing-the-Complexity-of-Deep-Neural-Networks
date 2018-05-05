@@ -19,21 +19,6 @@ def config_min_max_interval(config_name):
     return minimum, maximum, interval
 
 
-def load_known_architecture(file_name, input_shape):
-    chromosome = Genes(input_shape)
-    with open(file_name, encoding="utf-8-sig") as f:
-        reader = csv.reader(f)
-        for i, line in enumerate(reader):
-            line = line
-            for j, x in enumerate(line):
-                line[j] = convert(x)
-
-            if i == 0:
-                chromosome.hyperparameters = line
-            else:
-                chromosome.add_layer(line)
-    return chromosome
-
 
 def convert(x):
     """
@@ -51,33 +36,3 @@ def convert(x):
             return x
 
 
-def intermittent_logging(chromosome, generation_num):
-    with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter=' ',
-                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([generation_num, ',',
-                             chromosome.id, ',',
-                             chromosome.age, ',',
-                             chromosome.accuracy, ',',
-                             chromosome.fitness, ',',
-                             chromosome.parameters, ',',
-                             len(chromosome), ',',
-                             chromosome.num_conv_nodes(), ',',
-                             chromosome.num_dense_nodes(), ',',
-                             ])
-
-
-def setup_csvlogger():
-    with open('GeneticAlgorithm/logs/trend.csv', 'w', newline='') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter=' ',
-                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(['generation', ',',
-                             'id', ',',
-                             'Age', ',',
-                             'Fitness', ',',
-                             'Accuracy', ',',
-                             'Parameters', ',',
-                             'Num Layers', ',',
-                             'Num Conv Layers', ',',
-                             'Num Dense Layers', ',',
-                             ])

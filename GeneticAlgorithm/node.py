@@ -21,9 +21,8 @@ class GeneticObject(object):
     @staticmethod
     def config_min_max_interval(config_name):
 
-        data_folder = str(Path().home())
         config = configparser.ConfigParser()
-        config.read("GeneticAlgorithm/Config/training_parameters.ini")
+        config.read("../training_parameters.ini")
         config = config[config_name]
         minimum = int(config['minimum'])
         maximum = int(config['maximum'])

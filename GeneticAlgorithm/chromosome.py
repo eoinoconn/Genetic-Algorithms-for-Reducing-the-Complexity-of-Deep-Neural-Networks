@@ -1,17 +1,6 @@
-from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, AveragePooling2D, \
-    concatenate, Input, BatchNormalization, Activation, Concatenate
 from keras.backend import clear_session
-from keras.models import Model
 from tensorflow import reset_default_graph
 from GeneticAlgorithm.node import *
-from pathlib import Path
-from GeneticAlgorithm.fitness import assess_chromosome_fitness
-# import networkx as nx
-# import matplotlib.pyplot as plt
-import configparser
-import logging
-import random
-import csv
 
 
 class Chromosome(GeneticObject):
@@ -35,7 +24,7 @@ class Chromosome(GeneticObject):
         Chromosome._id += 1
 
         config = configparser.ConfigParser()
-        config.read("GeneticAlgorithm/Config/training_parameters.ini")
+        config.read("../training_parameters.ini")
         self._logger = logging.getLogger('Chromosome')
         self._logger.info("creating parent genes")
 
@@ -110,11 +99,16 @@ class Chromosome(GeneticObject):
         reset_default_graph()  # for being sure
         clear_session()  # removing session, it will instance another
 
-    def recurrently_build_graph(self, id):
-        node = self.conv_by_id(id)
+    def recurrently_build_graph(self, conv_id):
+        """
+        Build the graph of convolutional layers and assemble tensors width first.
+        :param conv_id:
+        :return:
+        """
+        node = self.conv_by_id(conv_id)
         if not node.active:
             return
-        input_node_ids = list(set(self.vertices[id]))
+        input_node_ids = list(set(self.vertices[conv_id]))
         if len(input_node_ids) > 0:
             if not self.check_inputs_built(input_node_ids):
                 return
@@ -124,14 +118,15 @@ class Chromosome(GeneticObject):
                 input_node = self.conv_by_id(input_id)
                 if not input_node.active:
                     continue
-                tensors_to_concatenate.append(self.downsample_to(input_node.model, smallest_dimension, input_node.output_dimension))
+                tensors_to_concatenate.append(self.downsample_to(input_node.model, smallest_dimension,
+                                                                 input_node.output_dimension))
             if len(tensors_to_concatenate) > 1:
                 node.build(Concatenate(axis=-1)(tensors_to_concatenate))
             elif len(tensors_to_concatenate) == 1:
                 node.build(tensors_to_concatenate[0])
         else:
             node.build()
-        for output_id in self.conv_node_outputs(id):
+        for output_id in self.conv_node_outputs(conv_id):
             self.recurrently_build_graph(output_id)
 
     def check_inputs_built(self, input_node_ids):
@@ -166,20 +161,23 @@ class Chromosome(GeneticObject):
         """Find smallest output dimensions in the given list of nodes"""
         self._logger.info("Finding smallest dimension for node %d, with inputs" + str(input_node_ids))
         if len(input_node_ids) == 1:
-            self._logger.info("Only one input for node %d, of type %s", input_node_ids[0], self.conv_by_id(input_node_ids[0]).vertex_type)
+            self._logger.info("Only one input for node %d, of type %s",
+                              input_node_ids[0],
+                              self.conv_by_id(input_node_ids[0]).vertex_type)
             return self.conv_by_id(input_node_ids[0]).output_dimension
         current_smallest = 1000
-        for id in input_node_ids:
-            if not self.conv_by_id(id).active:
+        for ids in input_node_ids:
+            if not self.conv_by_id(ids).active:
                 continue
-            if self.conv_by_id(id).output_dimension < current_smallest:
-                current_smallest = self.conv_by_id(id).output_dimension
+            if self.conv_by_id(ids).output_dimension < current_smallest:
+                current_smallest = self.conv_by_id(ids).output_dimension
         self._logger.info("Smallest dimension is %d", current_smallest)
         return current_smallest
 
     def evaluate(self, training_data):
         self._logger.info("Evaluating fitness of chromosome %d, age %d", self.id, self.age)
-        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self.build(), self.hyperparameters, **training_data)
+        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self.build(), self.hyperparameters,
+                                                                                 **training_data)
         self.destroy_models()
 
     def recurrently_build_list(self, model, dense_nodes, index):
