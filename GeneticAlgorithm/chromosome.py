@@ -34,7 +34,6 @@ class Chromosome(GeneticObject):
         self.shape = input_shape
         Chromosome._id += 1
 
-        data_folder = str(Path().home())
         config = configparser.ConfigParser()
         config.read("GeneticAlgorithm/Config/training_parameters.ini")
         self._logger = logging.getLogger('Chromosome')
@@ -104,10 +103,6 @@ class Chromosome(GeneticObject):
         model = self.recurrently_build_list(self.conv_by_id(self.output_conv_id).model, self.dense_nodes, 0)
         input_layer = self.conv_by_id(self.input_conv_id).model
         return Model(inputs=input_layer, outputs=model)
-
-    """Each conv node needs to know its input and output dimensions. But this should only be calculated when building. 
-    Can only be calculated when building. Both should be stored as instance variables. Both should be swiped upon 
-    completion of the build, along with the tensors """
 
     def destroy_models(self):
         for node in self.conv_nodes_iterator():
@@ -219,29 +214,6 @@ class Chromosome(GeneticObject):
                 self._logger.info("Attempting to add edge...")
                 self.add_random_vertex()
                 break
-            # elif rand == 2:
-                # """ remove node"""
-                # rand = random.randrange(0, 2)
-                # if rand == 0:
-                #     if self.num_active_conv_nodes() > 2:
-                #         while True:
-                #             node_to_remove = self.random_conv_node()
-                #             if (node_to_remove.id != self.input_conv_id) and (node_to_remove.id != self.output_conv_id) and node_to_remove.active:
-                #                 self._logger.info("Attempting to remove conv node %d", node_to_remove.id)
-                #                 break
-                #
-                #         self.remove_node(node_to_remove.id)
-                #
-                #         break
-                #     else:
-                #         continue
-                # else:
-                #     if len(self.dense_nodes) > 1:
-                #         node_to_remove = self.random_dense_node().id
-                #         self._logger.info("Attempting to remove dense node %d", node_to_remove)
-                #         self.remove_node(node_to_remove)
-                #     else:
-                #         continue
             elif rand == 2:
                 """ Mutate hyperparameters"""
                 self._logger.info("Mutating hyperparameters")
@@ -350,14 +322,14 @@ class Chromosome(GeneticObject):
         for node in self.conv_nodes:
             yield node
 
-    def conv_by_id(self, id):
+    def conv_by_id(self, find_id):
         for node in self.conv_nodes_iterator():
-            if node.id == id:
+            if node.id == find_id:
                 return node
 
-    def conv_node_outputs(self, id):
+    def conv_node_outputs(self, find_id):
         for key, contents in self.vertices.items():
-            if id in contents:
+            if find_id in contents:
                 yield key
 
     def num_active_conv_nodes(self):
@@ -369,9 +341,6 @@ class Chromosome(GeneticObject):
 
     def increment_age(self):
         self.age += 1
-
-    def mash(self):
-        raise NotImplementedError
 
     def creates_cycle(self):
         """Return True if the directed graph has a cycle.
@@ -399,42 +368,6 @@ class Chromosome(GeneticObject):
                 path_set.remove(path.pop())
                 stack.pop()
         return False
-
-    def draw_graph(self):
-
-        graph = []
-        for node, inputs in self.vertices.items():
-            for input in inputs:
-                graph.append((node, input))
-
-        # extract nodes from graph
-        nodes = set([n1 for n1, n2 in graph] + [n2 for n1, n2 in graph])
-
-        # create networkx graph
-        G = nx.Graph()
-
-        labels = {}
-        # add nodes
-        for node in self.vertices.keys():
-            G.add_node(node)
-            if node == self.input_conv_id:
-                labels[node] = "in"
-            elif node == self.output_conv_id:
-                labels[node] = "out"
-            else:
-                labels[node] = str(node)
-
-        # add edges
-        for edge in graph:
-            G.add_edge(edge[0], edge[1])
-
-        # draw graph
-        pos = nx.shell_layout(G)
-        nx.draw(G, pos)
-        nx.draw_networkx_labels(G, pos, labels, font_size=16)
-
-        # show graph
-        plt.show()
 
     def num_conv_nodes(self):
         return len(self.conv_nodes)
