@@ -6,9 +6,9 @@ from keras.layers import Concatenate, MaxPooling2D
 from keras.backend import clear_session
 from keras.models import Model
 from tensorflow import reset_default_graph
-from GeneticAlgorithm.node import GeneticObject, Node, ConvNode, DenseNode, ConvInputNode, ConvOutputNode
-from GeneticAlgorithm.exceptions import *
-from GeneticAlgorithm.fitness import Fitness
+from PySearch.node import GeneticObject, Node, ConvNode, DenseNode, ConvInputNode, ConvOutputNode
+from PySearch.exceptions import *
+from PySearch.fitness import Fitness
 
 
 class Chromosome(GeneticObject):

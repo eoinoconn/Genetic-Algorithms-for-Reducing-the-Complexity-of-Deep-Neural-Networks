@@ -6,7 +6,7 @@ from pathlib import Path
 import logging
 import random
 import csv
-from GeneticAlgorithm.exceptions import DimensionException
+from PySearch.exceptions import DimensionException
 
 class GeneticObject(object):
 
