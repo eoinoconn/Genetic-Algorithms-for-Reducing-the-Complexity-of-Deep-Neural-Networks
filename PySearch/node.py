@@ -6,15 +6,7 @@ from pathlib import Path
 import logging
 import random
 import csv
-
-
-class DimensionException(Exception):
-    pass
-
-
-class CantAddNode(Exception):
-    pass
-
+from GeneticAlgorithm.exceptions import DimensionException
 
 class GeneticObject(object):
 
@@ -124,23 +116,24 @@ class ConvNode(Node):
     :return:
     """
 
+    _vertex_type = "conv"
+
     def __init__(self, random_node=False):
         super().__init__()
-        self._vertex_type = "conv"
-        self.random_conv_filter_num()
-        self.random_conv_kernel()
-        self.random_conv_stride()
+        self._random_conv_filter_num()
+        self._random_conv_kernel()
+        self._random_conv_stride()
         self.encoding[3] = 'relu'
-        self.random_conv_layer_padding()
+        self._random_conv_layer_padding()
         self.last_mutate_index = None
         self.pre_mutate_value = None
 
         if random_node:
-            self.random_conv_dropout()
-            self.random_pooling_type()
-            self.random_pooling_size()
-            self.random_pool_stride()
-            self.toggle_batch_normalisation()
+            self._random_conv_dropout()
+            self._random_pooling_type()
+            self._random_pooling_size()
+            self._random_pool_stride()
+            self._toggle_batch_normalisation()
 
     def build(self, model):
         if self.compute_output_dimension((model.get_shape()[1], model.get_shape()[2])) < 1:
@@ -184,48 +177,48 @@ class ConvNode(Node):
     def mutate(self):
         rand = random.randrange(0, 9)
         if rand == 0:
-            self.random_conv_filter_num()
+            self._random_conv_filter_num()
         elif rand == 1:
-            self.random_conv_kernel()
+            self._random_conv_kernel()
         elif rand == 2:
-            self.random_conv_stride()
+            self._random_conv_stride()
         elif rand == 3:
-            self.random_conv_layer_padding()
+            self._random_conv_layer_padding()
         elif rand == 4:
-            self.random_conv_dropout()
+            self._random_conv_dropout()
         elif rand == 5:
-            self.random_pooling_type()
+            self._random_pooling_type()
         elif rand == 6:
-            self.random_pooling_size()
+            self._random_pooling_size()
         elif rand == 7:
-            self.random_pool_stride()
+            self._random_pool_stride()
         else:
-            self.toggle_batch_normalisation()
+            self._toggle_batch_normalisation()
 
     def reshuffle_dimensions(self):
-        self.random_conv_kernel()
-        self.random_conv_stride()
+        self._random_conv_kernel()
+        self._random_conv_stride()
 
-    def random_conv_filter_num(self):
+    def _random_conv_filter_num(self):
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.filter')
         self.encoding[0] = 2 ** random.randrange(min_value, max_value + 1, interval)  # sets layer units
         self._logger.info("set con filters to %d on node %d", self.encoding[0], self.id)
 
-    def random_conv_kernel(self):
+    def _random_conv_kernel(self):
         self.last_mutate_index = 1
         self.pre_mutate_value = self.encoding[1]
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.kernel')
         self.encoding[1] = random.randrange(min_value, max_value + 1, interval)
         self._logger.info("set kernel size to %d on node %d", self.encoding[1], self.id)
 
-    def random_conv_stride(self):
+    def _random_conv_stride(self):
         self.last_mutate_index = 2
         self.pre_mutate_value = self.encoding[2]
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.stride')
         self.encoding[2] = random.randrange(min_value, self.encoding[1] + 1, interval)
         self._logger.info("set conv stride to %d on node %d", self.encoding[2], self.id)
 
-    def random_conv_layer_padding(self):
+    def _random_conv_layer_padding(self):
         # padding_index = random.randrange(0, 2)
         # if padding_index == 0:
         #     self.encoding[4] = 'same'
@@ -234,33 +227,33 @@ class ConvNode(Node):
         self.encoding[4] = 'same'
         self._logger.info("set padding to %s on node %d", self.encoding[4], self.id)
 
-    def random_conv_dropout(self):
+    def _random_conv_dropout(self):
         min_value, max_value, interval = self.config_min_max_interval('conv.layer.dropout')
         self.encoding[5] = (random.randrange(min_value, max_value + 1, interval)) / 10  # Set dropout probability
         self._logger.info("set droupout to %f on node %d", self.encoding[7], self.id)
 
-    def random_pooling_type(self):
+    def _random_pooling_type(self):
         self.last_mutate_index = 7
         self.pre_mutate_value = self.encoding[7]
         min_value, max_value, interval = self.config_min_max_interval('pooling.type')
         self.encoding[6] = random.randrange(min_value, max_value + 1, interval)
         self._logger.info("set pooling type to %s on node %d", self.encoding[6], self.id)
 
-    def random_pooling_size(self):
+    def _random_pooling_size(self):
         self.last_mutate_index = 7
         self.pre_mutate_value = self.encoding[7]
         min_value, max_value, interval = self.config_min_max_interval('pooling.filter')
         self.encoding[7] = random.randrange(min_value, max_value + 1, interval)
         self._logger.info("set pooling size to %d on node %d", self.encoding[7], self.id)
 
-    def random_pool_stride(self):
+    def _random_pool_stride(self):
         self.last_mutate_index = 8
         self.pre_mutate_value = self.encoding[8]
         min_value, max_value, interval = self.config_min_max_interval('convolutional.layer.pool.stride')
         self.encoding[8] = random.randrange(min_value, self.encoding[6] + 1, interval)
         self._logger.info("set pool stride to %d on node %d", self.encoding[8], self.id)
 
-    def toggle_batch_normalisation(self):
+    def _toggle_batch_normalisation(self):
         self.last_mutate_index = 9
         self.pre_mutate_value = self.encoding[9]
         if self.encoding[9] == 1:
@@ -269,7 +262,7 @@ class ConvNode(Node):
             self.encoding[9] = 1
         self._logger.info("set batch normalisation to %d on node %d", self.encoding[10], self.id)
 
-    def undo_last_mutate(self):
+    def _undo_last_mutate(self):
         self.encoding[self.last_mutate_index] = self.pre_mutate_value
 
 

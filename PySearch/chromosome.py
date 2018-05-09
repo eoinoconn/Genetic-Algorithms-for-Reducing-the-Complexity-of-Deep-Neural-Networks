@@ -1,6 +1,14 @@
+import random
+import configparser
+import logging
+import csv
+from keras.layers import Concatenate, MaxPooling2D
 from keras.backend import clear_session
+from keras.models import Model
 from tensorflow import reset_default_graph
-from GeneticAlgorithm.node import *
+from GeneticAlgorithm.node import GeneticObject, Node, ConvNode, DenseNode, ConvInputNode, ConvOutputNode
+from GeneticAlgorithm.exceptions import *
+from GeneticAlgorithm.fitness import Fitness
 
 
 class Chromosome(GeneticObject):
@@ -176,7 +184,8 @@ class Chromosome(GeneticObject):
 
     def evaluate(self, training_data):
         self._logger.info("Evaluating fitness of chromosome %d, age %d", self.id, self.age)
-        self.fitness, self.accuracy, self.parameters = assess_chromosome_fitness(self.build(), self.hyperparameters,
+        fit = Fitness()
+        self.fitness, self.accuracy, self.parameters = fit(self.build(), self.hyperparameters,
                                                                                  **training_data)
         self.destroy_models()
 
