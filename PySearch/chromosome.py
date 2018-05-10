@@ -32,7 +32,7 @@ class Chromosome(GeneticObject):
         Chromosome._id += 1
 
         config = configparser.ConfigParser()
-        config.read("../training_parameters.ini")
+        config.read("PySearch/training_parameters.ini")
         self._logger = logging.getLogger('Chromosome')
         self._logger.info("creating parent genes")
 

@@ -31,7 +31,7 @@ class PySearch(object):
         self.input_size = train_dataset.shape
 
         config = configparser.ConfigParser()
-        config.read('GeneticAlgorithm/Config/training_parameters.ini')
+        config.read('PySearch/training_parameters.ini')
 
         self.pool_size = int(config['genetic.engine']['pool_size'])
         self.max_crossovers = int(config['genetic.engine']['max_crossover'])

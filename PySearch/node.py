@@ -14,7 +14,7 @@ class GeneticObject(object):
     def config_min_max_interval(config_name):
 
         config = configparser.ConfigParser()
-        config.read("../training_parameters.ini")
+        config.read("PySearch/training_parameters.ini")
         config = config[config_name]
         minimum = int(config['minimum'])
         maximum = int(config['maximum'])

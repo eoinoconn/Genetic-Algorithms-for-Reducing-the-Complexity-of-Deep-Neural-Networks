@@ -6,7 +6,7 @@ import csv
 
 def get_config():
     config = configparser.ConfigParser()
-    config.read('GeneticAlgorithm/Config/training_parameters.ini')
+    config.read('PySearch/Config/training_parameters.ini')
     return config
 
 

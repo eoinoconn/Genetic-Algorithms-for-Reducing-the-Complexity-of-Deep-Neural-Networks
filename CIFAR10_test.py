@@ -27,7 +27,7 @@ def set_seed(logger):
 class CIFAR10Test(unittest.TestCase):
 
     def test_encoding(self):
-        logging.config.fileConfig('GeneticAlgorithm/logs/logging.conf')
+        logging.config.fileConfig('PySearch/logs/logging.conf')
         logger = logging.getLogger('testFile')
 
         logger.info("Setting seed")
