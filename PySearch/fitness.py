@@ -18,7 +18,7 @@ class Fitness(object):
         self.hyper_params = []
 
         self.config = configparser.ConfigParser()
-        self.config.read('GeneticAlgorithm/Config/training_parameters.ini')
+        self.config.read('PySearch/training_parameters.ini')
 
         # initilise logging objects
         self.logger_fitness = logging.getLogger('fitness')

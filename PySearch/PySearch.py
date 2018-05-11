@@ -13,31 +13,34 @@ class PySearch(object):
                  valid_dataset=None, valid_labels=None,
                  test_dataset=None, test_labels=None):
 
+        self.config = configparser.ConfigParser()
+        self.config.read('PySearch/training_parameters.ini')
+
+        self.logger = logging.getLogger("genetic_engine")
+        self.pool = []
+
         train_labels = to_categorical(train_labels, num_labels)
         test_labels = to_categorical(test_labels, num_labels)
 
+        # Normalise training data
         train_dataset = train_dataset.astype('float32')
         test_dataset = test_dataset.astype('float32')
         train_dataset /= 255
         test_dataset /= 255
 
-        self.train_dataset = train_dataset
-        self.train_labels = train_labels
-        self.valid_dataset = valid_dataset
-        self.valid_dataset = valid_labels
-        self.test_dataset = test_dataset
-        self.test_lables = test_labels
+        self.training_data = {'train_dataset': train_dataset, 'train_labels': train_labels,
+                              'valid_dataset': valid_dataset, 'valid_labels': valid_labels,
+                              'test_dataset': test_dataset, 'test_labels': test_labels}
 
-        self.input_size = train_dataset.shape
+        self.input_size = train_dataset.shape[1:]
+        self.logger.info("Dataset input size: %s", str(self.input_size))
 
-        config = configparser.ConfigParser()
-        config.read('PySearch/training_parameters.ini')
+        self.pool_size = int(self.config['genetic.engine']['pool_size'])
+        self.logger.info("Pool size: %d", self.pool_size)
 
-        self.pool_size = int(config['genetic.engine']['pool_size'])
-        self.max_crossovers = int(config['genetic.engine']['max_crossover'])
+        self.max_crossovers = int(self.config['genetic.engine']['max_crossover'])
+        self.logger.info("Generation Crossovers: %d", self.max_crossovers)
 
-        self.logger = logging.getLogger("genetic_engine")
-        self.pool = []
 
     def __call__(self, generations, factor):
 
@@ -61,7 +64,7 @@ class PySearch(object):
 
     def _assess_population(self):
         for chromosome in self.pool:
-            chromosome.assess()
+            chromosome.evaluate(self.training_data)
         self.pool.sort(key=operator.attrgetter('fitness'))
 
     def _mutate_population(self):
