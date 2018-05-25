@@ -9,10 +9,13 @@ import csv
 from PySearch.exceptions import DimensionException
 
 class GeneticObject(object):
-
+    """Base encoding object"""
+    
     @staticmethod
     def config_min_max_interval(config_name):
-
+        """
+        Parses configuration for hyper-parameter boundaries.
+        """
         config = configparser.ConfigParser()
         config.read("PySearch/training_parameters.ini")
         config = config[config_name]
@@ -23,15 +26,15 @@ class GeneticObject(object):
 
 
 class Node(GeneticObject):
-
+    """Base class for chromosome nodes."""
     _id = 1
+    __vertex_type = "Base Node"
 
     def __init__(self):
-        self.__vertex_type = ""
         self.__encoding = [0 for x in range(0, 12)]
         self._id = Node._id
-        self.active = True
-        self.model = None
+        self._active = True
+        self._model = None
         self._logger = logging.getLogger('geneset')
         Node._id += 1
 
@@ -45,23 +48,19 @@ class Node(GeneticObject):
 
     @property
     def output_dimension(self):
-        return int(self.model.get_shape()[1])
+        return int(self._model.get_shape()[1])
 
     @property
     def active(self):
-        return self.__active
+        return self._active
 
     @active.setter
     def active(self, value):
-        self.__active = value
+        self._active = value
 
     @property
     def vertex_type(self):
         return self.__vertex_type
-
-    @vertex_type.setter
-    def vertex_type(self, vertex_type):
-        self.__vertex_type = vertex_type
 
     @property
     def encoding(self):
@@ -76,32 +75,37 @@ class Node(GeneticObject):
 
     @encoding.deleter
     def encoding(self):
-        del self.__encoding
+        self.__encoding = None
 
-    def delete_model(self):
-        del self.model
-        self.model = None
+    @property
+    def model(self):
+        return self._model
+
+    @model.setter
+    def model(self, new_model):
+        self._model = new_model
+
+    @model.deleter
+    def model(self):
+        self._model = None
 
     def is_built(self):
-        if self.model is None:
+        """Returns true of model is present"""
+        if self._model is None:
             return False
         else:
             return True
 
     def __str__(self):
-        enc_string = "Node type {}, Node id {}\n".format(str(self.__vertex_type), self._id)
-        enc_string += str(self.encoding)
-        return enc_string
-
-    def __hash__(self):
-        return hash(self._id)
-
+        enc_string = "Node type {}, Node id {}\n".format(self.__vertex_type, self._id)
+        return enc_string + str(self.encoding)
 
 class ConvNode(Node):
     """
     Node to simulate convolutional layer
 
-    The first value of the layer array is 2 for a convolutional layer
+    Model properties are stored in the __encoding list with the following data
+    contained in the correponding indexes.
     Other variables:
        0   layer units
        1   stride
@@ -113,10 +117,14 @@ class ConvNode(Node):
        7   pool size
        8   Pool stride
        9   batch normalisation (Default 0 = None)
-    :return:
+    
+    Arguments
+        random_node -- if True creates randomises all hyper-parameters.
+            If False only filter number, kernel size, stride and padding is randomised.
+            (Default = False)
     """
 
-    _vertex_type = "conv"
+    __vertex_type = "conv"
 
     def __init__(self, random_node=False):
         super().__init__()
@@ -136,45 +144,46 @@ class ConvNode(Node):
             self._toggle_batch_normalisation()
 
     def build(self, model):
+        """ Builds appropriate keras tensoors for convolutional node. """
+        # Check dimension output
         if self.compute_output_dimension((model.get_shape()[1], model.get_shape()[2])) < 1:
-            self._logger.info("Dimensions are {}" + str(self.compute_output_dimension((model.get_shape()[1], model.get_shape()[2]))))
             raise DimensionException("Error with dimensions; model shape {}", model.get_shape())
         model = Conv2D(self.encoding[0], self.encoding[2], strides=self.encoding[1], padding=self.encoding[4])(model)
-        if self.encoding[9] == 1:  # Batch normalisation layer
+        if self.encoding[9] == 1:           # Batch normalisation layer
             model = BatchNormalization()(model)
-        if self.encoding[3] is not None:
-            model = Activation(self.encoding[3])(model)
-        if self.encoding[6] > 0:  # Pooling layer
-            if self.encoding[6] == 1:  # max pooling
+        model = Activation(self.encoding[3])(model)
+        if self.encoding[6] > 0:            # Pooling layer
+            if self.encoding[6] == 1:           # max pooling
                 MaxPooling2D((self.encoding[7], self.encoding[7]), strides=self.encoding[8])(model)
-            else:
+            else:                               # average pooling
                 AveragePooling2D((self.encoding[7], self.encoding[7]), strides=self.encoding[8])(model)
-        if self.encoding[5] > 0:  # Dropout layer
+        if self.encoding[5] > 0:            # Dropout layer
             model = Dropout(self.encoding[8])(model)
         self._logger.info("Dimensions after build of node %d are {}", self.id)
         self._logger.info(model.get_shape())
-        self.model = model
+        self._model = model
 
     def compute_output_dimension(self, input_dimensions):
-            """Computes expected conv node output based on encoding"""
-            width, heigth = input_dimensions
-            if width != heigth:
-                raise ValueError("width and height are not the same")
-            if self.encoding[4] == "same":
-                output_of_conv = int(width)/self.encoding[1]
-            else:
-                output_of_conv = int(int(width - self.encoding[2]) / int(self.encoding[1]))
-            self._logger.info("output dimensions of convolutional layer for node {0} is {1}".format(str(self.id), str(
-                output_of_conv)))
-            if self.encoding[6] > 0:
-                output_dimension = int((output_of_conv - self.encoding[7]) / self.encoding[8] + 1)
-            else:
-                output_dimension = output_of_conv
-            self._logger.info("output dimensions of pooling layer for node {0} is {1}".format(str(self.id), str(
-                output_dimension)))
-            return output_dimension
+        """Computes expected conv node output based on encoding"""
+        width, heigth = input_dimensions
+        if width != heigth:
+            raise ValueError("width and height are not the same")
+        if self.encoding[4] == "same":
+            output_of_conv = int(width)/self.encoding[1]
+        else:
+            output_of_conv = int(int(width - self.encoding[2]) / int(self.encoding[1]))
+        self._logger.info("output dimensions of convolutional layer for node {0} is {1}".format(str(self.id), 
+                                                                                                str(output_of_conv)))
+        if self.encoding[6] > 0:
+            output_dimension = int((output_of_conv - self.encoding[7]) / self.encoding[8] + 1)
+        else:
+            output_dimension = output_of_conv
+        self._logger.info("output dimensions of pooling layer for node {0} is {1}".format(str(self.id), str(
+            output_dimension)))
+        return output_dimension
 
     def mutate(self):
+        """Chooses random node hyper-parameters and mutates. """
         rand = random.randrange(0, 9)
         if rand == 0:
             self._random_conv_filter_num()
@@ -196,6 +205,7 @@ class ConvNode(Node):
             self._toggle_batch_normalisation()
 
     def reshuffle_dimensions(self):
+        """ Performs mutations that adjust node output dimensions. """
         self._random_conv_kernel()
         self._random_conv_stride()
 
@@ -263,6 +273,7 @@ class ConvNode(Node):
         self._logger.info("set batch normalisation to %d on node %d", self.encoding[10], self.id)
 
     def _undo_last_mutate(self):
+        """Returns node to state before last mutation."""
         self.encoding[self.last_mutate_index] = self.pre_mutate_value
 
 
@@ -270,24 +281,33 @@ class DenseNode(Node):
     """
     Node to simulate dense layer
 
-    # The first value of the layer array is 1 for a dense layer
-     Other variables:
+    Model properties are stored in the __encoding list with the following data
+    contained in the correponding indexes.
        0   layer units
        1   dropout
        2   activation
-    :return:
+    Arguments:
+        random_node -- If true randomies dropout, else dropout is 0. (Default = False)
     """
+    __vertex_type = "dense"
 
     def __init__(self, random_node=False):
         super().__init__()
-        self._vertex_type = "dense"
-
-        self.random_dense_units()
+        self._random_dense_units()
         self.encoding[2] = 'relu'
         if random_node:
-            self.random_dense_dropout()
+            self._random_dense_dropout()
 
     def build(self, model, output_layer=False, classes=None):
+        """
+        Builds and returns keras tensor
+        
+        Arguments:
+            model -- tensor from input connections
+            output_layer -- If true indicates node is output.
+                Activation is softmax, num of perceptrons = classes, dropout
+                is excluded. (Default = False).
+        """
         if output_layer:  # output layer
             return Dense(classes, activation='softmax')(model)
         else:  # hidden layer
@@ -300,33 +320,40 @@ class DenseNode(Node):
             return model
 
     def mutate(self):
-        rand = random.randrange(0, 3)
+        """Chooses random node hyper-parameters and mutates"""
+        rand = random.randrange(0, 2)
         if rand == 0:
-            self.random_dense_units()
+            self._random_dense_units()
         else:
-            self.random_dense_dropout()
+            self._random_dense_dropout()
 
-    def random_dense_units(self):
+    def _random_dense_units(self):
         min_value, max_value, interval = self.config_min_max_interval('dense.layer.units')
         self.encoding[0] = 2 ** (random.randrange(min_value, max_value + 1, interval))     # Set dense units
         self._logger.info("set dense units to %d on node %d", self.encoding[0], self.id)
 
-    def random_dense_dropout(self):
+    def _random_dense_dropout(self):
         min_value, max_value, interval = self.config_min_max_interval('dense.layer.dropout')
         self.encoding[1] = (random.randrange(min_value, max_value + 1, interval)) / 10  # Set dropout probability
         self._logger.info("set droupout to %f on node %d", self.encoding[1], self.id)
 
 
 class ConvInputNode(Node):
+    """
+        Input node of feature extraction graph.
+        
+        Arguments:
+            shape -- shape of input data e.g. (28, 28, 1)
+    """
+    __vertex_type = "ConvInputNode"
 
     def __init__(self, shape):
         super().__init__()
-        self._vertex_type = "input"
         self.shape = shape
 
     def build(self):
-        self.model = Input(self.shape)
-        return self.model
+        """Builds and returns Keras tensor."""
+        return Input(self.shape)
 
     @property
     def output_dimension(self):
@@ -334,15 +361,18 @@ class ConvInputNode(Node):
 
 
 class ConvOutputNode(Node):
+    """Input node of feature extraction graph."""
+    
+    __vertex_type = "ConvOutputNode"
 
     def __init__(self):
         super().__init__()
-        self._vertex_type = "output"
 
     def build(self, model):
-        self.model = Flatten()(model)
+        """ Builds Keras model. """
+        self._model = Flatten()(model)
 
     @property
     def output_dimension(self):
-        return self.model.get_shape()[1]
+        return self._model.get_shape()[1]
 
