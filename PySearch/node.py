@@ -352,8 +352,8 @@ class ConvInputNode(Node):
         self.shape = shape
 
     def build(self):
-        """Builds and returns Keras tensor."""
-        return Input(self.shape)
+        """Builds and stores Keras tensor."""
+        self._model = Input(self.shape)
 
     @property
     def output_dimension(self):
@@ -369,7 +369,7 @@ class ConvOutputNode(Node):
         super().__init__()
 
     def build(self, model):
-        """ Builds Keras model. """
+        """ Builds and stoers Keras model. """
         self._model = Flatten()(model)
 
     @property
