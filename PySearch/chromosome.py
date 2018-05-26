@@ -5,14 +5,16 @@ import csv
 from keras.layers import Concatenate, MaxPooling2D
 from keras.backend import clear_session
 from keras.models import Model
-from tensorflow import reset_default_graph
 from PySearch.node import GeneticObject, Node, ConvNode, DenseNode, ConvInputNode, ConvOutputNode
 from PySearch.exceptions import *
 from PySearch.fitness import Fitness
 
 
 class Chromosome(GeneticObject):
-
+    """
+        Object to simulate a genetic chromosome. Stores, alters and builds 
+        model from nodes. 
+    """
     _id = 1
 
     def __init__(self, input_shape):
@@ -48,16 +50,21 @@ class Chromosome(GeneticObject):
 
     def random_initial_generation(self):
         self.minimal_structure()
+        pass
 
     def minimal_structure(self):
+        """
+        Adds the minimal required amount of nodes and edges for a valid chromosome.
+        """
         self.add_node(ConvOutputNode())
         self.output_conv_id = self.conv_nodes[0].id
         self.add_node(ConvInputNode(self.shape))
         self.input_conv_id = self.conv_nodes[1].id
-        self.add_vertex(self.output_conv_id, self.input_conv_id)
+        self.add_edge(self.output_conv_id, self.input_conv_id)
         self.add_node(DenseNode())
 
     def add_node(self, node):
+        """ Add node to chromosome. """
         if isinstance(node, (ConvNode, ConvOutputNode, ConvInputNode)):
             self.conv_nodes.append(node)
             self.vertices[node.id] = []
@@ -66,8 +73,8 @@ class Chromosome(GeneticObject):
         else:
             raise TypeError("node should be of type ConvNode or DenseNode")
 
-    # add id of the node that inputs to node
-    def add_vertex(self, node, input_node_id):
+    def add_edge(self, node, input_node_id):
+        """ Add input connection to node. """
         if isinstance(node, Node):
             node = node.id
         self.vertices[node].append(input_node_id)
@@ -79,7 +86,7 @@ class Chromosome(GeneticObject):
             if node.id == node_to_remove:
                 node.active = False
                 for node_id in self.conv_node_outputs(node_to_remove):
-                    self.remove_vertex(node_id, node_to_remove)
+                    self.remove_edge(node_id, node_to_remove)
                 self.vertices.pop(node_to_remove)
                 return
         for idx, val in enumerate(self.dense_nodes):
@@ -87,43 +94,54 @@ class Chromosome(GeneticObject):
                 node_to_remove = idx
         self.dense_nodes.pop(node_to_remove)
 
-    def remove_vertex(self, node, input_node_id):
+    def remove_edge(self, node, input_node_id):
+        """ Deletes edge  """
         if isinstance(input_node_id, Node):
             input_node_id = input_node_id.id
         if isinstance(node, Node):
             node = node.id
         self.vertices[node].remove(input_node_id)
 
-    def build(self):
+    def build_model(self):
+        """
+        Builds keras Model.
+
+        Returns:
+            Keras Model
+        """
         self._logger.info(str(self))
         self.recurrently_build_graph(self.input_conv_id)
-        model = self.recurrently_build_list(self.conv_by_id(self.output_conv_id).model, self.dense_nodes, 0)
-        input_layer = self.conv_by_id(self.input_conv_id).model
+        model = self.recurrently_build_list(self.node_by_id(self.output_conv_id).model, self.dense_nodes, 0)
+        input_layer = self.node_by_id(self.input_conv_id).model
         return Model(inputs=input_layer, outputs=model)
 
     def destroy_models(self):
-        for node in self.conv_nodes_iterator():
-            node.delete_model()
-        reset_default_graph()  # for being sure
-        clear_session()  # removing session, it will instance another
+        """
+        Performs memory cleanup
 
-    def recurrently_build_graph(self, conv_id):
+        Deletes tensors from memory
         """
-        Build the graph of convolutional layers and assemble tensors width first.
-        :param conv_id:
-        :return:
+        for node in self.conv_nodes_iterator():
+            del node.model
+        clear_session()  # removing session
+
+    def recurrently_build_graph(self, node_id):
         """
-        node = self.conv_by_id(conv_id)
+        Build the graph of convolutional layers and assembles tensors width first.
+        Argument:
+            conv_id -- id of node
+        """
+        node = self.node_by_id(node_id)
         if not node.active:
             return
-        input_node_ids = list(set(self.vertices[conv_id]))
+        input_node_ids = list(set(self.vertices[node_id]))
         if len(input_node_ids) > 0:
             if not self.check_inputs_built(input_node_ids):
                 return
             smallest_dimension = self.find_smallest_dimension(input_node_ids)
             tensors_to_concatenate = []
             for input_id in input_node_ids:
-                input_node = self.conv_by_id(input_id)
+                input_node = self.node_by_id(input_id)
                 if not input_node.active:
                     continue
                 tensors_to_concatenate.append(self.downsample_to(input_node.model, smallest_dimension,
@@ -134,12 +152,12 @@ class Chromosome(GeneticObject):
                 node.build(tensors_to_concatenate[0])
         else:
             node.build()
-        for output_id in self.conv_node_outputs(conv_id):
+        for output_id in self.conv_node_outputs(node_id):
             self.recurrently_build_graph(output_id)
 
     def check_inputs_built(self, input_node_ids):
         for input_id in input_node_ids:
-            input_node = self.conv_by_id(input_id)
+            input_node = self.node_by_id(input_id)
             if not input_node.active:
                 continue
             if not input_node.is_built():
@@ -171,22 +189,23 @@ class Chromosome(GeneticObject):
         if len(input_node_ids) == 1:
             self._logger.info("Only one input for node %d, of type %s",
                               input_node_ids[0],
-                              self.conv_by_id(input_node_ids[0]).vertex_type)
-            return self.conv_by_id(input_node_ids[0]).output_dimension
+                              self.node_by_id(input_node_ids[0]).vertex_type)
+            return self.node_by_id(input_node_ids[0]).output_dimension
         current_smallest = 1000
         for ids in input_node_ids:
-            if not self.conv_by_id(ids).active:
+            if not self.node_by_id(ids).active:
                 continue
-            if self.conv_by_id(ids).output_dimension < current_smallest:
-                current_smallest = self.conv_by_id(ids).output_dimension
+            if self.node_by_id(ids).output_dimension < current_smallest:
+                current_smallest = self.node_by_id(ids).output_dimension
         self._logger.info("Smallest dimension is %d", current_smallest)
         return current_smallest
 
     def evaluate(self, training_data):
         self._logger.info("Evaluating fitness of chromosome %d, age %d", self.id, self.age)
         fit = Fitness()
-        self.fitness, self.accuracy, self.parameters = fit(self.build(), self.hyperparameters,
-                                                                                 **training_data)
+        self.fitness, self.accuracy, self.parameters = fit(self.build_model(),
+                                                           self.hyperparameters,
+                                                           **training_data)
         self.destroy_models()
 
     def recurrently_build_list(self, model, dense_nodes, index):
@@ -219,7 +238,7 @@ class Chromosome(GeneticObject):
             elif rand == 1:
                 """Add edge"""
                 self._logger.info("Attempting to add edge...")
-                self.add_random_vertex()
+                self.add_random_edge()
                 break
             elif rand == 2:
                 """ Mutate hyperparameters"""
@@ -237,7 +256,7 @@ class Chromosome(GeneticObject):
                 self._logger.info("Attempting to mutate node %d", node_to_mutate)
                 node_to_mutate.mutate()
                 try:
-                    self.build()
+                    self.build_model()
                 except DimensionException:
                     node_to_mutate.undo_last_mutate()
                     self._logger.info("Mutation failed on node %d", node_to_mutate)
@@ -247,7 +266,7 @@ class Chromosome(GeneticObject):
     def add_random_dense_node(self):
         self.add_node(DenseNode(random_node=True))
 
-    def add_random_vertex(self):
+    def add_random_edge(self):
         for i in range(50):
             input_node = self.random_conv_node()
             output_node = self.random_conv_node()
@@ -255,42 +274,42 @@ class Chromosome(GeneticObject):
                     (output_node.active or input_node.active) or \
                     (input_node == self.input_conv_id and output_node == self.output_conv_id):
                 continue
-            self.add_vertex(output_node.id, input_node.id)
+            self.add_edge(output_node.id, input_node.id)
             if self.creates_cycle():
-                self.remove_vertex(output_node.id, input_node.id)
+                self.remove_edge(output_node.id, input_node.id)
                 continue
             try:
-                self.build()
+                self.build_model()
                 return True
             except DimensionException:
-                self.remove_vertex(output_node.id, input_node.id)
+                self.remove_edge(output_node.id, input_node.id)
                 continue
         return False
 
     def add_random_conv_node(self):
-        input_node_id, output_node_id = self.find_random_vertex()
+        input_node_id, output_node_id = self.find_random_edge()
         new_node = ConvNode(random_node=True)
         self.add_node(new_node)
         new_node_id = new_node.id
-        self.remove_vertex(output_node_id, input_node_id)
-        self.add_vertex(new_node_id, input_node_id)
-        self.add_vertex(output_node_id, new_node_id)
+        self.remove_edge(output_node_id, input_node_id)
+        self.add_edge(new_node_id, input_node_id)
+        self.add_edge(output_node_id, new_node_id)
         self._logger.info("Attempting to add conv node with id %d", new_node_id)
         for i in range(100):
             try:
-                self.build()
+                self.build_model()
             except DimensionException:
-                self.conv_by_id(new_node_id).reshuffle_dimensions()
+                self.node_by_id(new_node_id).reshuffle_dimensions()
                 continue
             if not self.creates_cycle():
                 return
-        self.remove_vertex(new_node_id, input_node_id)
-        self.remove_vertex(output_node_id, new_node_id)
-        self.add_vertex(output_node_id, input_node_id)
+        self.remove_edge(new_node_id, input_node_id)
+        self.remove_edge(output_node_id, new_node_id)
+        self.add_edge(output_node_id, input_node_id)
         self.remove_node(new_node_id)
         raise CantAddNode
 
-    def find_random_vertex(self):
+    def find_random_edge(self):
         while True:
             random_output_id = random.choice(list(self.vertices.keys()))
             if random_output_id == self.input_conv_id:
@@ -329,10 +348,20 @@ class Chromosome(GeneticObject):
         for node in self.conv_nodes:
             yield node
 
-    def conv_by_id(self, find_id):
+    def dense_nodes_iterator(self):
+        for node in self.dense_nodes:
+            yield node
+
+
+    def node_by_id(self, find_id):
         for node in self.conv_nodes_iterator():
             if node.id == find_id:
                 return node
+
+        for node in self.dense_nodes_iterator():
+            if node.id == find_id:
+                return node
+        return None
 
     def conv_node_outputs(self, find_id):
         for key, contents in self.vertices.items():
@@ -350,10 +379,10 @@ class Chromosome(GeneticObject):
         self.age += 1
 
     def creates_cycle(self):
-        """Return True if the directed graph has a cycle.
+        """
+        Return True if the directed graph has a cycle.
         The graph must be represented as a dictionary mapping vertices to
         iterables of neighbouring vertices. For example:
-
         """
         
         self._logger.info("Checking for created cycle")
