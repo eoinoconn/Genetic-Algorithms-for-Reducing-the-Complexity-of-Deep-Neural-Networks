@@ -49,6 +49,7 @@ class Chromosome(GeneticObject):
             self.minimal_structure()
 
     def random_initial_generation(self):
+        """creates a chromosome with a random number and type  of nodes."""
         self.minimal_structure()
         pass
 
@@ -80,6 +81,12 @@ class Chromosome(GeneticObject):
         self.vertices[node].append(input_node_id)
 
     def remove_node(self, node_to_remove):
+        """
+        Removes node from chromosome.
+        
+        Arguments:
+            node_to_node -- id or node itself to be removed
+        """
         if isinstance(node_to_remove, Node):
             node_to_remove = node_to_remove.id
         for node in self.conv_nodes:
@@ -156,6 +163,14 @@ class Chromosome(GeneticObject):
             self.recurrently_build_graph(output_id)
 
     def check_inputs_built(self, input_node_ids):
+        """ Checks anodes input to ensure they are all built. 
+
+        Only when all of a nodes inputs are built can it also be built.
+        
+        Returns:
+            True if all input nodes have built tensors.
+            False if any input nodes tensor is not built.
+        """
         for input_id in input_node_ids:
             input_node = self.node_by_id(input_id)
             if not input_node.active:
@@ -184,8 +199,9 @@ class Chromosome(GeneticObject):
         return tensor
 
     def find_smallest_dimension(self, input_node_ids):
-        """Find smallest output dimensions in the given list of nodes"""
+        """Find smallest output dimensions in the given list of nodes."""
         self._logger.info("Finding smallest dimension for node %d, with inputs" + str(input_node_ids))
+        # If only one input, return dimension of smallest node.
         if len(input_node_ids) == 1:
             self._logger.info("Only one input for node %d, of type %s",
                               input_node_ids[0],
@@ -201,6 +217,10 @@ class Chromosome(GeneticObject):
         return current_smallest
 
     def evaluate(self, training_data):
+        """Performs evaluation on models  contained in chromosome.
+        
+        Updates fitness, accuracy and parameters.
+        """
         self._logger.info("Evaluating fitness of chromosome %d, age %d", self.id, self.age)
         fit = Fitness()
         self.fitness, self.accuracy, self.parameters = fit(self.build_model(),
@@ -218,9 +238,18 @@ class Chromosome(GeneticObject):
             return model
 
     def mutate(self):
+        """
+        Performs a random mutation on the chromosome.
+
+        Possible mutations:
+            -Add Node
+            -Add Edge
+            -Mutate hyperparameters
+            -Mutate random node
+        """
         self._logger.info("Mutating chromosome %d", self.id)
         while True:
-            rand = random.randrange(0, 3)
+            rand = random.randrange(0, 4)
             if rand == 0:
                 """ Add node"""
                 rand = random.randrange(0, 2)
@@ -264,9 +293,16 @@ class Chromosome(GeneticObject):
                 break
 
     def add_random_dense_node(self):
+        """Adds random dense node to chromsome."""
         self.add_node(DenseNode(random_node=True))
 
     def add_random_edge(self):
+        """Adds random edge to chromosome encoding.
+        
+        Returns:
+            True if succesfully adds edge.
+            False otherwise.
+        """
         for i in range(50):
             input_node = self.random_conv_node()
             output_node = self.random_conv_node()
@@ -287,6 +323,7 @@ class Chromosome(GeneticObject):
         return False
 
     def add_random_conv_node(self):
+        """ Adds random conv node to encoding. """
         input_node_id, output_node_id = self.find_random_edge()
         new_node = ConvNode(random_node=True)
         self.add_node(new_node)
@@ -310,6 +347,7 @@ class Chromosome(GeneticObject):
         raise CantAddNode
 
     def find_random_edge(self):
+        """Returns the ids of a random edge between nodes."""
         while True:
             random_output_id = random.choice(list(self.vertices.keys()))
             if random_output_id == self.input_conv_id:
@@ -319,20 +357,24 @@ class Chromosome(GeneticObject):
         return random_input_id, random_output_id
 
     def random_conv_node(self):
+        """Returns a random conv node."""
         while True:
             node = random.choice(self.conv_nodes)
             if node.active:
                 return node
 
     def random_dense_node(self):
+        """ Returns a random dense node. """
         return random.choice(self.dense_nodes)
 
     def random_batch_size(self):
+        """ Creates a random batch size for the model."""
         min_value, max_value, interval = self.config_min_max_interval('chromosome.batchsize')
         self.hyperparameters[2] = random.randrange(min_value, max_value + 1, interval)  # batch size
 
     def log(self, generation_num):
-        with open('GeneticAlgorithm/logs/trend.csv', 'a', newline='') as csvfile:
+        """Logs elements  of the data stored in chromosome to a csv file."""
+        with open('PySearch/logs/trend.csv', 'a', newline='') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=' ',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             spamwriter.writerow([generation_num, ',',
@@ -354,6 +396,7 @@ class Chromosome(GeneticObject):
 
 
     def node_by_id(self, find_id):
+        """Returns a node withgiven id. Else it returns None"""
         for node in self.conv_nodes_iterator():
             if node.id == find_id:
                 return node
@@ -364,6 +407,10 @@ class Chromosome(GeneticObject):
         return None
 
     def conv_node_outputs(self, find_id):
+        """Yields the id of a nodes outputs.
+        Arguments:
+            find_id - the id of the node whos output id you want to yield.
+        """
         for key, contents in self.vertices.items():
             if find_id in contents:
                 yield key
