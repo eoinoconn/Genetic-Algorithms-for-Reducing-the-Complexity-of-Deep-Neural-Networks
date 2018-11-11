@@ -357,7 +357,7 @@ class ConvInputNode(Node):
 
     @property
     def output_dimension(self):
-        return self.shape[1]
+        return tuple(self.shape)
 
 
 class ConvOutputNode(Node):

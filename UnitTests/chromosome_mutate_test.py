@@ -1,14 +1,15 @@
 import unittest
 import logging
-from GeneticAlgorithm.chromosome import *
+import random
 import keras as k
+from ..PySearch.chromosome import Chromosome
+from PySearch.exceptions import CantAddNode
 from keras.utils import to_categorical
 from keras.backend import image_data_format
 from keras.datasets import cifar10
 
 
 def mutate_model_test():
-    setup_csvlogger()
     for i in range(1, 400):
         print("Chromosome num: %d", i)
         while True:
@@ -19,12 +20,12 @@ def mutate_model_test():
                     print("adding conv_node")
                     chromo.add_random_conv_node()
                 for i in range(random.randrange(5)):
-                    print("adding random vertex")
-                    chromo.add_random_vertex()
+                    print("adding random edge")
+                    chromo.add_random_edge()
                 for i in range(random.randrange(5)):
                     print("adding dense node")
                     chromo.add_random_dense_node()
-                chromo.build().summary()
+                chromo.build_model().summary()
                 break
             except CantAddNode:
                 del chromo
@@ -34,7 +35,6 @@ def mutate_model_test():
         print(str(chromo))
         chromo.evaluate(unpack_data(10))
         print("{} {} {}".format(chromo.fitness, chromo.accuracy, chromo.parameters))
-        intermittent_logging(chromo, i)
         print("\n\n")
 
 
@@ -67,37 +67,6 @@ def unpack_data(num_labels):
             "valid_dataset": None, "valid_labels": None,
             "test_dataset": test_dataset, "test_labels": test_labels}
 
-
-def intermittent_logging(chromosome, generation_num):
-    with open('trend_graph.csv', 'a', newline='') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter=' ',
-                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow([generation_num, ',',
-                             chromosome.id, ',',
-                             chromosome.age, ',',
-                             chromosome.accuracy, ',',
-                             chromosome.fitness, ',',
-                             chromosome.parameters, ',',
-                             len(chromosome), ',',
-                             chromosome.num_conv_nodes(), ',',
-                             chromosome.num_dense_nodes(), ',',
-                             ])
-
-
-def setup_csvlogger():
-    with open('trend_graph.csv', 'w', newline='') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter=' ',
-                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        spamwriter.writerow(['generation', ',',
-                             'id', ',',
-                             'Age', ',',
-                             'Fitness', ',',
-                             'Accuracy', ',',
-                             'Parameters', ',',
-                             'Num Layers', ',',
-                             'Num Conv Layers', ',',
-                             'Num Dense Layers', ',',
-                             ])
 
 
 if __name__ == '__main__':

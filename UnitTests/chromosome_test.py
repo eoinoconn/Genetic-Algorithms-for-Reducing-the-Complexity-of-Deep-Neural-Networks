@@ -1,5 +1,5 @@
 import unittest
-from GeneticAlgorithm.chromosome import *
+from PySearch.chromosome import *
 from keras.utils import to_categorical
 from keras.backend import image_data_format
 from keras.datasets import mnist
@@ -12,13 +12,13 @@ class TestChromosome(unittest.TestCase):
         node = ConvNode()
         chromo = Chromosome((32, 32, 3))
         chromo.add_node(node)
-        chromo.add_vertex(node, node.id)
+        chromo.add_edge(node, node.id)
         print(chromo)
 
     @staticmethod
     def build_basic_model_test():
         chromo = Chromosome((32, 32, 3))
-        chromo.build().summary()
+        chromo.build_model().summary()
 
     def dense_model_test(self):
         for i in range(25):
@@ -30,7 +30,7 @@ class TestChromosome(unittest.TestCase):
         chromo = Chromosome((32, 32, 3))
         for i in range(10):
             chromo.add_random_dense_node()
-        chromo.build().summary()
+        chromo.build_model().summary()
 
     def simple_conv_model_test(self):
         counter = 0
@@ -71,10 +71,10 @@ class TestChromosome(unittest.TestCase):
             try:
                 for i in range(5):
                     chromo.add_random_conv_node()
-                    chromo.add_random_vertex()
+                    chromo.add_random_edge()
                 for i in range(5):
                     chromo.add_random_dense_node()
-                chromo.build().summary()
+                chromo.build_model().summary()
                 break
             except CantAddNode:
                 del chromo
@@ -86,7 +86,7 @@ class TestChromosome(unittest.TestCase):
         try:
             chromo = Chromosome((32, 32, 3))
             chromo.add_random_conv_node()
-            chromo.build().summary()
+            chromo.build_model().summary()
         except DimensionException:
             return True
             pass
@@ -97,7 +97,7 @@ class TestChromosome(unittest.TestCase):
         try:
             for i in range(5):
                 chromo.add_random_conv_node()
-            chromo.build().summary()
+            chromo.build_model().summary()
         except CantAddNode:
             del chromo
             return True
@@ -108,7 +108,7 @@ class TestChromosome(unittest.TestCase):
         try:
             for i in range(25):
                 chromo.add_random_conv_node()
-            chromo.build().summary()
+            chromo.build_model().summary()
         except CantAddNode:
             del chromo
             return True
@@ -119,10 +119,10 @@ class TestChromosome(unittest.TestCase):
         try:
             for i in range(5):
                 chromo.add_random_conv_node()
-                chromo.add_random_vertex()
+                chromo.add_random_edge()
             for i in range(5):
                 chromo.add_random_dense_node()
-            chromo.build().summary()
+            chromo.build_model().summary()
         except CantAddNode:
             return True
 
@@ -133,10 +133,10 @@ class TestChromosome(unittest.TestCase):
                 chromo = Chromosome((32, 32, 3))
                 for i in range(5):
                     chromo.add_random_conv_node()
-                    chromo.add_random_vertex()
+                    chromo.add_random_edge()
                 for i in range(5):
                     chromo.add_random_dense_node()
-                chromo.build().summary()
+                chromo.build_model().summary()
             except CantAddNode:
                 continue
             break
@@ -158,7 +158,7 @@ class TestChromosome(unittest.TestCase):
         for i in range(30):
             print("Mutate and build no " + str(i))
             chromo.mutate()
-            chromo.build().summary()
+            chromo.build_model().summary()
             count += 1
         print(count)
 

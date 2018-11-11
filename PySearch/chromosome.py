@@ -118,7 +118,7 @@ class Chromosome(GeneticObject):
         """
         self._logger.info(str(self))
         self.recurrently_build_graph(self.input_conv_id)
-        model = self.recurrently_build_list(self.node_by_id(self.output_conv_id).model, self.dense_nodes, 0)
+        model = self.recurrently_build_list(self.node_by_id(self.output_conv_id).model, 0)
         input_layer = self.node_by_id(self.input_conv_id).model
         return Model(inputs=input_layer, outputs=model)
 
@@ -180,9 +180,9 @@ class Chromosome(GeneticObject):
         return True
 
     def downsample_to(self, tensor, downsample_to, input_at):
-        self._logger.info("Downsampling for node %d from input at %d to %d", self.id, input_at, downsample_to)
+        self._logger.info("Downsampling node %d from %d to %d", self.id, input_at, downsample_to)
         stride = 1
-        if downsample_to == input_at:
+        if downsample_to[0] == input_at[0] and downsample_to[1] == input_at[1]:
             return tensor
         kernel = 1
         while True:
@@ -206,13 +206,16 @@ class Chromosome(GeneticObject):
             self._logger.info("Only one input for node %d, of type %s",
                               input_node_ids[0],
                               self.node_by_id(input_node_ids[0]).vertex_type)
-            return self.node_by_id(input_node_ids[0]).output_dimension
-        current_smallest = 1000
+            return self.node_by_id(input_node_ids[0]).output_dimension[1:3]
+        # Otherwise interate through each node searching, updating smallest dimension if found
+        current_smallest = [1000, 1000]
         for ids in input_node_ids:
             if not self.node_by_id(ids).active:
                 continue
-            if self.node_by_id(ids).output_dimension < current_smallest:
-                current_smallest = self.node_by_id(ids).output_dimension
+            if self.node_by_id(ids).output_dimension[0] < current_smallest[0]:
+                current_smallest[0] = self.node_by_id(ids).output_dimension[0]
+            if self.node_by_id(ids).output_dimension[1] < current_smallest[1]:
+                current_smallest[1] = self.node_by_id(ids).output_dimension[1]
         self._logger.info("Smallest dimension is %d", current_smallest)
         return current_smallest
 
@@ -228,12 +231,15 @@ class Chromosome(GeneticObject):
                                                            **training_data)
         self.destroy_models()
 
-    def recurrently_build_list(self, model, dense_nodes, index):
-        if index < (len(dense_nodes) - 1):
-            model = dense_nodes[index].build(model)
-            return self.recurrently_build_list(model, dense_nodes, (index + 1))
-        elif index == (len(dense_nodes) - 1):
-            return dense_nodes[index].build(model, output_layer=True, classes=10)
+    def recurrently_build_list(self, model, index):
+        """
+        Calls build method for each node contained in dense_nodes
+        """
+        if index < (len(self.dense_nodes) - 1):
+            model = self.dense_nodes[index].build(model)
+            return self.recurrently_build_list(model, (index + 1))
+        elif index == (len(self.dense_nodes) - 1):
+            return self.dense_nodes[index].build(model, output_layer=True, classes=10)
         else:
             return model
 
