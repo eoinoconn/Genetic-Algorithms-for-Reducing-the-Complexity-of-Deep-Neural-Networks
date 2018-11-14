@@ -1,7 +1,7 @@
-# Genetic-Algorithms-for-Reducing-the-Complexity-of-Deep-Neural-Networks
+# PySearch
 
-Diary and notebook:
-https://1drv.ms/o/s!ArxQuKF6nRU6prx6UshI44sjH504OQ
+## Machine vision model search using genetic algorithms
 
-Trello board:
-https://trello.com/b/dtzfD3je/fyp
+*Author* Eoin O'Connell
+
+*Architecture* Keras
