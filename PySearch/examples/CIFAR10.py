@@ -41,8 +41,11 @@ class CIFAR10Test(unittest.TestCase):
                                         test_labels) = cifar10.load_data()
 
         start = time.time()
-        best_cnn = PySearch(10, train_dataset=train_dataset, train_labels=train_labels,
-                            test_dataset=test_dataset, test_labels=test_labels)
+        best_cnn = PySearch(10, 
+                            {'train_dataset' : train_dataset, 
+                            'train_labels': train_labels,
+                            'test_dataset': test_dataset,
+                            'test_labels' : test_labels})
         fitness, accuracy, parameters = best_cnn(50, 0.00001)
         end = time.time()
         print("Time to best %f, fitness: %f, Accuracy: %f, Parameters: %d",
