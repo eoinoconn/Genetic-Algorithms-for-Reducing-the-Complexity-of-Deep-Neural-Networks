@@ -9,8 +9,8 @@ import sys
 import subprocess
 import unittest
 import logging
-from PySearch import PySearch
-from keras.datasets import cifar10
+from PySearch.PySearch import PySearch
+from tensorflow.keras.datasets import cifar10
 from logging import config
 
 
@@ -41,8 +41,7 @@ class CIFAR10Test(unittest.TestCase):
                                         test_labels) = cifar10.load_data()
 
         start = time.time()
-        best_cnn = PySearch(10, 
-                            {'train_dataset' : train_dataset, 
+        best_cnn = PySearch({'train_dataset' : train_dataset, 
                             'train_labels': train_labels,
                             'test_dataset': test_dataset,
                             'test_labels' : test_labels})
